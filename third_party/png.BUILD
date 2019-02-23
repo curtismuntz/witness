@@ -19,6 +19,7 @@ cc_library(
     deps = [
         "//external:zlib",
     ],
+    include_prefix = "libpng",
 )
 
 genrule(

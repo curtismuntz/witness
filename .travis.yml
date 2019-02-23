@@ -1,0 +1,15 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+install: skip
+script:
+- tools/ci/run_all_tests.sh
+- tools/ci/build_all_targets.sh
+
+# deploy:
+#   provider: script
+#   script: tools/ci/deploy.sh
+#   on:
+#     branch: master
