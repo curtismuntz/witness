@@ -1,0 +1,147 @@
+load("@subpar//:subpar.bzl", "par_binary")
+load("@murtis_bazel_tools//tools:linters.bzl", "pylint")
+
+py_library(
+    name = "common",
+    srcs = [
+        "common.py",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["//witness/api:py_grpc"],
+)
+
+par_binary(
+    name = "download_all",
+    srcs = ["download_all.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        ":list_files",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "automated_timelapse",
+    srcs = ["automated_timelapse.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        ":start_timelapse",
+        ":stop_recording",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "list_files",
+    srcs = ["list_files.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "get_version",
+    srcs = ["get_version.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "start_timelapse",
+    srcs = ["start_timelapse.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "open_webcam",
+    srcs = ["open_webcam.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "clear_data",
+    srcs = ["clear_data.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "start_monitor",
+    srcs = ["start_monitor.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "take_photo",
+    srcs = ["take_photo.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "take_3",
+    srcs = ["take_3.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        ":take_photo",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "get_server_state",
+    srcs = ["get_server_state.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "start_recording",
+    srcs = ["start_recording.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
+    name = "stop_recording",
+    srcs = ["stop_recording.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+pylint()

@@ -1,0 +1,21 @@
+load("@build_stack_rules_proto//python:python_grpc_library.bzl", "python_grpc_library")
+load("@build_stack_rules_proto//cpp:cpp_grpc_library.bzl", "cpp_grpc_library")
+
+proto_library(
+    name = "witness",
+    srcs = ["witness.proto"],
+    visibility = ["//witness:__subpackages__"],
+)
+
+cpp_grpc_library(
+    name = "cc_grpc",
+    visibility = ["//visibility:public"],
+    deps = [":witness"],
+)
+
+python_grpc_library(
+    name = "py_grpc",
+    transitive = True,
+    visibility = ["//visibility:public"],
+    deps = [":witness"],
+)

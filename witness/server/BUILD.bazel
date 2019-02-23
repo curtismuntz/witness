@@ -1,0 +1,58 @@
+load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
+
+config_setting(
+    name = "armeabi-v7a",
+    values = {"cpu": "armeabi-v7a"},
+)
+
+genrule(
+    name = "version_header",
+    srcs = ["//witness:version.txt"],
+    outs = ["version.h"],
+    cmd =
+        "sed -e \"s/\\(.*\\)/\\\"\\1\\\"/\" $(location //witness:version.txt) > tmpfile" +
+        "&& echo -n \"#define WITNESS_VERSION \" > $@" +
+        "&& echo `cat tmpfile` >> $@",
+)
+
+cc_library(
+    name = "file_operations",
+    srcs = ["file_operations.cpp"],
+    hdrs = ["file_operations.h"],
+    linkopts = ["-lstdc++fs"],
+    deps = ["@com_github_glog_glog//:glog"],
+)
+
+cc_library(
+    name = "webcam_manager",
+    srcs = ["webcam_manager.cpp"],
+    hdrs = ["webcam_manager.h"],
+    defines = select({
+        ":armeabi-v7a": ["RPI_CAM=true"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":file_operations",
+        "@com_github_glog_glog//:glog",
+        "@opencv_archive//:opencv",
+    ],
+)
+
+cc_binary(
+    name = "server",
+    srcs = [
+        "main.cpp",
+        "server.cpp",
+        "server.h",
+        ":version_header",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":file_operations",
+        ":webcam_manager",
+        "//witness/api:cc_grpc",
+        "@com_github_glog_glog//:glog",
+    ],
+)
+
+cpplint()

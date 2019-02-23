@@ -1,0 +1,78 @@
+#!/bin/bash
+set -e
+
+usage() {
+  echo "Usage: $0 [-t <string>] [-a <string>] [-r <string>]"
+  echo "  -t: bazel target (path/to/project:target)"
+  echo "  -a: architecture (must be listed within compilers/arm_compiler/CROSSTOOL)"
+  echo "  -r: resin appname (must exist on resin)"
+  echo "  -b: additional build options for bazel (optional)"
+  exit 1;
+}
+
+
+check_prereqs() {
+  #detect docker exists
+  if ! docker images &> /dev/null; then
+    echo "ERROR: docker not installed or permissions issue"
+    exit 1
+  fi
+
+  #detect bazel installed
+  if ! which bazel &> /dev/null; then
+    echo "ERROR: bazel not installed"
+    exit 1
+  fi
+
+  #detect resin-cli installed
+  if ! which resin &> /dev/null; then
+    echo "ERROR: resin not installed"
+    exit 1
+  fi
+}
+
+
+while getopts ":h:a:t:r:b:" opt; do
+  case ${opt} in
+    t )
+      TARGET=$OPTARG
+      ;;
+    a )
+      ARCHITECTURE=$OPTARG
+      ;;
+    r )
+      RESIN_APPNAME=$OPTARG
+      ;;
+    b )
+      BUILD_OPTS=$OPTARG
+      ;;
+    * )
+      usage
+      ;;
+    \? )
+      usage
+      ;;
+  esac
+done
+
+check_prereqs
+
+# query target to verify that it is of type container_image
+TYPE=$(bazel query "kind(container_image, $TARGET)")
+
+if [ ${#TYPE} -eq 0 ]; then
+  echo "ERROR: only container_image targets are supported"
+  exit 1
+fi
+
+
+echo -e "BUILDING $TARGET $BUILD_OPTS for $ARCHITECTURE and deploying to $RESIN_APPNAME\n\n"
+
+
+
+# Build with bazel and load into docker daemon
+BAZEL_PYTHON=/usr/bin/python2.7 bazel run $BUILD_OPTS --config=$ARCHITECTURE $TARGET
+# bazel run container_image produces strangly named dockerfiles
+DOCKER_IMAGE_NAME="bazel/${TARGET%:*}:${TARGET##*:}"
+# Deploy to resin!
+resin deploy $RESIN_APPNAME $DOCKER_IMAGE_NAME

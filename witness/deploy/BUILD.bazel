@@ -1,0 +1,94 @@
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
+
+config_setting(
+    name = "armeabi-v7a",
+    values = {"cpu": "armeabi-v7a"},
+)
+
+sh_binary(
+    name = "launcher",
+    srcs = ["launcher.sh"],
+)
+
+filegroup(
+    name = "targets",
+    srcs = [
+        ":launcher",
+        "//witness/server",
+    ],
+)
+
+pkg_tar(
+    name = "witness_tar",
+    srcs = [":targets"],
+    extension = "tar",
+    include_runfiles = True,
+    mode = "0755",
+    package_dir = "/opt/witness",
+    strip_prefix = ".",
+    visibility = ["//visibility:public"],
+)
+
+# Modified from:
+# https://github.com/bazelbuild/bazel/blob/master/scripts/packages/BUILD#L128
+genrule(
+    name = "build_version",
+    outs = ["version.txt"],
+    cmd =
+        "echo -n \"`date` \" >> $@ " +
+        "&& cat bazel-out/stable-status.txt" +
+        " | grep EMBED_LABEL | cut -d ' ' -f 2-" +
+        " >> $@",
+    stamp = 1,
+)
+
+genrule(
+    name = "bazel_version",
+    srcs = ["//:.bazelversion"],
+    outs = ["bazel_version.txt"],
+    cmd =
+        "echo Bazel `cat $(location //:.bazelversion)` > $@\n",
+)
+
+pkg_deb(
+    name = "witness_deb",
+    built_using_file = ":bazel_version.txt",
+    data = ":witness_tar",
+    description = "woo",
+    homepage = "https://murt.is",
+    maintainer = "Curtis Muntz <me@murt.is>",
+    package = "witness_deb",
+    version_file = "//witness:version.txt",
+)
+
+container_image(
+    name = "container",
+    base = select({
+        ":armeabi-v7a": "@witness_armv7_docker_base//image",
+        "//conditions:default": "@witness_amd64_docker_base//image",
+    }),
+    cmd = ["/opt/witness/launcher"],
+    mode = "777",
+    stamp = 1,
+    tars = [":witness_tar"],
+)
+
+#TODO enforce platform
+container_image(
+    name = "container_armv7",
+    base = "@witness_armv7_docker_base//image",
+    cmd = ["/opt/witness/launcher"],
+    mode = "777",
+    stamp = 1,
+    tars = [":witness_tar"],
+)
+
+container_push(
+    name = "push_witness_armv7",
+    format = "Docker",
+    image = ":container_armv7",
+    registry = "index.docker.io",
+    repository = "murtis/witness_armv7hf",
+    tag = "service",
+)

@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package witness.api.witness;
+
+service WitnessCameraService {
+  rpc OpenWebcam(OpenWebcamRequest) returns (OpenWebcamReply);
+  rpc StartRecording(StartRecordingRequest) returns (StartRecordingReply);
+  rpc StopRecording(StopRecordingRequest) returns (StopRecordingReply);
+  rpc TakePhoto(TakePhotoRequest) returns (TakePhotoReply);
+  rpc GetFileList(GetFileListRequest) returns (stream FileListReply);
+  rpc ClearData(ClearDataRequest) returns (ClearDataReply);
+  rpc StartTimelapse(StartTimelapseRequest) returns (StartTimelapseReply);
+  rpc GetServerState(ServerStateRequest) returns (ServerStateReply);
+  rpc StartMonitor(StartMonitorRequest) returns (StartMonitorReply);
+  rpc GetServerVersion(VersionRequest) returns (VersionReply);
+}
+
+message Error {
+  Code code = 1;
+  string message = 2;
+  enum Code {
+    UNKNOWN = 0;
+    // The requested endpoint has not yet been implemented.
+    NOT_IMPLEMENTED = 1;
+  }
+}
+
+message ServerState {
+  State state = 1;
+  enum State {
+    IDLE = 0;
+    RECORDING = 1;
+    MONITORING = 2;
+  }
+}
+
+message OpenWebcamRequest {
+  int32 webcam_id = 1;
+}
+
+message OpenWebcamReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+
+}
+
+message StartRecordingRequest {
+  string filename = 1;
+}
+
+message StartRecordingReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+
+}
+
+message StopRecordingRequest {}
+
+message StopRecordingReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+
+}
+
+message TakePhotoRequest {
+  string filename = 1;
+}
+
+message TakePhotoReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {
+    string filename = 1;
+  }
+}
+
+message GetFileListRequest {}
+
+message FileListReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {
+    string filename = 1;
+  }
+}
+
+message ClearDataRequest {}
+
+message ClearDataReply {}
+
+message StartTimelapseRequest {
+  string filename = 1;
+  int32 sleep_for = 2;
+}
+
+message StartTimelapseReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+
+}
+
+message ServerStateRequest {}
+
+message ServerStateReply {
+  oneof result {
+    Error error = 1;
+    ServerState state = 2;
+  }
+  message Data {}
+
+}
+
+message StartMonitorRequest {}
+
+message StartMonitorReply {}
+
+message VersionRequest {}
+
+message VersionReply {
+  string version = 1;
+}
