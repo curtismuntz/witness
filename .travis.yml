@@ -6,7 +6,11 @@ services:
 install: skip
 script:
 - tools/ci/run_all_tests.sh
-- tools/ci/build_all_targets.sh
+
+# TODO(curtismuntz):
+# Run all tests on branch master
+# Run only changed tests on other branches
+# Deploy on a release tag.
 
 # deploy:
 #   provider: script
