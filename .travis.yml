@@ -1,19 +1,24 @@
 language: generic
+os: linux
+dist: xenial
 sudo: required
 services:
   - docker
 
+branches:
+  except:
+  - experimental
+
 install: skip
-script:
-- tools/ci/run_all_tests.sh
 
-# TODO(curtismuntz):
-# Run all tests on branch master
-# Run only changed tests on other branches
-# Deploy on a release tag.
+jobs:
+  include:
+    - stage: test
+      script: ci/travis_container_runner.sh ci/test_changed.sh
+    - stage: deploy
+      script: ci/travis_container_runner.sh ci/deploy.sh
 
-# deploy:
-#   provider: script
-#   script: tools/ci/deploy.sh
-#   on:
-#     branch: master
+stages:
+  - test
+  - name: deploy
+    if: (branch = master) AND (NOT (type IN (push, pull_request)))
