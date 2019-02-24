@@ -1,8 +1,8 @@
-#include <string>
 #include <memory>
+#include <string>
 
-#include "witness/server/server.h"
 #include "witness/server/file_operations.h"
+#include "witness/server/server.h"
 
 DEFINE_string(media_dir, "/data", "Directory to store media");
 DEFINE_string(photo_extension, ".jpg", "Photo extension");
@@ -21,13 +21,19 @@ Status WitnessService::StartRecording(ServerContext *context, const StartRecordi
                                       StartRecordingReply *reply) {
   LOG(INFO) << "StartRecording requested" << std::endl;
   auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                               FLAGS_video_extension);
-  auto success = webcam_.StartRecording(fname);
+                                                        FLAGS_video_extension);
 
-  if (!success) {
+  if (!webcam_.IsActive()) {
+    auto success = webcam_.StartRecording(fname);
+    if (!success) {
+      auto reply_error = reply->mutable_error();
+      reply_error->set_code(Error::UNKNOWN);
+      reply_error->set_message("Issue starting recording...");
+    }
+  } else {
     auto reply_error = reply->mutable_error();
-    reply_error->set_code(Error::UNKNOWN);
-    reply_error->set_message("Issue starting recording...");
+    reply_error->set_code(Error::CAMERA_ACTIVE);
+    reply_error->set_message("Camera is already active.");
   }
 
   return Status::OK;
@@ -37,13 +43,18 @@ Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelap
                                       StartTimelapseReply *reply) {
   LOG(INFO) << "StartTimelapse requested" << std::endl;
   auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                               FLAGS_video_extension);
-  auto success = webcam_.StartTimelapse(fname, request->sleep_for());
-
-  if (!success) {
+                                                        FLAGS_video_extension);
+  if (!webcam_.IsActive()) {
+    auto success = webcam_.StartTimelapse(fname, request->sleep_for());
+    if (!success) {
+      auto reply_error = reply->mutable_error();
+      reply_error->set_code(Error::UNKNOWN);
+      reply_error->set_message("Issue starting recording...");
+    }
+  } else {
     auto reply_error = reply->mutable_error();
-    reply_error->set_code(Error::UNKNOWN);
-    reply_error->set_message("Issue starting recording...");
+    reply_error->set_code(Error::CAMERA_ACTIVE);
+    reply_error->set_message("Camera is already active.");
   }
 
   return Status::OK;
@@ -76,24 +87,37 @@ Status WitnessService::StartMonitor(ServerContext *context, const StartMonitorRe
                                     StartMonitorReply *reply) {
   LOG(INFO) << "StartMonitor requested" << std::endl;
   auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, std::string{"monitor"},
-                                                               FLAGS_video_extension);
-  webcam_.StartMonitoring(fname);
+                                                        FLAGS_video_extension);
+  if (!webcam_.IsActive()) {
+    auto success = webcam_.StartMonitoring(fname);
+    if (!success) {
+      auto reply_error = reply->mutable_error();
+      reply_error->set_code(Error::UNKNOWN);
+      reply_error->set_message("Issue starting recording...");
+    }
+  } else {
+    auto reply_error = reply->mutable_error();
+    reply_error->set_code(Error::CAMERA_ACTIVE);
+    reply_error->set_message("Camera is already active.");
+  }
   return Status::OK;
 }
 
 Status WitnessService::GetServerState(ServerContext *context, const ServerStateRequest *request,
                                       ServerStateReply *reply) {
   LOG(INFO) << "GetServerState requested" << std::endl;
-  auto reply_message = reply->mutable_state();
+
+  auto reply_message = reply->mutable_data();
+  auto state = reply_message->mutable_state();
   if (webcam_.IsMonitoring()) {
     LOG(INFO) << "monitoring";
-    reply_message->set_state(ServerState::MONITORING);
+    state->set_state(ServerState::MONITORING);
   } else if (webcam_.IsRecording()) {
     LOG(INFO) << "recording";
-    reply_message->set_state(ServerState::RECORDING);
+    state->set_state(ServerState::RECORDING);
   } else {
     LOG(INFO) << "idle";
-    reply_message->set_state(ServerState::IDLE);
+    state->set_state(ServerState::IDLE);
   }
   return Status::OK;
 }
@@ -102,7 +126,7 @@ Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest 
                                  TakePhotoReply *reply) {
   LOG(INFO) << "Take Photo Requested";
   auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                               FLAGS_photo_extension);
+                                                        FLAGS_photo_extension);
   auto success = webcam_.SaveImage(fname);
   if (success) {
     LOG(INFO) << "Saved file " << fname << std::endl;
@@ -130,7 +154,7 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
   auto file_list = witness::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
-                                                    FLAGS_video_extension);
+                                                     FLAGS_video_extension);
   for (const auto str : file_list) {
     FileListReply flr;
     flr.mutable_data()->set_filename(str);
@@ -140,7 +164,7 @@ Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequ
 }
 
 Status WitnessService::GetServerVersion(ServerContext *context, const VersionRequest *request,
-                                      VersionReply *reply) {
+                                        VersionReply *reply) {
   LOG(INFO) << "GetServerVersion requested" << std::endl;
   LOG(INFO) << "Witness server version " << WITNESS_VERSION;
   reply->set_version(WITNESS_VERSION);

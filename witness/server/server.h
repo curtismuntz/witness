@@ -11,8 +11,8 @@
 #include <thread>
 
 #include "witness/api/witness.grpc.pb.h"
-#include "witness/server/webcam_manager.h"
 #include "witness/server/version.h"
+#include "witness/server/webcam_manager.h"
 
 namespace witness {
 namespace server {

@@ -26,6 +26,7 @@ class WebcamManager {
   bool StopRecording();
   bool IsRecording() { return camera_recording_; }
   bool IsMonitoring() { return monitoring_; }
+  bool IsActive() {return IsRecording() || IsMonitoring();}
 
  private:
   void VideoLoop(const std::string &fname);

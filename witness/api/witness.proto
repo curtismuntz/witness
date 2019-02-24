@@ -3,15 +3,33 @@ syntax = "proto3";
 package witness.api.witness;
 
 service WitnessCameraService {
+  // Opens a webcam by id.
   rpc OpenWebcam(OpenWebcamRequest) returns (OpenWebcamReply);
+
+  // Starts a normal video recording.
   rpc StartRecording(StartRecordingRequest) returns (StartRecordingReply);
+
+  // Stops any recording type, be it recording, timelapse, or monitor.
   rpc StopRecording(StopRecordingRequest) returns (StopRecordingReply);
+
+  // Takes a photo.
   rpc TakePhoto(TakePhotoRequest) returns (TakePhotoReply);
+
+  // Gets a list of files on the server's data directory.
   rpc GetFileList(GetFileListRequest) returns (stream FileListReply);
+
+  // Clears all files on the server's data directory.
   rpc ClearData(ClearDataRequest) returns (ClearDataReply);
+
+  // Starts a timelapse.
   rpc StartTimelapse(StartTimelapseRequest) returns (StartTimelapseReply);
+
   rpc GetServerState(ServerStateRequest) returns (ServerStateReply);
+
+  // Starts a security monitor.
   rpc StartMonitor(StartMonitorRequest) returns (StartMonitorReply);
+
+  // Gets the version of the running server.
   rpc GetServerVersion(VersionRequest) returns (VersionReply);
 }
 
@@ -19,22 +37,31 @@ message Error {
   Code code = 1;
   string message = 2;
   enum Code {
+    // Unknown/undefined error.
     UNKNOWN = 0;
     // The requested endpoint has not yet been implemented.
     NOT_IMPLEMENTED = 1;
+    // The request cannot be complete because the camera is active.
+    CAMERA_ACTIVE = 2;
   }
 }
 
 message ServerState {
   State state = 1;
   enum State {
+    // The server is idle (not actively in a recording loop).
     IDLE = 0;
+    // The server is in a recording loop.
     RECORDING = 1;
+    // The server is in a security monitor loop.
     MONITORING = 2;
   }
 }
 
 message OpenWebcamRequest {
+  // Integer of webcam to open. video0 is 0, video1 is 1, etc.
+  // Note that this is almost always going to be the default value of zero, as this softare will
+  // almost always be running in a container, which can be translated by the docker volume command.
   int32 webcam_id = 1;
 }
 
@@ -48,6 +75,7 @@ message OpenWebcamReply {
 }
 
 message StartRecordingRequest {
+  // If filename is not specified, the current date will be used as the file name.
   string filename = 1;
 }
 
@@ -72,6 +100,7 @@ message StopRecordingReply {
 }
 
 message TakePhotoRequest {
+  // If filename is not specified, the current date will be used as the file name.
   string filename = 1;
 }
 
@@ -81,6 +110,7 @@ message TakePhotoReply {
     Data data = 2;
   }
   message Data {
+    // Reply data is the saved file's name.
     string filename = 1;
   }
 }
@@ -99,10 +129,18 @@ message FileListReply {
 
 message ClearDataRequest {}
 
-message ClearDataReply {}
+message ClearDataReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+}
 
 message StartTimelapseRequest {
+  // If filename is not specified, the current date will be used as the file name.
   string filename = 1;
+  // Desired sleep time between photos.
   int32 sleep_for = 2;
 }
 
@@ -120,18 +158,28 @@ message ServerStateRequest {}
 message ServerStateReply {
   oneof result {
     Error error = 1;
-    ServerState state = 2;
+    Data data = 2;
   }
-  message Data {}
+  message Data {
+    ServerState state = 1;
+  }
 
 }
 
 message StartMonitorRequest {}
 
-message StartMonitorReply {}
+message StartMonitorReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
+
+}
 
 message VersionRequest {}
 
 message VersionReply {
+  // Server version, useful to check capabilities and definitions.
   string version = 1;
 }

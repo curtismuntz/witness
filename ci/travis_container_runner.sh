@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-cmd = "$@"
+cmd="$@"
 
 docker run \
   --rm \
