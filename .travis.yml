@@ -16,9 +16,9 @@ jobs:
     - stage: test
       script: ci/travis_container_runner.sh ci/test_changed.sh
     - stage: deploy
-      script: ci/travis_container_runner.sh ci/deploy
+      script: ci/travis_container_runner.sh ci/deploy.sh
 
 stages:
   - test
   - name: deploy
-    if: branch = master
+    if: (branch = master) AND (NOT (type IN (push, pull_request)))
