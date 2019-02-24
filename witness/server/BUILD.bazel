@@ -23,6 +23,15 @@ cc_library(
     deps = ["@com_github_glog_glog//:glog"],
 )
 
+cc_test(
+  name = "file_operations_test",
+  srcs = ["file_operations_test.cpp"],
+  deps = [
+      ":file_operations",
+      "//external:gtest",
+  ],
+)
+
 cc_library(
     name = "webcam_manager",
     srcs = ["webcam_manager.cpp"],
