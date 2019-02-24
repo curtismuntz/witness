@@ -2,7 +2,7 @@
 #include "gtest/gtest.h"
 
 namespace witness {
-namespace server{
+namespace server {
 namespace file_operations {
 namespace {
 

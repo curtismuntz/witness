@@ -20,8 +20,8 @@ WitnessService::WitnessService() : webcam_() {
 Status WitnessService::StartRecording(ServerContext *context, const StartRecordingRequest *request,
                                       StartRecordingReply *reply) {
   LOG(INFO) << "StartRecording requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
 
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartRecording(fname);
@@ -42,8 +42,8 @@ Status WitnessService::StartRecording(ServerContext *context, const StartRecordi
 Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelapseRequest *request,
                                       StartTimelapseReply *reply) {
   LOG(INFO) << "StartTimelapse requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartTimelapse(fname, request->sleep_for());
     if (!success) {
@@ -86,8 +86,8 @@ Status WitnessService::ClearData(ServerContext *context, const ClearDataRequest 
 Status WitnessService::StartMonitor(ServerContext *context, const StartMonitorRequest *request,
                                     StartMonitorReply *reply) {
   LOG(INFO) << "StartMonitor requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(FLAGS_media_dir, std::string{"monitor"},
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, std::string{"monitor"}, FLAGS_video_extension);
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartMonitoring(fname);
     if (!success) {
@@ -125,8 +125,8 @@ Status WitnessService::GetServerState(ServerContext *context, const ServerStateR
 Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest *request,
                                  TakePhotoReply *reply) {
   LOG(INFO) << "Take Photo Requested";
-  auto fname = witness::server::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_photo_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_photo_extension);
   auto success = webcam_.SaveImage(fname);
   if (success) {
     LOG(INFO) << "Saved file " << fname << std::endl;
@@ -154,7 +154,7 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
   auto file_list = witness::server::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
-                                                     FLAGS_video_extension);
+                                                             FLAGS_video_extension);
   for (const auto str : file_list) {
     FileListReply flr;
     flr.mutable_data()->set_filename(str);
