@@ -49,7 +49,10 @@
 
 if [ -z "$TRAVIS_COMMIT_RANGE"]; then
   echo "Detecting commit range."
-  COMMIT_RANGE=${COMMIT_RANGE:-$(git merge-base origin/master HEAD)"."}
+  COMMIT_RANGE=${COMMIT_RANGE:-$(git merge-base origin/master HEAD)".."}
+else
+  echo "Using travis commit range."
+  COMMIT_RANGE=${TRAVIS_COMMIT_RANGE}
 fi
 
 # Go to the root of the repo
