@@ -7,8 +7,8 @@
 DEFINE_string(media_dir, "/data", "Directory to store media");
 DEFINE_string(photo_extension, ".jpg", "Photo extension");
 DEFINE_string(video_extension, ".avi", "Video extension");
-DEFINE_validator(photo_extension, &witness::file_operations::ValidateExtension);
-DEFINE_validator(video_extension, &witness::file_operations::ValidateExtension);
+DEFINE_validator(photo_extension, &witness::server::file_operations::ValidateExtension);
+DEFINE_validator(video_extension, &witness::server::file_operations::ValidateExtension);
 
 namespace witness {
 namespace server {
@@ -20,8 +20,8 @@ WitnessService::WitnessService() : webcam_() {
 Status WitnessService::StartRecording(ServerContext *context, const StartRecordingRequest *request,
                                       StartRecordingReply *reply) {
   LOG(INFO) << "StartRecording requested" << std::endl;
-  auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
 
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartRecording(fname);
@@ -42,8 +42,8 @@ Status WitnessService::StartRecording(ServerContext *context, const StartRecordi
 Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelapseRequest *request,
                                       StartTimelapseReply *reply) {
   LOG(INFO) << "StartTimelapse requested" << std::endl;
-  auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartTimelapse(fname, request->sleep_for());
     if (!success) {
@@ -79,15 +79,15 @@ Status WitnessService::StopRecording(ServerContext *context, const StopRecording
 Status WitnessService::ClearData(ServerContext *context, const ClearDataRequest *request,
                                  ClearDataReply *reply) {
   LOG(INFO) << "ClearData requested" << std::endl;
-  witness::file_operations::ClearDir(FLAGS_media_dir);
+  witness::server::file_operations::ClearDir(FLAGS_media_dir);
   return Status::OK;
 }
 
 Status WitnessService::StartMonitor(ServerContext *context, const StartMonitorRequest *request,
                                     StartMonitorReply *reply) {
   LOG(INFO) << "StartMonitor requested" << std::endl;
-  auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, std::string{"monitor"},
-                                                        FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, std::string{"monitor"}, FLAGS_video_extension);
   if (!webcam_.IsActive()) {
     auto success = webcam_.StartMonitoring(fname);
     if (!success) {
@@ -125,8 +125,8 @@ Status WitnessService::GetServerState(ServerContext *context, const ServerStateR
 Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest *request,
                                  TakePhotoReply *reply) {
   LOG(INFO) << "Take Photo Requested";
-  auto fname = witness::file_operations::DecideFilename(FLAGS_media_dir, request->filename(),
-                                                        FLAGS_photo_extension);
+  auto fname = witness::server::file_operations::DecideFilename(
+      FLAGS_media_dir, request->filename(), FLAGS_photo_extension);
   auto success = webcam_.SaveImage(fname);
   if (success) {
     LOG(INFO) << "Saved file " << fname << std::endl;
@@ -153,8 +153,8 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
-  auto file_list = witness::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
-                                                     FLAGS_video_extension);
+  auto file_list = witness::server::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
+                                                             FLAGS_video_extension);
   for (const auto str : file_list) {
     FileListReply flr;
     flr.mutable_data()->set_filename(str);

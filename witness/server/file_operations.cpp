@@ -3,6 +3,7 @@
 #include "witness/server/file_operations.h"
 
 namespace witness {
+namespace server {
 namespace file_operations {
 
 void ClearDir(std::string media_dir) {
@@ -60,4 +61,5 @@ std::vector<std::string> ListDir(std::string media_path, std::string photo_ext,
   return file_list;
 }
 }  // namespace file_operations
+}  // namespace server
 }  // namespace witness

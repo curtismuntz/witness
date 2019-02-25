@@ -9,6 +9,7 @@
 #include <string>
 
 namespace witness {
+namespace server {
 namespace file_operations {
 
 static bool ValidateExtension(const char *flagname, const std::string &value) {
@@ -29,4 +30,5 @@ std::string CreatePath(const std::string &directory, const std::string &filename
 std::string DecideFilename(const std::string &media_dir, const std::string &requested_fname,
                                   const std::string &ext);
 }  // namespace file_operations
+}  // namespace server
 }  // namespace witness

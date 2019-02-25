@@ -11,6 +11,10 @@
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/videoio.hpp"
 
+namespace witness {
+namespace server {
+namespace webcam_manager {
+
 class WebcamManager {
  public:
   WebcamManager();
@@ -45,3 +49,7 @@ class WebcamManager {
   bool camera_recording_;
   bool monitoring_;
 };
+
+}  // namespace webcam_manager
+}  // namespace server
+}  // namespace witness

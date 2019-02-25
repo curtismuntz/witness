@@ -6,6 +6,10 @@
 #include "witness/server/file_operations.h"
 #include "witness/server/webcam_manager.h"
 
+namespace witness {
+namespace server {
+namespace webcam_manager {
+
 WebcamManager::WebcamManager()
     : camera_(nullptr), worker_thread_(nullptr), camera_recording_(false), monitoring_(false) {}
 WebcamManager::~WebcamManager() { CloseCamera(); }
@@ -173,7 +177,7 @@ void WebcamManager::Watermark(cv::Mat *img) {
 
 void WebcamManager::WatermarkTime(cv::Mat *img) {
   Watermark(img);
-  cv::putText(*img, witness::file_operations::CurrentTimeString(), cv::Point(30, 300),
+  cv::putText(*img, witness::server::file_operations::CurrentTimeString(), cv::Point(30, 300),
               cv::FONT_HERSHEY_COMPLEX, 0.8, cv::Scalar(0, 165, 255), 1, CV_AA);
 }
 
@@ -248,3 +252,7 @@ void WebcamManager::MonitorLoop(const std::string &desired_filename) {
   video.release();
   CloseCamera();
 }
+
+}  // namespace webcam_manager
+}  // namespace server
+}  // namespace witness

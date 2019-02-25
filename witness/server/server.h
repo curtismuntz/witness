@@ -73,7 +73,7 @@ class WitnessService final : public WitnessCameraService::Service {
                       StartMonitorReply *writer) override;
   Status GetServerVersion(ServerContext *context, const VersionRequest *request,
                           VersionReply *writer) override;
-  WebcamManager webcam_;
+  witness::server::webcam_manager::WebcamManager webcam_;
 };
 
 void RunServer();
