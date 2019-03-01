@@ -3,13 +3,23 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 ###############################
 # murtis maintained external bazel projects
 ###############################
-load("//tools:github_repo.bzl", "github_repo")
+http_archive(
+    name = "murtis_bazel_tools",
+    sha256 = "a6bcb86c7b5ed4c55fddd4b64d9c4916677e758f0fdd7f051f9dbfca8a6a8eee",
+    strip_prefix = "bazel_tools-811127f89abd954e3ed4a89e9aa90b468c71c2d4",
+    urls = ["https://github.com/curtismuntz/bazel_tools/archive/811127f89abd954e3ed4a89e9aa90b468c71c2d4.tar.gz"],
+)
+
+load("@murtis_bazel_tools//tools:github_repo.bzl", "github_repo")
+load("@murtis_bazel_tools//tools:deps.bzl", "linter_dependencies")
+
+linter_dependencies()
 
 github_repo(
     name = "murtis_bazel_compilers",
     repo = "bazel_compilers",
-    sha256 = "3dcaa2f1a1677ca99c56a3fa6c458592d8c8b74bac240fe9e57b1008a47b2494",
-    tag = "b835dbb8cedd6284501c5d2323352409add8848b",
+    sha256 = "6d0f5efaa3ac073906ef3351da4038bfd081296d6307e0e87c33ffc2cc876a4f",
+    tag = "eaafbe4ee813b2d1363e8022eee2218ac3e2da06",
     user = "curtismuntz",
 )
 
@@ -17,26 +27,14 @@ load("@murtis_bazel_compilers//compilers:dependencies.bzl", "cross_compiler_depe
 
 cross_compiler_dependencies()
 
-github_repo(
-    name = "murtis_bazel_tools",
-    repo = "bazel_tools",
-    sha256 = "b1a6caa5151af02b8ac174d7bff3b317f9be347116113fb10abd06feced50826",
-    tag = "5d256b9b8bb74a91e8e4370781be9b92910f7b14",
-    user = "curtismuntz",
-)
-
-load("@murtis_bazel_tools//tools:deps.bzl", "linter_dependencies")
-
-linter_dependencies()
-
 ###############################
 # protobuf
 ###############################
 http_archive(
     name = "build_stack_rules_proto",
-    sha256 = "775981425f2e2313e30ca67b75cac35134df65c5fae2231820d63eec708c65eb",
-    strip_prefix = "rules_proto-b74e93b3a197401da858423d2758aaf4f38be4f9",
-    urls = ["https://github.com/stackb/rules_proto/archive/b74e93b3a197401da858423d2758aaf4f38be4f9.tar.gz"],
+    sha256 = "128c4486b1707db917411c6e448849dd76ea3b8ba704f9e0627d9b01f2ee45fe",
+    strip_prefix = "rules_proto-f5d6eea6a4528bef3c1d3a44d486b51a214d61c2",
+    urls = ["https://github.com/stackb/rules_proto/archive/f5d6eea6a4528bef3c1d3a44d486b51a214d61c2.tar.gz"],
 )
 
 load("@build_stack_rules_proto//cpp:deps.bzl", "cpp_grpc_library")
@@ -116,24 +114,16 @@ load("@grpc_py_deps//:requirements.bzl", grpc_pip_install = "pip_install")
 
 grpc_pip_install()
 
-http_archive(
-    name = "subpar",
-    sha256 = "eddbfc920e9cd565500370114316757848b672deba06dc2336acfa81b4ac0e6d",
-    strip_prefix = "subpar-1.3.0",
-    urls = ["https://github.com/google/subpar/archive/1.3.0.tar.gz"],
-)
+# already included by another project somehow...
+# http_archive(
+#     name = "subpar",
+#     strip_prefix = "subpar-a4f9b23bf01bcc7a52d458910af65a90ee991aff",
+#     urls = ["https://github.com/google/subpar/archive/a4f9b23bf01bcc7a52d458910af65a90ee991aff.tar.gz"],
+# )
 
 ###############################
 # c++
 ###############################
-# cpplint from google style guide
-new_git_repository(
-    name = "google_styleguide",
-    build_file = "//third_party:google_styleguide.BUILD",
-    commit = "159b4c81bbca97a9ca00f1195a37174388398a67",
-    remote = "https://github.com/google/styleguide.git",
-)
-
 http_archive(
     name = "opencv_archive",
     build_file = "//third_party:opencv.BUILD",
@@ -212,14 +202,15 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # See https://github.com/bazelbuild/rules_go for the up to date setup instructions.
 http_archive(
     name = "io_bazel_rules_go",
-    sha256 = "f87fa87475ea107b3c69196f39c82b7bbf58fe27c62a338684c20ca17d1d8613",
-    url = "https://github.com/bazelbuild/rules_go/releases/download/0.16.2/rules_go-0.16.2.tar.gz",
+    sha256 = "ade51a315fa17347e5c31201fdc55aa5ffb913377aa315dceb56ee9725e620ee",
+    url = "https://github.com/bazelbuild/rules_go/releases/download/0.16.6/rules_go-0.16.6.tar.gz",
 )
 
 http_archive(
     name = "com_github_bazelbuild_buildtools",
-    strip_prefix = "buildtools-9f8fdb20dd423621ef00ced33dcb40204703c2c8",
-    url = "https://github.com/bazelbuild/buildtools/archive/9f8fdb20dd423621ef00ced33dcb40204703c2c8.zip",
+    strip_prefix = "buildtools-4bcdbd1064fcc48180fa30400e39f7a940fdb8f9",
+    sha256 = "e8792ae37bfa82eb4efa3e2d93a5b4dcc43d681d13f6d00f183d2ef34a4bc828",
+    url = "https://github.com/bazelbuild/buildtools/archive/4bcdbd1064fcc48180fa30400e39f7a940fdb8f9.zip",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")

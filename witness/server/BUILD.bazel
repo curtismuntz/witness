@@ -24,12 +24,12 @@ cc_library(
 )
 
 cc_test(
-  name = "file_operations_test",
-  srcs = ["file_operations_test.cpp"],
-  deps = [
-      ":file_operations",
-      "//external:gtest",
-  ],
+    name = "file_operations_test",
+    srcs = ["file_operations_test.cpp"],
+    deps = [
+        ":file_operations",
+        "//external:gtest",
+    ],
 )
 
 cc_library(

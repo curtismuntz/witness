@@ -15,11 +15,11 @@ cc_library(
         ],
     ) + ["pnglibconf.h"],
     hdrs = ["png.h"],
+    include_prefix = "libpng",
     visibility = ["//visibility:public"],
     deps = [
         "//external:zlib",
     ],
-    include_prefix = "libpng",
 )
 
 genrule(
