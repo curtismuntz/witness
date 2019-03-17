@@ -3,6 +3,7 @@
 import os
 import argparse
 import tkinter as tk
+import collections
 
 import endpoint_scripts.common
 import endpoint_scripts.take_photo
@@ -42,19 +43,20 @@ def main():
         "take_3": lambda: endpoint_scripts.take_3.take_3(service),
         "take_photo": lambda: endpoint_scripts.take_photo.take_photo(service),
     }
+    sorted_endpoints = collections.OrderedDict(sorted(endpoints.items()))
 
     root = tk.Tk()
     root.title(grpc_server)
     buttons = []
 
-    for item in endpoints:
-        button = tk.Button(root, text=item, command=endpoints[item])
+    for item in sorted_endpoints:
+        button = tk.Button(root, text=item, command=sorted_endpoints[item])
         button.pack()
         buttons.append(button)
 
     # Window seem to need to be ~28 pixels tall per button
-    window_height = str(len(list(endpoints.keys()) * 28))
-    max_width = len(max(list(endpoints.keys()), key=len))
+    window_height = str(len(list(sorted_endpoints.keys()) * 28))
+    max_width = len(max(list(sorted_endpoints.keys()), key=len))
     # Roughly 7 pixels wide per character
     window_width = str((max_width * 7) + 7)
     window_size = window_width + "x" + window_height
