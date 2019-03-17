@@ -1,19 +1,30 @@
 #include <memory>
 #include <string>
+#include <cstdint>
 
 #include "witness/server/file_operations.h"
 #include "witness/server/server.h"
 
+static bool ValidateRotation(const char* flagname, int value) {
+  if (std::abs(value) > 360) {
+    LOG(ERROR) << "Rotation value needs to be within +- 360";
+    return false;
+  }
+  return true;
+}
+
 DEFINE_string(media_dir, "/data", "Directory to store media");
 DEFINE_string(photo_extension, ".jpg", "Photo extension");
 DEFINE_string(video_extension, ".avi", "Video extension");
+DEFINE_int32(camera_rotation, 0, "Camera rotation in degrees");
 DEFINE_validator(photo_extension, &witness::server::file_operations::ValidateExtension);
 DEFINE_validator(video_extension, &witness::server::file_operations::ValidateExtension);
+DEFINE_validator(camera_rotation, &ValidateRotation);
 
 namespace witness {
 namespace server {
 
-WitnessService::WitnessService() : webcam_() {
+WitnessService::WitnessService() : webcam_(FLAGS_camera_rotation) {
   LOG(INFO) << "Witness server version " << WITNESS_VERSION;
 }
 
