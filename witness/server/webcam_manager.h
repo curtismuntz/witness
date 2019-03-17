@@ -17,7 +17,7 @@ namespace webcam_manager {
 
 class WebcamManager {
  public:
-  WebcamManager();
+  explicit WebcamManager(int camera_rotation_degrees);
   ~WebcamManager();
 
   bool OpenCamera(int camera_id = 0);

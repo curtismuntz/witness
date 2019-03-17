@@ -7,7 +7,7 @@ import witness.api.witness_pb2_grpc as witness_pb2_grpc
 DEFAULT_TIMEOUT = 5  # seconds
 
 
-def open_webcam(service_stub, device=0):
+def open_webcam(service_stub, device=1):
     open_request = witness_pb2.OpenWebcamRequest()
     open_request.webcam_id = device
     reply = service_stub.OpenWebcam(open_request, DEFAULT_TIMEOUT)

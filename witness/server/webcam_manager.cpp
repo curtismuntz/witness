@@ -10,12 +10,12 @@ namespace witness {
 namespace server {
 namespace webcam_manager {
 
-WebcamManager::WebcamManager()
+WebcamManager::WebcamManager(int camera_rotation_degrees)
     : camera_(nullptr),
       worker_thread_(nullptr),
       camera_recording_(false),
       monitoring_(false),
-      rotation_degrees_(0) {}
+      rotation_degrees_(camera_rotation_degrees) {}
 WebcamManager::~WebcamManager() { CloseCamera(); }
 
 bool WebcamManager::OpenCamera(int camera_id /* = 0 */) {
