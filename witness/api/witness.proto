@@ -31,6 +31,9 @@ service WitnessCameraService {
 
   // Gets the version of the running server.
   rpc GetServerVersion(VersionRequest) returns (VersionReply);
+
+  // Sets an angle for the camera's image to be rotated
+  rpc SetCameraRotation(CameraRotationRequest) returns (CameraRotationReply);
 }
 
 message Error {
@@ -182,4 +185,17 @@ message VersionRequest {}
 message VersionReply {
   // Server version, useful to check capabilities and definitions.
   string version = 1;
+}
+
+message CameraRotationRequest {
+  // Rotation angle in degrees. Positive values mean counter-clockwise rotation
+  int32 degrees = 1;
+}
+
+message CameraRotationReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {}
 }

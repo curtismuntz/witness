@@ -47,6 +47,8 @@ using witness::api::witness::Error;
 using witness::api::witness::ServerState;
 using witness::api::witness::VersionRequest;
 using witness::api::witness::VersionReply;
+using witness::api::witness::CameraRotationRequest;
+using witness::api::witness::CameraRotationReply;
 
 class WitnessService final : public WitnessCameraService::Service {
  public:
@@ -73,6 +75,8 @@ class WitnessService final : public WitnessCameraService::Service {
                       StartMonitorReply *writer) override;
   Status GetServerVersion(ServerContext *context, const VersionRequest *request,
                           VersionReply *writer) override;
+  Status SetCameraRotation(ServerContext *context, const CameraRotationRequest *request,
+                           CameraRotationReply *writer) override;
   witness::server::webcam_manager::WebcamManager webcam_;
 };
 

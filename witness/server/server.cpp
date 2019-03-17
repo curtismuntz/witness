@@ -171,6 +171,15 @@ Status WitnessService::GetServerVersion(ServerContext *context, const VersionReq
   return Status::OK;
 }
 
+Status WitnessService::SetCameraRotation(ServerContext *context,
+                                         const CameraRotationRequest *request,
+                                         CameraRotationReply *reply) {
+  auto degrees = request->degrees();
+  LOG(INFO) << "CameraRotation of " << degrees << " requested" << std::endl;
+  webcam_.SetCameraRotation(degrees);
+  return Status::OK;
+}
+
 void RunServer() {
   const std::string kServerAddress{"0.0.0.0:50051"};
   WitnessService service;
