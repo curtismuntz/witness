@@ -36,7 +36,9 @@ std::string CreatePath(const std::string &directory, const std::string &filename
 
 std::string DecideFilename(const std::string &media_dir, const std::string &requested_fname,
                                   const std::string &ext) {
-  std::string fname = getenv("HOSTNAME") + std::string{"_"};
+  auto hostvar = getenv("HOSTNAME");
+  auto hostname = hostvar ? hostvar : "local";
+  std::string fname = hostname + std::string{"_"};
 
   if (requested_fname != "") {
     fname = fname + requested_fname;
