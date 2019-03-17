@@ -64,6 +64,16 @@ par_binary(
 )
 
 par_binary(
+    name = "set_rotation",
+    srcs = ["set_rotation.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
     name = "open_webcam",
     srcs = ["open_webcam.py"],
     visibility = ["//visibility:public"],

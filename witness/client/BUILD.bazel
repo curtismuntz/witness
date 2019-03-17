@@ -16,6 +16,7 @@ par_binary(
         "//witness/client/endpoint_scripts:get_version",
         "//witness/client/endpoint_scripts:list_files",
         "//witness/client/endpoint_scripts:open_webcam",
+        "//witness/client/endpoint_scripts:set_rotation",
         "//witness/client/endpoint_scripts:start_monitor",
         "//witness/client/endpoint_scripts:start_recording",
         "//witness/client/endpoint_scripts:start_timelapse",

@@ -11,7 +11,11 @@ namespace server {
 namespace webcam_manager {
 
 WebcamManager::WebcamManager()
-    : camera_(nullptr), worker_thread_(nullptr), camera_recording_(false), monitoring_(false) {}
+    : camera_(nullptr),
+      worker_thread_(nullptr),
+      camera_recording_(false),
+      monitoring_(false),
+      rotation_degrees_(0) {}
 WebcamManager::~WebcamManager() { CloseCamera(); }
 
 bool WebcamManager::OpenCamera(int camera_id /* = 0 */) {
@@ -44,7 +48,11 @@ bool WebcamManager::SetParameter(const int cv_parameter, const int value) {
 }
 
 bool WebcamManager::SaveImage(const std::string &desired_filename) {
-  auto frame = GrabFrame();
+  OpenCamera();
+  cv::Mat frame;
+  ReadFrame(&frame);
+  CloseCamera();
+  Watermark(&frame);
 
   bool success = !frame.empty();
   if (success) {
@@ -54,19 +62,31 @@ bool WebcamManager::SaveImage(const std::string &desired_filename) {
   return success;
 }
 
-cv::Mat WebcamManager::GrabFrame() {
-  OpenCamera();
-
-  cv::Mat frame;
-
-  camera_->read(frame);
-  if (frame.empty()) {
-    LOG(INFO) << "empty frame" << std::endl;
+void WebcamManager::ReadGrey(cv::Mat *frame, cv::Mat *grey) {
+  if (ReadFrame(frame)) {
+    cv::cvtColor(*frame, *grey, CV_BGR2GRAY);
   }
+}
 
-  CloseCamera();
-  Watermark(&frame);
-  return frame;
+bool WebcamManager::ReadFrame(cv::Mat *frame) {
+  if (camera_->isOpened()) {
+    camera_->read(*frame);
+
+    if (frame->empty()) {
+      LOG(INFO) << "empty frame" << std::endl;
+      return false;
+    }
+
+    if (rotation_degrees_ != 0) {
+      static const double scale = 1.0;
+      auto center = cv::Point2f(frame->cols / 2., frame->rows / 2.);
+      auto M = cv::getRotationMatrix2D(center, rotation_degrees_, scale);
+      cv::warpAffine(*frame, *frame, M, frame->size());
+    }
+    return true;
+  } else {
+    return false;
+  }
 }
 
 void WebcamManager::TimelapseLoop(const std::string &file_path, int sleep_for) {
@@ -80,8 +100,8 @@ void WebcamManager::TimelapseLoop(const std::string &file_path, int sleep_for) {
 
   cv::VideoWriter video(file_path, CV_FOURCC('M', 'J', 'P', 'G'), 30, cv::Size(width, height));
   while (camera_recording_ && camera_->isOpened()) {
-    camera_->read(frame);  // get a new frame from camera
-    if (frame.empty()) {
+    // get a new frame from camera
+    if (!ReadFrame(&frame)) {
       break;
     }
     std::chrono::seconds sec(sleep_for);
@@ -120,8 +140,8 @@ void WebcamManager::VideoLoop(const std::string &fname) {
 
   cv::Mat frame;
   while (camera_recording_ && camera_->isOpened()) {
-    camera_->read(frame);  // get a new frame from camera
-    if (frame.empty()) {
+    // get a new frame from camera
+    if (ReadFrame(&frame)) {
       break;
     }
     Watermark(&frame);
@@ -198,8 +218,7 @@ bool WebcamManager::MotionDetected(cv::Mat *foreground_mask) {
   std::vector<std::vector<cv::Point>> contours;
   std::vector<cv::Vec4i> hierarchy;
 
-  cv::findContours(*foreground_mask, contours, hierarchy, CV_RETR_CCOMP,
-                   CV_CHAIN_APPROX_SIMPLE);
+  cv::findContours(*foreground_mask, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
   for (size_t i = 0; i < contours.size(); i++) {
     double a = cv::contourArea(contours[i], false);
@@ -211,13 +230,6 @@ bool WebcamManager::MotionDetected(cv::Mat *foreground_mask) {
   auto motion_detected = largest_area > MAGIC_MOTION_THRESHOLD ? true : false;
 
   return motion_detected;
-}
-
-void WebcamManager::ReadFrame(cv::Mat *frame, cv::Mat *grey) {
-  if (camera_->isOpened()) {
-    camera_->read(*frame);
-    cv::cvtColor(*frame, *grey, CV_BGR2GRAY);
-  }
 }
 
 void WebcamManager::MonitorLoop(const std::string &desired_filename) {
@@ -232,13 +244,13 @@ void WebcamManager::MonitorLoop(const std::string &desired_filename) {
   pBackSub = cv::createBackgroundSubtractorMOG2();
 
   // seed background subtractor
-  ReadFrame(&frame, &grey);
+  ReadGrey(&frame, &grey);
   pBackSub->apply(grey, foreground_mask);
 
   auto video = CreateVideoObject(desired_filename);
 
   while (monitoring_ && camera_->isOpened()) {
-    ReadFrame(&frame, &grey);
+    ReadGrey(&frame, &grey);
     pBackSub->apply(grey, foreground_mask);
 
     if (MotionDetected(&foreground_mask)) {

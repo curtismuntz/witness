@@ -2,8 +2,8 @@
 
 #include <iostream>
 #include <memory>
-#include <thread>
 #include <string>
+#include <thread>
 
 #include "opencv2/core.hpp"
 #include "opencv2/highgui.hpp"
@@ -30,7 +30,8 @@ class WebcamManager {
   bool StopRecording();
   bool IsRecording() { return camera_recording_; }
   bool IsMonitoring() { return monitoring_; }
-  bool IsActive() {return IsRecording() || IsMonitoring();}
+  bool IsActive() { return IsRecording() || IsMonitoring(); }
+  void SetCameraRotation(const int degrees) { rotation_degrees_ = degrees; }
 
  private:
   void VideoLoop(const std::string &fname);
@@ -38,9 +39,8 @@ class WebcamManager {
   void MonitorLoop(const std::string &fname);
   bool MotionDetected(cv::Mat *foreground_mask);
   cv::VideoWriter CreateVideoObject(const std::string &fname);
-
-  void ReadFrame(cv::Mat *frame, cv::Mat *grey);
-  cv::Mat GrabFrame();
+  bool ReadFrame(cv::Mat *frame);
+  void ReadGrey(cv::Mat *frame, cv::Mat *grey);
   void Watermark(cv::Mat *img);
   void WatermarkTime(cv::Mat *img);
 
@@ -48,6 +48,7 @@ class WebcamManager {
   std::unique_ptr<std::thread> worker_thread_;
   bool camera_recording_;
   bool monitoring_;
+  int rotation_degrees_;
 };
 
 }  // namespace webcam_manager

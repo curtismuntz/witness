@@ -34,6 +34,7 @@ def main():
         "get_version": lambda: endpoint_scripts.get_version.get_version(service),
         "list_files": lambda: endpoint_scripts.list_files.list_files(service),
         "open_webcam": lambda: endpoint_scripts.open_webcam.open_webcam(service),
+        "set_rotation": lambda: endpoint_scripts.set_rotation.set_rotation(service),
         "start_monitor": lambda: endpoint_scripts.start_monitor.start_monitor(service),
         "start_recording": lambda: endpoint_scripts.start_recording.start_recording(service),
         "start_timelapse": lambda: endpoint_scripts.start_timelapse.start_timelapse(service),
