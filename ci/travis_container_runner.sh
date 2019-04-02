@@ -6,4 +6,4 @@ docker run \
   --rm \
   -it \
   -v "$PWD":/opt/src \
-  murtis/bazel ${cmd}
+  murtis/bazelisk_container ${cmd}
