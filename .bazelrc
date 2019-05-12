@@ -1,6 +1,7 @@
 build --cxxopt=--std=c++14
 build --verbose_failures
 build --compiler=compiler
+build --python_top=//:py_runtime_2
 
 # Tracking incompatible flags that will need to be upgraded. These are all required as the gRPC
 # pipeline needs to be upgraded.
@@ -23,7 +24,6 @@ build:armv7hf --crosstool_top=@murtis_bazel_compilers//compilers/arm_compiler:to
 build:armv7hf --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
 build:armv7hf --cpu=armeabi-v7a --compiler=gcc
 build:armv7hf --spawn_strategy=standalone
-build:armv7hf --python_top=//:py_runtime_2
 
 build:aarch64 --crosstool_top=@murtis_bazel_compilers//compilers/arm_compiler:toolchain
 build:aarch64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
