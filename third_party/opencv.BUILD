@@ -6,9 +6,16 @@
 package(default_visibility = ["//visibility:private"])
 
 config_setting(
-    name = "arm",
+    name = "arm7",
     values = {
         "cpu": "armeabi-v7a",
+    },
+)
+
+config_setting(
+    name = "arm8",
+    values = {
+        "cpu": "aarch64-linux-gnu",
     },
 )
 
@@ -129,7 +136,8 @@ EOF""",
 genrule(
     name = "cvconfig",
     srcs = select({
-        ":arm": ["cvconfig_armv7hf.h"],
+        ":arm7": ["cvconfig_armv7hf.h"],
+        ":arm8": ["cvconfig_armv7hf.h"],
         "//conditions:default": ["cvconfig_amd64.h"],
     }),
     outs = ["cvconfig.h"],
@@ -139,7 +147,8 @@ genrule(
 genrule(
     name = "cv_cpu_config",
     srcs = select({
-        ":arm": ["cv_cpu_config_armv7hf.h"],
+        ":arm7": ["cv_cpu_config_armv7hf.h"],
+        ":arm8": ["cv_cpu_config_armv7hf.h"],
         "//conditions:default": ["cv_cpu_config_amd64.h"],
     }),
     outs = ["cv_cpu_config.h"],
@@ -543,7 +552,7 @@ cat > $@ <<"EOF"
 /* #undef HAVE_LIBREALSENSE */
 
 /* PNG codec */
-#define HAVE_PNG
+//#define HAVE_PNG
 
 /* Posix threads (pthreads) */
 #define HAVE_PTHREAD

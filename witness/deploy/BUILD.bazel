@@ -6,6 +6,11 @@ config_setting(
     values = {"cpu": "armeabi-v7a"},
 )
 
+config_setting(
+    name = "aarch64-linux-gnu",
+    values = {"cpu": "aarch64-linux-gnu"},
+)
+
 sh_binary(
     name = "launcher",
     srcs = ["launcher.sh"],
@@ -64,10 +69,7 @@ pkg_deb(
 
 container_image(
     name = "container",
-    base = select({
-        ":armeabi-v7a": "@witness_armv7_docker_base//image",
-        "//conditions:default": "@witness_amd64_docker_base//image",
-    }),
+    base = "@witness_amd64_docker_base//image",
     cmd = ["/opt/witness/launcher"],
     mode = "777",
     stamp = 1,
@@ -84,11 +86,29 @@ container_image(
     tars = [":witness_tar"],
 )
 
+container_image(
+    name = "container_aarch64",
+    base = "@witness_aarch64_docker_base//image",
+    cmd = ["/opt/witness/launcher"],
+    mode = "777",
+    stamp = 1,
+    tars = [":witness_tar"],
+)
+
 container_push(
     name = "push_witness_armv7",
     format = "Docker",
     image = ":container_armv7",
     registry = "index.docker.io",
     repository = "murtis/witness_armv7hf",
+    tag = "service",
+)
+
+container_push(
+    name = "push_witness_aarch64",
+    format = "Docker",
+    image = ":container_aarch64",
+    registry = "index.docker.io",
+    repository = "murtis/witness_aarch64",
     tag = "service",
 )

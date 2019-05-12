@@ -5,9 +5,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 ###############################
 http_archive(
     name = "murtis_bazel_tools",
-    sha256 = "a6bcb86c7b5ed4c55fddd4b64d9c4916677e758f0fdd7f051f9dbfca8a6a8eee",
-    strip_prefix = "bazel_tools-811127f89abd954e3ed4a89e9aa90b468c71c2d4",
-    urls = ["https://github.com/curtismuntz/bazel_tools/archive/811127f89abd954e3ed4a89e9aa90b468c71c2d4.tar.gz"],
+    sha256 = "099798213986aa96d7dc1bdc6f7b0841eeefe5408f6ede85f5530638a9aff1bf",
+    strip_prefix = "bazel_tools-47f50405eb76f8320dc16c11509595254af98a4d",
+    urls = ["https://github.com/curtismuntz/bazel_tools/archive/47f50405eb76f8320dc16c11509595254af98a4d.tar.gz"],
 )
 
 load("@murtis_bazel_tools//tools:github_repo.bzl", "github_repo")
@@ -18,8 +18,8 @@ linter_dependencies()
 github_repo(
     name = "murtis_bazel_compilers",
     repo = "bazel_compilers",
-    sha256 = "6d0f5efaa3ac073906ef3351da4038bfd081296d6307e0e87c33ffc2cc876a4f",
-    tag = "eaafbe4ee813b2d1363e8022eee2218ac3e2da06",
+    sha256 = "0006cf0d09b488d172ad46806ebcd25f39957069d1fcb4536ea3c79c08d67192",
+    tag = "4eceef3d494411b2959d33374618c40c9720d9a9",
     user = "curtismuntz",
 )
 
@@ -32,9 +32,9 @@ cross_compiler_dependencies()
 ###############################
 http_archive(
     name = "build_stack_rules_proto",
-    sha256 = "128c4486b1707db917411c6e448849dd76ea3b8ba704f9e0627d9b01f2ee45fe",
-    strip_prefix = "rules_proto-f5d6eea6a4528bef3c1d3a44d486b51a214d61c2",
-    urls = ["https://github.com/stackb/rules_proto/archive/f5d6eea6a4528bef3c1d3a44d486b51a214d61c2.tar.gz"],
+    urls = ["https://github.com/stackb/rules_proto/archive/56665373fe541d6f134d394624c8c64cd5652e8c.tar.gz"],
+    sha256 = "78e378237c6e7bd7cfdda155d4f7010b27723f26ebfa6345e79675bddbbebc11",
+    strip_prefix = "rules_proto-56665373fe541d6f134d394624c8c64cd5652e8c",
 )
 
 load("@build_stack_rules_proto//cpp:deps.bzl", "cpp_grpc_library")
@@ -71,6 +71,13 @@ container_pull(
     name = "witness_armv7_docker_base",
     registry = "index.docker.io",
     repository = "murtis/witness_armv7hf",
+    tag = "base",
+)
+
+container_pull(
+    name = "witness_aarch64_docker_base",
+    registry = "index.docker.io",
+    repository = "murtis/witness_aarch64",
     tag = "base",
 )
 
