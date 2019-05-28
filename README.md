@@ -1,11 +1,20 @@
-# witness
+# Witness: An API callable webcam project.
 [![Build Status](https://travis-ci.org/curtismuntz/witness.svg?branch=master)](https://travis-ci.org/curtismuntz/witness)
 
-an api callable webcam project.
+An api callable webcam project. Read about it in my blog post on [https://murt.is/articles/2019-03/witness.html](https://murt.is/articles/2019-03/witness.html).
+
+I work a lot in robotics. Sometimes testing robots outside of simulators can result in hardware damaging incidents. Debugging these incidents is a combination of digging through log files and relying on witness accounts. Witnesses are imperfect, as they can be biased or perhaps they see the whole incident.
+
+Typically, witness cameras are used to combat this problem. It becomes part of the operational practice to always start a camera recording when you start a test. The problem with recording every test, is if it’s not automated, eventually you’ll forget to do it. This led me to develop the concept of an unbiased robotic witness. The idea is to have an API callable webcam that is scalable to however many witnesses I want to have.
+
+Using this project, you can now integrate the API calls into your usual robotics testing procedures. Any time you're about to test a new feature, the witnesses can be told to start recording sessions with the same filename (the software prepends hostname to filename). Then, all witness accounts can be downloaded upon test completion. This automates the process of synchronizing tests with witness accounts, as well as ensures a video is always recorded.
+
+# Usage
 
 See the [protobuf definition](witness/api/witness.proto) for supported features and more information.
 
-# usage
+
+# Running the service
 
 Run server locally:
 
@@ -18,6 +27,12 @@ bazel run witness/deploy:container
 docker run --rm -it --device=/dev/video1:/dev/video0:rwm bazel/witness/deploy:container
 ```
 
+# Example clients
+
 Run simple client gui:
 
 `bazel run witness/client:simple_gui -c opt`
+
+# Running the service on an IoT device
+
+This project has tooling to develop aarch64 and armv7hf containers for use on Raspberry Pi and Nvidia Jetson (Nano, TX1, TX2, and Xavier) computers. These containers can be pushed to dockerhub and pulled onto each device, or you could use [balena](https://balena.io) to manage a fleet of witnesses.
