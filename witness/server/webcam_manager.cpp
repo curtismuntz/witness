@@ -141,7 +141,7 @@ void WebcamManager::VideoLoop(const std::string &fname) {
   cv::Mat frame;
   while (camera_recording_ && camera_->isOpened()) {
     // get a new frame from camera
-    if (ReadFrame(&frame)) {
+    if (!ReadFrame(&frame)) {
       break;
     }
     Watermark(&frame);
