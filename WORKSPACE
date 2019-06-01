@@ -10,17 +10,15 @@ http_archive(
     urls = ["https://github.com/curtismuntz/bazel_tools/archive/47f50405eb76f8320dc16c11509595254af98a4d.tar.gz"],
 )
 
-load("@murtis_bazel_tools//tools:github_repo.bzl", "github_repo")
 load("@murtis_bazel_tools//tools:deps.bzl", "linter_dependencies")
 
 linter_dependencies()
 
-github_repo(
+http_archive(
     name = "murtis_bazel_compilers",
-    repo = "bazel_compilers",
-    sha256 = "0006cf0d09b488d172ad46806ebcd25f39957069d1fcb4536ea3c79c08d67192",
-    tag = "4eceef3d494411b2959d33374618c40c9720d9a9",
-    user = "curtismuntz",
+    sha256 = "16865fc175a3f64f5179c484d47b80170e7635093348ce51743c1eb261413246",
+    strip_prefix = "bazel_compilers-0.4.0",
+    urls = ["https://github.com/curtismuntz/bazel_compilers/archive/v0.4.0.tar.gz"],
 )
 
 load("@murtis_bazel_compilers//compilers:dependencies.bzl", "cross_compiler_dependencies")
@@ -32,9 +30,9 @@ cross_compiler_dependencies()
 ###############################
 http_archive(
     name = "build_stack_rules_proto",
-    urls = ["https://github.com/stackb/rules_proto/archive/56665373fe541d6f134d394624c8c64cd5652e8c.tar.gz"],
     sha256 = "78e378237c6e7bd7cfdda155d4f7010b27723f26ebfa6345e79675bddbbebc11",
     strip_prefix = "rules_proto-56665373fe541d6f134d394624c8c64cd5652e8c",
+    urls = ["https://github.com/stackb/rules_proto/archive/56665373fe541d6f134d394624c8c64cd5652e8c.tar.gz"],
 )
 
 load("@build_stack_rules_proto//cpp:deps.bzl", "cpp_grpc_library")
