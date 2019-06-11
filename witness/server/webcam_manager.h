@@ -24,8 +24,10 @@ class WebcamManager {
   void CloseCamera();
   bool SetParameter(const int cv_parameter, const int value);
   bool SaveImage(const std::string &desired_filename);
+  bool UnmanagedSaveImage(const std::string &desired_filename);
   bool StartRecording(const std::string &desired_filename);
-  bool StartTimelapse(const std::string &desired_filename, int sleep_for);
+  bool StartTimelapse(const std::string &folder_path, const std::string &video_ext,
+                      const std::string &photo_ext, int sleep_for);
   bool StartMonitoring(const std::string &desired_filename);
   bool StopRecording();
   bool IsRecording() { return camera_recording_; }
@@ -35,7 +37,8 @@ class WebcamManager {
 
  private:
   void VideoLoop(const std::string &fname);
-  void TimelapseLoop(const std::string &fname, int sleep_for);
+  void TimelapseLoop(const std::string &folder_path, const std::string &video_ext,
+                     const std::string &photo_ext, int sleep_for);
   void MonitorLoop(const std::string &fname);
   bool MotionDetected(cv::Mat *foreground_mask);
   cv::VideoWriter CreateVideoObject(const std::string &fname);

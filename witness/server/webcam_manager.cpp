@@ -2,7 +2,9 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
+#include "third_party/alphanum/alphanum.hpp"
 #include "witness/server/file_operations.h"
 #include "witness/server/webcam_manager.h"
 
@@ -49,9 +51,14 @@ bool WebcamManager::SetParameter(const int cv_parameter, const int value) {
 
 bool WebcamManager::SaveImage(const std::string &desired_filename) {
   OpenCamera();
+  auto success = UnmanagedSaveImage(desired_filename);
+  CloseCamera();
+  return success;
+}
+
+bool WebcamManager::UnmanagedSaveImage(const std::string &desired_filename) {
   cv::Mat frame;
   ReadFrame(&frame);
-  CloseCamera();
   Watermark(&frame);
 
   bool success = !frame.empty();
@@ -89,30 +96,40 @@ bool WebcamManager::ReadFrame(cv::Mat *frame) {
   }
 }
 
-void WebcamManager::TimelapseLoop(const std::string &file_path, int sleep_for) {
+void WebcamManager::TimelapseLoop(const std::string &folder_path, const std::string &video_ext,
+                                  const std::string &photo_ext, int sleep_for) {
   OpenCamera();
-
   cv::Mat frame;
   auto frame_number = 0u;
 
-  auto width = camera_->get(cv::CAP_PROP_FRAME_WIDTH);
-  auto height = camera_->get(cv::CAP_PROP_FRAME_HEIGHT);
-
-  cv::VideoWriter video(file_path, CV_FOURCC('M', 'J', 'P', 'G'), 30, cv::Size(width, height));
+  // Save photos to the path and sleep between.
   while (camera_recording_ && camera_->isOpened()) {
-    // get a new frame from camera
-    if (!ReadFrame(&frame)) {
-      break;
-    }
+    auto img_name = std::string{folder_path + "/" + std::to_string(frame_number) + photo_ext};
     std::chrono::seconds sec(sleep_for);
-    LOG(INFO) << "TIMELAPSE running: Frame " << frame_number << " Sleep: " << sec.count() << "s";
+
+    LOG(INFO) << "Saving timpelapse photo " << img_name << "; Sleep: " << sec.count() << "s";
+    UnmanagedSaveImage(img_name);
+
     std::this_thread::sleep_for(sec);
-    Watermark(&frame);
-    video.write(frame);
     frame_number++;
   }
-  video.release();
+
+  auto width = camera_->get(cv::CAP_PROP_FRAME_WIDTH);
+  auto height = camera_->get(cv::CAP_PROP_FRAME_HEIGHT);
   CloseCamera();
+
+  auto video_name = std::string{folder_path + video_ext};
+  LOG(INFO) << "Writing timelapse video: " << video_name;
+  cv::VideoWriter video(video_name, CV_FOURCC('M', 'J', 'P', 'G'), 30, cv::Size(width, height));
+
+  // Iterate over folder path and add frames to a video object.
+  auto file_vector = file_operations::ListDir(folder_path, photo_ext, video_ext);
+  std::sort(file_vector.begin(), file_vector.end(), doj::alphanum_less<std::string>());
+  for (auto i : file_vector) {
+    auto mat = cv::imread(i);
+    video.write(mat);
+  }
+  video.release();
 }
 
 cv::VideoWriter WebcamManager::CreateVideoObject(const std::string &fname) {
@@ -151,14 +168,15 @@ void WebcamManager::VideoLoop(const std::string &fname) {
   CloseCamera();
 }
 
-bool WebcamManager::StartTimelapse(const std::string &desired_filename, int sleep_for) {
+bool WebcamManager::StartTimelapse(const std::string &folder_path, const std::string &video_ext,
+                                   const std::string &photo_ext, int sleep_for) {
   if (IsRecording() || IsMonitoring()) {
     return false;
   }
   camera_recording_ = true;
   // start video thread;
-  worker_thread_ = std::make_unique<std::thread>(&WebcamManager::TimelapseLoop, this,
-                                                 desired_filename, sleep_for);
+  worker_thread_ = std::make_unique<std::thread>(&WebcamManager::TimelapseLoop, this, folder_path,
+                                                 video_ext, photo_ext, sleep_for);
   return true;
 }
 

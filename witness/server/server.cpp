@@ -1,11 +1,11 @@
+#include <cstdint>
 #include <memory>
 #include <string>
-#include <cstdint>
 
 #include "witness/server/file_operations.h"
 #include "witness/server/server.h"
 
-static bool ValidateRotation(const char* flagname, int value) {
+static bool ValidateRotation(const char *flagname, int value) {
   if (std::abs(value) > 360) {
     LOG(ERROR) << "Rotation value needs to be within +- 360";
     return false;
@@ -53,10 +53,18 @@ Status WitnessService::StartRecording(ServerContext *context, const StartRecordi
 Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelapseRequest *request,
                                       StartTimelapseReply *reply) {
   LOG(INFO) << "StartTimelapse requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(
-      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
+
+  // cut a dir with filename
+  auto folder_name = file_operations::DecideFilename(FLAGS_media_dir, request->filename(), "");
+
+  LOG(INFO) << "Making Directory " << folder_name;
+  file_operations::MakeDir(folder_name);
+
+  // auto fname = witness::server::file_operations::DecideFilename(
+  // FLAGS_media_dir, request->filename(), FLAGS_video_extension);
   if (!webcam_.IsActive()) {
-    auto success = webcam_.StartTimelapse(fname, request->sleep_for());
+    auto success = webcam_.StartTimelapse(folder_name, FLAGS_video_extension, FLAGS_photo_extension,
+                                          request->sleep_for());
     if (!success) {
       auto reply_error = reply->mutable_error();
       reply_error->set_code(Error::UNKNOWN);
