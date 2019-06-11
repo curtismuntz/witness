@@ -1,0 +1,15 @@
+# People sort strings with numbers differently than software does. Most sorting
+# algorithms compare ASCII values, which produces an ordering that is
+# inconsistent with human logic. Here's how to fix it.
+#
+# http://www.davekoelle.com/alphanum.html
+
+licenses(["notice"])  # MIT license
+
+exports_files(["LICENSE.txt"])
+
+cc_library(
+    name = "alphanum",
+    hdrs = ["alphanum.hpp"],
+    visibility = ["//visibility:public"],
+)

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <experimental/filesystem>
 #include <glog/logging.h>
+#include <experimental/filesystem>
 
 #include <chrono>
 #include <iomanip>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace witness {
 namespace server {
@@ -21,14 +21,16 @@ static bool ValidateExtension(const char *flagname, const std::string &value) {
   return true;
 }
 
-void ClearDir(std::string media_dir);
-std::vector<std::string> ListDir(std::string media_path, std::string photo_ext,
-                                std::string video_ext);
+void MakeDir(const std::string &fullpath);
+void ClearDir(const std::string &fullpath);
+std::vector<std::string> ListDir(const std::string &media_path, const std::string &photo_ext,
+                                 const std::string &video_ext);
 std::string CurrentTimeString();
-std::string CreatePath(const std::string &directory, const std::string &filename,
-                       const std::string extension);
+std::string CreatePathString(const std::string &directory, const std::string &filename,
+                             const std::string extension = "");
 std::string DecideFilename(const std::string &media_dir, const std::string &requested_fname,
-                                  const std::string &ext);
+                           const std::string &ext);
+
 }  // namespace file_operations
 }  // namespace server
 }  // namespace witness

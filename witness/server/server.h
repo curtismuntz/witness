@@ -18,37 +18,37 @@ namespace witness {
 namespace server {
 
 using grpc::Server;
-using grpc::ServerWriter;
 using grpc::ServerAsyncWriter;
 using grpc::ServerBuilder;
-using grpc::ServerContext;
 using grpc::ServerCompletionQueue;
+using grpc::ServerContext;
+using grpc::ServerWriter;
 using grpc::Status;
-using witness::api::witness::WitnessCameraService;
-using witness::api::witness::OpenWebcamRequest;
-using witness::api::witness::OpenWebcamReply;
-using witness::api::witness::ClearDataRequest;
-using witness::api::witness::ClearDataReply;
-using witness::api::witness::StartRecordingRequest;
-using witness::api::witness::StartRecordingReply;
-using witness::api::witness::StopRecordingRequest;
-using witness::api::witness::StopRecordingReply;
-using witness::api::witness::StartTimelapseRequest;
-using witness::api::witness::StartTimelapseReply;
-using witness::api::witness::GetFileListRequest;
-using witness::api::witness::FileListReply;
-using witness::api::witness::TakePhotoRequest;
-using witness::api::witness::TakePhotoReply;
-using witness::api::witness::ServerStateRequest;
-using witness::api::witness::ServerStateReply;
-using witness::api::witness::StartMonitorRequest;
-using witness::api::witness::StartMonitorReply;
-using witness::api::witness::Error;
-using witness::api::witness::ServerState;
-using witness::api::witness::VersionRequest;
-using witness::api::witness::VersionReply;
-using witness::api::witness::CameraRotationRequest;
 using witness::api::witness::CameraRotationReply;
+using witness::api::witness::CameraRotationRequest;
+using witness::api::witness::ClearDataReply;
+using witness::api::witness::ClearDataRequest;
+using witness::api::witness::Error;
+using witness::api::witness::FileListReply;
+using witness::api::witness::GetFileListRequest;
+using witness::api::witness::OpenWebcamReply;
+using witness::api::witness::OpenWebcamRequest;
+using witness::api::witness::ServerState;
+using witness::api::witness::ServerStateReply;
+using witness::api::witness::ServerStateRequest;
+using witness::api::witness::StartMonitorReply;
+using witness::api::witness::StartMonitorRequest;
+using witness::api::witness::StartRecordingReply;
+using witness::api::witness::StartRecordingRequest;
+using witness::api::witness::StartTimelapseReply;
+using witness::api::witness::StartTimelapseRequest;
+using witness::api::witness::StopRecordingReply;
+using witness::api::witness::StopRecordingRequest;
+using witness::api::witness::TakePhotoReply;
+using witness::api::witness::TakePhotoRequest;
+using witness::api::witness::VersionReply;
+using witness::api::witness::VersionRequest;
+using witness::api::witness::WitnessCameraService;
 
 class WitnessService final : public WitnessCameraService::Service {
  public:

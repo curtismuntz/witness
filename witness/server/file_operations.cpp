@@ -6,8 +6,8 @@ namespace witness {
 namespace server {
 namespace file_operations {
 
-void ClearDir(std::string media_dir) {
-  for (auto &p : std::experimental::filesystem::directory_iterator(media_dir)) {
+void ClearDir(const std::string &fullpath) {
+  for (auto &p : std::experimental::filesystem::directory_iterator(fullpath)) {
     LOG(INFO) << "Removing " << p.path();
     std::experimental::filesystem::remove_all(p.path());
   }
@@ -22,8 +22,9 @@ std::string CurrentTimeString() {
   return oss.str();
 }
 
-std::string CreatePath(const std::string &directory, const std::string &filename,
-                       const std::string extension) {
+// If no extension is provided, it won't append the extension!
+std::string CreatePathString(const std::string &directory, const std::string &filename,
+                             const std::string extension /* = "" */) {
   std::experimental::filesystem::path path;
   std::experimental::filesystem::path dir(directory);
   std::experimental::filesystem::path fname(filename);
@@ -35,7 +36,7 @@ std::string CreatePath(const std::string &directory, const std::string &filename
 }
 
 std::string DecideFilename(const std::string &media_dir, const std::string &requested_fname,
-                                  const std::string &ext) {
+                           const std::string &ext) {
   auto hostvar = getenv("HOSTNAME");
   auto hostname = hostvar ? hostvar : "local";
   std::string fname = hostname + std::string{"_"};
@@ -46,11 +47,11 @@ std::string DecideFilename(const std::string &media_dir, const std::string &requ
     fname = fname + CurrentTimeString();
   }
 
-  return CreatePath(media_dir, fname, ext);
+  return CreatePathString(media_dir, fname, ext);
 }
 
-std::vector<std::string> ListDir(std::string media_path, std::string photo_ext,
-                                std::string video_ext) {
+std::vector<std::string> ListDir(const std::string &media_path, const std::string &photo_ext,
+                                 const std::string &video_ext) {
   std::vector<std::string> file_list;
   for (const auto &p : std::experimental::filesystem::directory_iterator(media_path)) {
     auto fext = p.path().extension();
@@ -62,6 +63,11 @@ std::vector<std::string> ListDir(std::string media_path, std::string photo_ext,
   }
   return file_list;
 }
+
+void MakeDir(const std::string &fullpath) {
+  std::experimental::filesystem::create_directory(fullpath);
+}
+
 }  // namespace file_operations
 }  // namespace server
 }  // namespace witness

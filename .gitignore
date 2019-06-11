@@ -1,3 +1,4 @@
 *.pyc
 bazel-*
 __pycache__/
+pyenv/
