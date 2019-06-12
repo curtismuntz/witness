@@ -33,10 +33,11 @@ This project has tooling to develop aarch64 and armv7hf containers for use on Ra
 
 Their structure follows:
 
-murtis/witness_armv7hf -> works on raspberrypi products
-murtis/witness_aarch64 -> works on nvidia jetson products
+* murtis/witness_armv7hf -> works on raspberrypi products
+* murtis/witness_aarch64 -> works on nvidia jetson products
 
 Each witness architecture has two tags:
+
 * base -> the base image that bazel pulls down to apply layers on top (see //docker/base_images)
 * service -> the compiled service layer that sits on top of the base layer
 
