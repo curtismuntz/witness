@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   gflags::SetUsageMessage("Some usage message here");
   gflags::SetVersionString(WITNESS_VERSION);
   FLAGS_logtostderr = 1;
-  LOG(INFO) << "test";
+  LOG(INFO) << "HELLO DEMO";
   gflags::ParseCommandLineFlags(&argc, &argv, true);
   assert(video_extension_validator_registered);
   assert(photo_extension_validator_registered);
