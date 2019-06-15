@@ -186,7 +186,16 @@ http_archive(
     name = "com_google_absl",
     url = "https://github.com/abseil/abseil-cpp/archive/3e2e9b5557e76d098de4b8a2a659125b98ca519b.tar.gz",
 )
-
+http_archive(
+  name = "com_github_april_robotics_april_tag",
+  url = "https://github.com/AprilRobotics/apriltag/archive/3.1.1.tar.gz",
+  build_file= "//third_party:apriltag.BUILD",
+  strip_prefix = "apriltag-3.1.1",
+)
+bind(
+  name = "apriltag",
+  actual = "@com_github_april_robotics_april_tag//:apriltag",
+  )
 # already included by another project somehow...
 # http_archive(
 #     name = "gtest",
