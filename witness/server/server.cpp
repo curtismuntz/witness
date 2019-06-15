@@ -199,6 +199,12 @@ Status WitnessService::SetCameraRotation(ServerContext *context,
   return Status::OK;
 }
 
+Status WitnessService::StartAprilTracking(ServerContext *context,
+                                          const StartAprilTrackingRequest *request,
+                                          StartAprilTrackingReply *reply) {
+                                            return Status::OK;
+}
+
 void RunServer() {
   const std::string kServerAddress{"0.0.0.0:50051"};
   WitnessService service;
