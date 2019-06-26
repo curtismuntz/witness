@@ -11,6 +11,16 @@ py_library(
 )
 
 par_binary(
+    name = "track",
+    srcs = ["track.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+par_binary(
     name = "download_all",
     srcs = ["download_all.py"],
     visibility = ["//visibility:public"],

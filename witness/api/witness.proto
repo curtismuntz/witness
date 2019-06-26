@@ -34,6 +34,17 @@ service WitnessCameraService {
 
   // Sets an angle for the camera's image to be rotated
   rpc SetCameraRotation(CameraRotationRequest) returns (CameraRotationReply);
+
+  // Starts a april tag tracking service
+  rpc StartAprilTracking(StartAprilTrackingRequest) returns (StartAprilTrackingReply);
+}
+
+message StartAprilTrackingRequest {
+  string apriltag_id = 1;
+}
+
+message StartAprilTrackingReply {
+  /* repeated Vector3 = 1; */
 }
 
 message Error {
