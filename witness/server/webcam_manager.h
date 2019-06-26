@@ -32,11 +32,13 @@ class WebcamManager {
   bool StopRecording();
   bool IsRecording() { return camera_recording_; }
   bool IsMonitoring() { return monitoring_; }
-  bool IsActive() { return IsRecording() || IsMonitoring(); }
+  bool IsTracking() {return tracking_; }
+  bool IsActive() { return IsRecording() || IsMonitoring() || IsTracking(); }
   void SetCameraRotation(const int degrees) { rotation_degrees_ = degrees; }
-
+  bool StartAprilTracking(const std::string &tag_id);
  private:
   void VideoLoop(const std::string &fname);
+  void TrackingLoop(const std::string &tag_id);
   void TimelapseLoop(const std::string &folder_path, const std::string &video_ext,
                      const std::string &photo_ext, int sleep_for);
   void MonitorLoop(const std::string &fname);
@@ -51,6 +53,7 @@ class WebcamManager {
   std::unique_ptr<std::thread> worker_thread_;
   bool camera_recording_;
   bool monitoring_;
+  bool tracking_;
   int rotation_degrees_;
 };
 

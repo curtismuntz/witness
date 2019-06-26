@@ -202,7 +202,10 @@ Status WitnessService::SetCameraRotation(ServerContext *context,
 Status WitnessService::StartAprilTracking(ServerContext *context,
                                           const StartAprilTrackingRequest *request,
                                           StartAprilTrackingReply *reply) {
-                                            return Status::OK;
+  auto tag_id = request->apriltag_id();
+  LOG(INFO) << "Using april tag id: " << tag_id;
+  webcam_.StartAprilTracking(tag_id);
+  return Status::OK;
 }
 
 void RunServer() {
