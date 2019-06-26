@@ -5,6 +5,11 @@ licenses(["notice"])  #BSD-2-Clause
 
 cc_library(
     name = "apriltag",
+    hdrs = [
+        "apriltag.h",
+        "tagStandard41h12.h",
+    ],
+    include_prefix = "apriltag",
     visibility = ["//visibility:public"],
     deps = [
         ":common",

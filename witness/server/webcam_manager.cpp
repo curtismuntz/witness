@@ -4,14 +4,14 @@
 #include <vector>
 #include <algorithm>
 
+extern "C" {
+#include "apriltag/apriltag.h"
+#include "apriltag/tagStandard41h12.h"
+}
 #include "third_party/alphanum/alphanum.hpp"
+
 #include "witness/server/file_operations.h"
 #include "witness/server/webcam_manager.h"
-
-extern "C" {
-#include "apriltag.h"
-#include "tagStandard41h12.h"
-}
 
 namespace witness {
 namespace server {
@@ -307,7 +307,7 @@ void WebcamManager::TrackingLoop(const std::string &tag_id) {
   apriltag_detector_t *td = apriltag_detector_create();
   apriltag_detector_add_family(td, tf);
 
-  // TODO: configurables!
+  // TODO(curtismuntz): configurables!
   td->quad_decimate = 2.0;
   td->quad_sigma = 0.0;
   td->nthreads = 1;

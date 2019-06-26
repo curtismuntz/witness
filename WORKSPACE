@@ -188,7 +188,7 @@ http_archive(
 )
 
 http_archive(
-    name = "com_github_april_robotics_april_tag",
+    name = "apriltag_archive",
     build_file = "//third_party:apriltag.BUILD",
     strip_prefix = "apriltag-3.1.1",
     url = "https://github.com/AprilRobotics/apriltag/archive/3.1.1.tar.gz",

@@ -32,10 +32,11 @@ class WebcamManager {
   bool StopRecording();
   bool IsRecording() { return camera_recording_; }
   bool IsMonitoring() { return monitoring_; }
-  bool IsTracking() {return tracking_; }
+  bool IsTracking() { return tracking_; }
   bool IsActive() { return IsRecording() || IsMonitoring() || IsTracking(); }
   void SetCameraRotation(const int degrees) { rotation_degrees_ = degrees; }
   bool StartAprilTracking(const std::string &tag_id);
+
  private:
   void VideoLoop(const std::string &fname);
   void TrackingLoop(const std::string &tag_id);
