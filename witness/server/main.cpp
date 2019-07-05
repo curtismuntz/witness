@@ -7,7 +7,6 @@ DEFINE_bool(verbose, false, "Display program name before message");
 
 int main(int argc, char *argv[]) {
   google::InitGoogleLogging(argv[0]);
-  gflags::SetUsageMessage("Some usage message here");
   gflags::SetVersionString(WITNESS_VERSION);
   LOG(INFO) << "Hello demo";
   LOG(INFO) << "Hello demo";

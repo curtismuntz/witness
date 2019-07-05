@@ -43,6 +43,7 @@ cc_library(
     deps = [
         ":file_operations",
         "//third_party/alphanum",
+        "@apriltag_archive//:apriltag",
         "@com_github_glog_glog//:glog",
         "@opencv_archive//:opencv",
     ],

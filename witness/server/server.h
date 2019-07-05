@@ -42,6 +42,8 @@ using witness::api::witness::StartRecordingReply;
 using witness::api::witness::StartRecordingRequest;
 using witness::api::witness::StartTimelapseReply;
 using witness::api::witness::StartTimelapseRequest;
+using witness::api::witness::StartAprilTrackingRequest;
+using witness::api::witness::StartAprilTrackingReply;
 using witness::api::witness::StopRecordingReply;
 using witness::api::witness::StopRecordingRequest;
 using witness::api::witness::TakePhotoReply;
@@ -77,6 +79,8 @@ class WitnessService final : public WitnessCameraService::Service {
                           VersionReply *writer) override;
   Status SetCameraRotation(ServerContext *context, const CameraRotationRequest *request,
                            CameraRotationReply *writer) override;
+  Status StartAprilTracking(ServerContext *context, const StartAprilTrackingRequest *request,
+                            StartAprilTrackingReply *writer) override;
   witness::server::webcam_manager::WebcamManager webcam_;
 };
 
