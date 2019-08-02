@@ -30,9 +30,9 @@ cross_compiler_dependencies()
 ###############################
 http_archive(
     name = "build_stack_rules_proto",
-    sha256 = "78e378237c6e7bd7cfdda155d4f7010b27723f26ebfa6345e79675bddbbebc11",
-    strip_prefix = "rules_proto-56665373fe541d6f134d394624c8c64cd5652e8c",
-    urls = ["https://github.com/stackb/rules_proto/archive/56665373fe541d6f134d394624c8c64cd5652e8c.tar.gz"],
+    sha256 = "85ccc69a964a9fe3859b1190a7c8246af2a4ead037ee82247378464276d4262a",
+    strip_prefix = "rules_proto-d9a123032f8436dbc34069cfc3207f2810a494ee",
+    urls = ["https://github.com/stackb/rules_proto/archive/d9a123032f8436dbc34069cfc3207f2810a494ee.tar.gz"],
 )
 
 load("@build_stack_rules_proto//cpp:deps.bzl", "cpp_grpc_library")
