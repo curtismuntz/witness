@@ -14,7 +14,7 @@ install: skip
 jobs:
   include:
     - stage: test
-      script: ci/travis_container_runner.sh ci/test_changed.sh
+      script: ci/travis_container_runner.sh ci/test_all.sh
     - stage: deploy
       script: ci/travis_container_runner.sh ci/deploy.sh
 
