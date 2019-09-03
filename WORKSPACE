@@ -177,9 +177,9 @@ bind(
 http_archive(
     name = "com_github_glog_glog",
     build_file = "//third_party:glog.BUILD",
-    sha256 = "819cb075d6b02b8e9c9c77c2be1d55cef7fec47e7c94359d2626f46268ae67bf",
-    strip_prefix = "glog-ba8a9f6952d04d1403b97df24e6836227751454e",
-    urls = ["https://github.com/google/glog/archive/ba8a9f6952d04d1403b97df24e6836227751454e.tar.gz"],
+    sha256 = "ec4a7a3d256ee0a192334644839f00dfdce78949cfdeba673b7339982e573db6",
+    strip_prefix = "glog-4cc89c9e2b452db579397887c37f302fb28f6ca1",
+    urls = ["https://github.com/google/glog/archive/4cc89c9e2b452db579397887c37f302fb28f6ca1.tar.gz"],
 )
 
 http_archive(
