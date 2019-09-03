@@ -1,7 +1,7 @@
 build --cxxopt=--std=c++14
 build --verbose_failures
 build --compiler=compiler
-build --python_top=//:py_runtime_2
+#build --python_top=//:py_runtime_2
 
 # Tracking incompatible flags that will need to be upgraded. These are all required as the gRPC
 # pipeline needs to be upgraded.
@@ -9,8 +9,8 @@ build --python_top=//:py_runtime_2
 #build --incompatible_allow_python_version_transitions
 #build --incompatible_bzl_disallow_load_after_statement=false
 #build --incompatible_disable_deprecated_attr_params=false
-#build --incompatible_remove_old_python_version_api=false
-#build --incompatible_depset_is_not_iterable=false
+build --incompatible_remove_old_python_version_api=false
+build --incompatible_depset_is_not_iterable=false
 #build --incompatible_disable_legacy_proto_provider=false
 #build --incompatible_disallow_load_labels_to_cross_package_boundaries=false
 #build --incompatible_no_support_tools_in_action_inputs=false
