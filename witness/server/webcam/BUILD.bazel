@@ -1,0 +1,11 @@
+cc_library(
+  name = "webcam",
+  hdrs = ["webcam.h"],
+  srcs = ["webcam.cpp"],
+  deps = [
+      "//witness/server/common:file_operations",
+      "@com_github_glog_glog//:glog",
+      "@opencv_archive//:opencv",
+  ],
+  visibility = ["//visibility:public"],
+)

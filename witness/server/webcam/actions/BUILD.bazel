@@ -1,0 +1,50 @@
+cc_library(
+  name = "webcam_action",
+  hdrs = ["webcam_action.h"],
+  srcs = ["webcam_action.cpp"],
+  deps = ["//witness/server/webcam:webcam"],
+)
+
+cc_library(
+  name = "video_recorder",
+  srcs = ["video_recorder.cpp"],
+  hdrs = ["video_recorder.h"],
+  deps = [
+      ":webcam_action",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "monitor",
+  srcs = ["monitor.cpp"],
+  hdrs = ["monitor.h"],
+  deps = [
+      ":webcam_action",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "timelapse",
+  srcs = ["timelapse.cpp"],
+  hdrs = ["timelapse.h"],
+  deps = [
+    ":webcam_action",
+    "//witness/server/common:file_operations",
+    "//third_party/alphanum",
+  ],
+  visibility = ["//visibility:public"],
+)
+
+cc_library(
+  name = "tracking",
+  srcs = ["tracking.cpp"],
+  hdrs = ["tracking.h"],
+  deps = [
+    ":webcam_action",
+    "//witness/server/common:file_operations",
+    "@apriltag_archive//:apriltag",
+  ],
+  visibility = ["//visibility:public"],
+)
