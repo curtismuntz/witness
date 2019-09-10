@@ -15,40 +15,6 @@ genrule(
         "&& echo `cat tmpfile` >> $@",
 )
 
-cc_library(
-    name = "file_operations",
-    srcs = ["file_operations.cpp"],
-    hdrs = ["file_operations.h"],
-    linkopts = ["-lstdc++fs"],
-    deps = ["@com_github_glog_glog//:glog"],
-)
-
-cc_test(
-    name = "file_operations_test",
-    srcs = ["file_operations_test.cpp"],
-    deps = [
-        ":file_operations",
-        "//external:gtest",
-    ],
-)
-
-cc_library(
-    name = "webcam_manager",
-    srcs = ["webcam_manager.cpp"],
-    hdrs = ["webcam_manager.h"],
-    defines = select({
-        ":armeabi-v7a": ["RPI_CAM=true"],
-        "//conditions:default": [],
-    }),
-    deps = [
-        ":file_operations",
-        "//third_party/alphanum",
-        "@apriltag_archive//:apriltag",
-        "@com_github_glog_glog//:glog",
-        "@opencv_archive//:opencv",
-    ],
-)
-
 cc_binary(
     name = "server",
     srcs = [
@@ -59,8 +25,12 @@ cc_binary(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":file_operations",
-        ":webcam_manager",
+        "//witness/server/common:file_operations",
+        "//witness/server/webcam:webcam",
+        "//witness/server/webcam/actions:video_recorder",
+        "//witness/server/webcam/actions:timelapse",
+        "//witness/server/webcam/actions:monitor",
+        "//witness/server/webcam/actions:tracking",
         "//witness/api:cc_grpc",
         "@com_github_glog_glog//:glog",
     ],

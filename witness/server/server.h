@@ -9,10 +9,12 @@
 #include <grpc/grpc.h>
 #include <grpc/support/log.h>
 #include <thread>
+#include <memory>
 
 #include "witness/api/witness.grpc.pb.h"
 #include "witness/server/version.h"
-#include "witness/server/webcam_manager.h"
+#include "witness/server/webcam/actions/webcam_action.h"
+#include "witness/server/webcam/webcam.h"
 
 namespace witness {
 namespace server {
@@ -81,7 +83,8 @@ class WitnessService final : public WitnessCameraService::Service {
                            CameraRotationReply *writer) override;
   Status StartAprilTracking(ServerContext *context, const StartAprilTrackingRequest *request,
                             StartAprilTrackingReply *writer) override;
-  witness::server::webcam_manager::WebcamManager webcam_;
+  std::shared_ptr<witness::webcam::Webcam> webcam_;
+  std::unique_ptr<witness::server::webcam::actions::WebcamAction> webcam_action_;
 };
 
 void RunServer();

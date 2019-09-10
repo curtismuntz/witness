@@ -1,0 +1,17 @@
+cc_library(
+    name = "file_operations",
+    srcs = ["file_operations.cpp"],
+    hdrs = ["file_operations.h"],
+    linkopts = ["-lstdc++fs"],
+    deps = ["@com_github_glog_glog//:glog"],
+    visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "file_operations_test",
+    srcs = ["file_operations_test.cpp"],
+    deps = [
+        ":file_operations",
+        "//external:gtest",
+    ],
+)
