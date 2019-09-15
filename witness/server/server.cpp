@@ -38,7 +38,7 @@ Status WitnessService::StartRecording(ServerContext *context, const StartRecordi
   LOG(INFO) << "StartRecording requested" << std::endl;
   auto fname = witness::server::file_operations::DecideFilename(
       FLAGS_media_dir, request->filename(), FLAGS_video_extension);
-
+  LOG(INFO) << "  fname: " << fname << std::endl;
   if (!webcam_action_) {
     webcam_action_ =
         std::make_unique<witness::server::webcam::actions::VideoRecorder>(webcam_, fname);
@@ -74,7 +74,7 @@ Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelap
   // cut a dir with filename
   auto folder_name = file_operations::DecideFilename(FLAGS_media_dir, request->filename(), "");
 
-  LOG(INFO) << "Making Directory " << folder_name;
+  LOG(INFO) << "  Making Directory " << folder_name;
   file_operations::MakeDir(folder_name);
 
   // auto fname = witness::server::file_operations::DecideFilename(
@@ -147,7 +147,7 @@ Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest 
       FLAGS_media_dir, request->filename(), FLAGS_photo_extension);
   auto success = webcam_->SaveImage(fname);
   if (success) {
-    LOG(INFO) << "Saved file " << fname << std::endl;
+    LOG(INFO) << "  Saved file " << fname << std::endl;
     auto reply_message = reply->mutable_data();
     reply_message->set_filename(fname);
   } else {
@@ -171,6 +171,7 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
+  LOG(INFO) << "GetFileList requested" << std::endl;
   auto file_list = witness::server::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
                                                              FLAGS_video_extension);
   for (const auto str : file_list) {
@@ -184,7 +185,7 @@ Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequ
 Status WitnessService::GetServerVersion(ServerContext *context, const VersionRequest *request,
                                         VersionReply *reply) {
   LOG(INFO) << "GetServerVersion requested" << std::endl;
-  LOG(INFO) << "Witness server version " << WITNESS_VERSION;
+  LOG(INFO) << "  Witness server version " << WITNESS_VERSION;
   reply->set_version(WITNESS_VERSION);
   return Status::OK;
 }
@@ -193,7 +194,8 @@ Status WitnessService::SetCameraRotation(ServerContext *context,
                                          const CameraRotationRequest *request,
                                          CameraRotationReply *reply) {
   auto degrees = request->degrees();
-  LOG(INFO) << "CameraRotation of " << degrees << " requested" << std::endl;
+  LOG(INFO) << "SetCameraRotation requested" << std::endl;
+  LOG(INFO) << " CameraRotation of " << degrees << " requested" << std::endl;
   webcam_->SetCameraRotation(degrees);
   return Status::OK;
 }
@@ -201,9 +203,11 @@ Status WitnessService::SetCameraRotation(ServerContext *context,
 Status WitnessService::StartAprilTracking(ServerContext *context,
                                           const StartAprilTrackingRequest *request,
                                           StartAprilTrackingReply *reply) {
+  LOG(INFO) << "StartAprilTracking requested" << std::endl;
   auto fname = "tracking.avi";
   auto tag_id = request->apriltag_id();
-  LOG(INFO) << "Using april tag id: " << tag_id;
+  LOG(INFO) << " Using april tag id: " << tag_id;
+  LOG(INFO) << " Saving to fname: " << fname;
   if (!webcam_action_) {
     webcam_action_ =
         std::make_unique<witness::server::webcam::actions::Tracking>(webcam_, fname, tag_id);
@@ -222,5 +226,6 @@ void RunServer() {
   LOG(INFO) << "Server listening on " << kServerAddress << std::endl;
   server->Wait();
 }
+
 }  // namespace server
 }  // namespace witness

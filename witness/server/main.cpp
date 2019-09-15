@@ -14,8 +14,7 @@ int main(int argc, char *argv[]) {
   LOG(INFO) << "Hello demo";
   FLAGS_logtostderr = 1;
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  assert(video_extension_validator_registered);
-  assert(photo_extension_validator_registered);
+
   witness::server::RunServer();
   gflags::ShutDownCommandLineFlags();
   return 0;
