@@ -68,6 +68,10 @@ void MakeDir(const std::string &fullpath) {
   std::experimental::filesystem::create_directory(fullpath);
 }
 
+bool exists(const std::string fname) {
+  return std::experimental::filesystem::exists(fname);
+}
+
 }  // namespace file_operations
 }  // namespace server
 }  // namespace witness

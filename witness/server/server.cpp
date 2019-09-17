@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <fstream>
 #include <memory>
 #include <string>
 
@@ -17,7 +18,6 @@ static bool ValidateRotation(const char *flagname, int value) {
   return true;
 }
 
-DEFINE_string(media_dir, "/data", "Directory to store media");
 DEFINE_string(photo_extension, ".jpg", "Photo extension");
 DEFINE_string(video_extension, ".avi", "Video extension");
 DEFINE_int32(camera_rotation, 0, "Camera rotation in degrees");
@@ -28,7 +28,8 @@ DEFINE_validator(camera_rotation, &ValidateRotation);
 namespace witness {
 namespace server {
 
-WitnessService::WitnessService() : webcam_(nullptr), webcam_action_(nullptr) {
+WitnessService::WitnessService(const std::string &media_dir)
+    : webcam_(nullptr), webcam_action_(nullptr), media_dir_(media_dir) {
   webcam_ = std::make_shared<witness::webcam::Webcam>(FLAGS_camera_rotation);
   LOG(INFO) << "Witness server version " << WITNESS_VERSION;
 }
@@ -36,8 +37,8 @@ WitnessService::WitnessService() : webcam_(nullptr), webcam_action_(nullptr) {
 Status WitnessService::StartRecording(ServerContext *context, const StartRecordingRequest *request,
                                       StartRecordingReply *reply) {
   LOG(INFO) << "StartRecording requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(
-      FLAGS_media_dir, request->filename(), FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(media_dir_, request->filename(),
+                                                                FLAGS_video_extension);
   LOG(INFO) << "  fname: " << fname << std::endl;
   if (!webcam_action_) {
     webcam_action_ =
@@ -72,13 +73,13 @@ Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelap
   LOG(INFO) << "StartTimelapse requested" << std::endl;
 
   // cut a dir with filename
-  auto folder_name = file_operations::DecideFilename(FLAGS_media_dir, request->filename(), "");
+  auto folder_name = file_operations::DecideFilename(media_dir_, request->filename(), "");
 
   LOG(INFO) << "  Making Directory " << folder_name;
   file_operations::MakeDir(folder_name);
 
   // auto fname = witness::server::file_operations::DecideFilename(
-  // FLAGS_media_dir, request->filename(), FLAGS_video_extension);
+  // media_dir_, request->filename(), FLAGS_video_extension);
   if (!webcam_action_) {
     webcam_action_ = std::make_unique<witness::server::webcam::actions::TimeLapse>(
         webcam_, folder_name, FLAGS_video_extension, FLAGS_photo_extension, request->sleep_for());
@@ -100,15 +101,15 @@ Status WitnessService::StartTimelapse(ServerContext *context, const StartTimelap
 Status WitnessService::ClearData(ServerContext *context, const ClearDataRequest *request,
                                  ClearDataReply *reply) {
   LOG(INFO) << "ClearData requested" << std::endl;
-  witness::server::file_operations::ClearDir(FLAGS_media_dir);
+  witness::server::file_operations::ClearDir(media_dir_);
   return Status::OK;
 }
 
 Status WitnessService::StartMonitor(ServerContext *context, const StartMonitorRequest *request,
                                     StartMonitorReply *reply) {
   LOG(INFO) << "StartMonitor requested" << std::endl;
-  auto fname = witness::server::file_operations::DecideFilename(
-      FLAGS_media_dir, std::string{"monitor"}, FLAGS_video_extension);
+  auto fname = witness::server::file_operations::DecideFilename(media_dir_, std::string{"monitor"},
+                                                                FLAGS_video_extension);
   if (!webcam_action_) {
     webcam_action_ = std::make_unique<witness::server::webcam::actions::Monitor>(webcam_, fname);
     auto success = webcam_action_->Start();
@@ -143,8 +144,8 @@ Status WitnessService::GetServerState(ServerContext *context, const ServerStateR
 Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest *request,
                                  TakePhotoReply *reply) {
   LOG(INFO) << "Take Photo Requested";
-  auto fname = witness::server::file_operations::DecideFilename(
-      FLAGS_media_dir, request->filename(), FLAGS_photo_extension);
+  auto fname = witness::server::file_operations::DecideFilename(media_dir_, request->filename(),
+                                                                FLAGS_photo_extension);
   auto success = webcam_->SaveImage(fname);
   if (success) {
     LOG(INFO) << "  Saved file " << fname << std::endl;
@@ -172,8 +173,9 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
   LOG(INFO) << "GetFileList requested" << std::endl;
-  auto file_list = witness::server::file_operations::ListDir(FLAGS_media_dir, FLAGS_photo_extension,
+  auto file_list = witness::server::file_operations::ListDir(media_dir_, FLAGS_photo_extension,
                                                              FLAGS_video_extension);
+  LOG(INFO) << "file_list length:" << file_list.size();
   for (const auto str : file_list) {
     FileListReply flr;
     flr.mutable_data()->set_filename(str);
@@ -216,9 +218,9 @@ Status WitnessService::StartAprilTracking(ServerContext *context,
   return Status::OK;
 }
 
-void RunServer() {
+void RunServer(const std::string &media_dir) {
   const std::string kServerAddress{"0.0.0.0:50051"};
-  WitnessService service;
+  WitnessService service(media_dir);
   ServerBuilder builder;
   builder.AddListeningPort(kServerAddress, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);

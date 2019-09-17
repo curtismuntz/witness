@@ -33,6 +33,7 @@ cc_binary(
         "//witness/server/webcam/actions:tracking",
         "//witness/api:cc_grpc",
         "@com_github_glog_glog//:glog",
+        "@cpp_httplib_archive//:cpp-httplib",
     ],
 )
 

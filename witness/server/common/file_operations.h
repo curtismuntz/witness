@@ -30,6 +30,7 @@ std::string CreatePathString(const std::string &directory, const std::string &fi
                              const std::string extension = "");
 std::string DecideFilename(const std::string &media_dir, const std::string &requested_fname,
                            const std::string &ext);
+bool exists(const std::string fname);
 
 }  // namespace file_operations
 }  // namespace server

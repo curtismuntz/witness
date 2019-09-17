@@ -8,8 +8,9 @@
 #include <grpc++/server_context.h>
 #include <grpc/grpc.h>
 #include <grpc/support/log.h>
-#include <thread>
 #include <memory>
+#include <string>
+#include <thread>
 
 #include "witness/api/witness.grpc.pb.h"
 #include "witness/server/version.h"
@@ -38,14 +39,14 @@ using witness::api::witness::OpenWebcamRequest;
 using witness::api::witness::ServerState;
 using witness::api::witness::ServerStateReply;
 using witness::api::witness::ServerStateRequest;
+using witness::api::witness::StartAprilTrackingReply;
+using witness::api::witness::StartAprilTrackingRequest;
 using witness::api::witness::StartMonitorReply;
 using witness::api::witness::StartMonitorRequest;
 using witness::api::witness::StartRecordingReply;
 using witness::api::witness::StartRecordingRequest;
 using witness::api::witness::StartTimelapseReply;
 using witness::api::witness::StartTimelapseRequest;
-using witness::api::witness::StartAprilTrackingRequest;
-using witness::api::witness::StartAprilTrackingReply;
 using witness::api::witness::StopRecordingReply;
 using witness::api::witness::StopRecordingRequest;
 using witness::api::witness::TakePhotoReply;
@@ -56,7 +57,7 @@ using witness::api::witness::WitnessCameraService;
 
 class WitnessService final : public WitnessCameraService::Service {
  public:
-  WitnessService();
+  explicit WitnessService(const std::string &media_dir);
 
  private:
   Status StartTimelapse(ServerContext *context, const StartTimelapseRequest *request,
@@ -83,11 +84,13 @@ class WitnessService final : public WitnessCameraService::Service {
                            CameraRotationReply *writer) override;
   Status StartAprilTracking(ServerContext *context, const StartAprilTrackingRequest *request,
                             StartAprilTrackingReply *writer) override;
+
+  std::string media_dir_;
   std::shared_ptr<witness::webcam::Webcam> webcam_;
   std::unique_ptr<witness::server::webcam::actions::WebcamAction> webcam_action_;
 };
 
-void RunServer();
+void RunServer(const std::string &media_dir);
 
 }  // namespace server
 }  // namespace witness
