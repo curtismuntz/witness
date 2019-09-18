@@ -23,5 +23,6 @@ int main(int argc, char *argv[]) {
 
   witness::server::RunServer(FLAGS_media_dir);
   gflags::ShutDownCommandLineFlags();
+  file_server.join();
   return 0;
 }
