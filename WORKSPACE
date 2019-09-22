@@ -5,9 +5,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 ###############################
 http_archive(
     name = "murtis_bazel_tools",
-    sha256 = "d4509b7646e64382588d71b794af9f8892c8584fa5865837b3f690362a19d995",
-    strip_prefix = "bazel_tools-179df94e7c050d69026175d8b6d3a3eab17446cd",
-    urls = ["https://github.com/curtismuntz/bazel_tools/archive/179df94e7c050d69026175d8b6d3a3eab17446cd.tar.gz"],
+    sha256 = "b6fef10507c689f664046f098261e5fe8dc1cb529a8855313c396f700cc31457",
+    strip_prefix = "bazel_tools-a908a1958cdf238f69b19837184e4f0fc924a0e8",
+    urls = ["https://github.com/curtismuntz/bazel_tools/archive/a908a1958cdf238f69b19837184e4f0fc924a0e8.tar.gz"],
 )
 
 load("@murtis_bazel_tools//tools:deps.bzl", "linter_dependencies")
