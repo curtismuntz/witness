@@ -18,13 +18,13 @@ See the [protobuf definition](witness/api/witness.proto) for supported features 
 
 Run server locally:
 
-`bazel run witness/server:server -- -media_dir /tmp`
+`bazel run //witness/server:server -- -media_dir /tmp`
 
 Run server in a container:
 
 ```
-bazel run witness/deploy:container
-docker run --rm -it --device=/dev/video1:/dev/video0:rwm bazel/witness/deploy:container
+bazel run //deploy:container_amd64
+docker run --rm -it --device=/dev/video1:/dev/video0:rwm bazel/deploy:container_amd64
 ```
 
 # Running the service on an IoT device
@@ -45,7 +45,7 @@ Build them for a device:
 
 ```
 # Note, you could push via the run command using the :push_witness_aarch64 target
-bazel build -c opt --config=aarch64 //witness/deploy:container_aarch64
+bazel build --config=aarch64 //deploy:container_aarch64
 ```
 
 Run them on a device:
@@ -56,6 +56,6 @@ docker run --rm -it --network=host --device=/dev/video0:/dev/video0:rwm murtis/w
 
 # Example clients
 
-Run simple client gui:
+Run simple cli client:
 
-`bazel run witness/client:simple_gui -c opt`
+`bazel run witness/client/endpoint_scripts:shell`
