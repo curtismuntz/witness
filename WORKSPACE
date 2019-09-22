@@ -6,9 +6,9 @@ register_toolchains("//:system_installed_python_toolchain")
 ###############################
 http_archive(
     name = "murtis_bazel_tools",
-    sha256 = "b6fef10507c689f664046f098261e5fe8dc1cb529a8855313c396f700cc31457",
-    strip_prefix = "bazel_tools-a908a1958cdf238f69b19837184e4f0fc924a0e8",
-    urls = ["https://github.com/curtismuntz/bazel_tools/archive/a908a1958cdf238f69b19837184e4f0fc924a0e8.tar.gz"],
+    sha256 = "ac407b2a169426007715d80de4269795676b963a9b5bddefffdf45399ab6010c",
+    strip_prefix = "bazel_tools-c3f0499f7aae8229f464f1b0bd802a3fdd6f39c1",
+    urls = ["https://github.com/curtismuntz/bazel_tools/archive/c3f0499f7aae8229f464f1b0bd802a3fdd6f39c1.tar.gz"],
 )
 
 load("@murtis_bazel_tools//tools:deps.bzl", "linter_dependencies", "google_cpp_dependencies")
