@@ -1,6 +1,5 @@
+load("@io_bazel_rules_docker//cc:image.bzl", "cc_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
-# load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
-# load("@io_bazel_rules_docker//contrib:push-all.bzl", "container_push")
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
 
 config_setting(
@@ -13,22 +12,9 @@ config_setting(
     values = {"cpu": "aarch64-linux-gnu"},
 )
 
-sh_binary(
-    name = "launcher",
-    srcs = ["launcher.sh"],
-)
-
-filegroup(
-    name = "targets",
-    srcs = [
-        ":launcher",
-        "//witness/server",
-    ],
-)
-
 pkg_tar(
     name = "witness_tar",
-    srcs = [":targets"],
+    srcs = ["//witness/server:server",],
     extension = "tar",
     include_runfiles = True,
     mode = "0755",
@@ -69,41 +55,21 @@ pkg_deb(
     version_file = "//witness:version.txt",
 )
 
-container_image(
-    name = "container",
-    base = "@witness_amd64_docker_base//image",
-    cmd = ["/opt/witness/launcher"],
-    mode = "777",
-    stamp = 1,
-    tars = [":witness_tar"],
+cc_image(
+    name = "container_amd64",
+    binary = "//witness/server:server",
 )
 
-#TODO enforce platform
-container_image(
+cc_image(
     name = "container_armv7",
     base = "@witness_armv7_docker_base//image",
-    cmd = ["/opt/witness/launcher"],
-    mode = "777",
-    stamp = 1,
-    tars = [":witness_tar"],
+    binary = "//witness/server:server",
 )
 
-container_image(
+cc_image(
     name = "container_aarch64",
     base = "@witness_aarch64_docker_base//image",
-    cmd = ["/opt/witness/launcher"],
-    mode = "777",
-    stamp = 1,
-    tars = [":witness_tar"],
-)
-
-container_push(
-    name = "push_witness_armv7",
-    format = "Docker",
-    image = ":container_armv7",
-    registry = "index.docker.io",
-    repository = "murtis/witness_armv7hf",
-    tag = "service",
+    binary = "//witness/server:server",
 )
 
 container_push(
@@ -115,9 +81,21 @@ container_push(
     tag = "service",
 )
 
-# container_bundle(
-#     name = "containers",
-#     images = {
-#         "docker.io/murtis/witness:{STABLE_IMAGE_TAG}": ":container",
-#     },
+container_push(
+    name = "push_witness_armv7",
+    format = "Docker",
+    image = ":container_armv7",
+    registry = "index.docker.io",
+    repository = "murtis/witness_armv7hf",
+    tag = "service",
+)
+
+# Disabled because 19.04 compile doesnt work.
+# container_push(
+#     name = "push_witness_amd64",
+#     format = "Docker",
+#     image = ":container_amd64",
+#     registry = "index.docker.io",
+#     repository = "murtis/witness_amd64",
+#     tag = "service",
 # )

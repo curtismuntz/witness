@@ -6,4 +6,4 @@ docker run \
   --rm \
   -it \
   -v "$PWD":/opt/src \
-  murtis/bazelisk_container ${cmd}
+  murtis/witness_dev:latest ${cmd}

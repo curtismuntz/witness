@@ -1,4 +1,3 @@
-load("@subpar//:subpar.bzl", "par_binary")
 load("@murtis_bazel_tools//tools:linters.bzl", "pylint")
 
 ENDPOINT_SCRIPTS=[
@@ -20,15 +19,7 @@ ENDPOINT_SCRIPTS=[
     "//witness/client/endpoint_scripts:take_photo",
 ]
 
-par_binary(
-    name = "simple_gui",
-    srcs = ["simple_gui.py"],
-    imports = ["endpoint_scripts"],
-    visibility = ["//visibility:public"],
-    deps = ENDPOINT_SCRIPTS,
-)
-
-par_binary(
+py_binary(
     name = "shell",
     srcs = ["shell.py"],
     imports = ["endpoint_scripts"],
@@ -45,7 +36,7 @@ py_library(
     deps = ["//witness/api:py_grpc"],
 )
 
-par_binary(
+py_binary(
     name = "track",
     srcs = ["track.py"],
     visibility = ["//visibility:public"],
@@ -55,7 +46,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "download_all",
     srcs = ["download_all.py"],
     visibility = ["//visibility:public"],
@@ -66,7 +57,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "automated_timelapse",
     srcs = ["automated_timelapse.py"],
     visibility = ["//visibility:public"],
@@ -78,7 +69,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "list_files",
     srcs = ["list_files.py"],
     visibility = ["//visibility:public"],
@@ -88,7 +79,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "get_version",
     srcs = ["get_version.py"],
     visibility = ["//visibility:public"],
@@ -98,7 +89,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "start_timelapse",
     srcs = ["start_timelapse.py"],
     visibility = ["//visibility:public"],
@@ -108,7 +99,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "set_rotation",
     srcs = ["set_rotation.py"],
     visibility = ["//visibility:public"],
@@ -118,7 +109,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "open_webcam",
     srcs = ["open_webcam.py"],
     visibility = ["//visibility:public"],
@@ -128,7 +119,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "clear_data",
     srcs = ["clear_data.py"],
     visibility = ["//visibility:public"],
@@ -138,7 +129,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "start_monitor",
     srcs = ["start_monitor.py"],
     visibility = ["//visibility:public"],
@@ -148,7 +139,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "take_photo",
     srcs = ["take_photo.py"],
     visibility = ["//visibility:public"],
@@ -158,7 +149,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "take_3",
     srcs = ["take_3.py"],
     visibility = ["//visibility:public"],
@@ -169,7 +160,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "get_server_state",
     srcs = ["get_server_state.py"],
     visibility = ["//visibility:public"],
@@ -179,7 +170,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "start_recording",
     srcs = ["start_recording.py"],
     visibility = ["//visibility:public"],
@@ -189,7 +180,7 @@ par_binary(
     ],
 )
 
-par_binary(
+py_binary(
     name = "stop_recording",
     srcs = ["stop_recording.py"],
     visibility = ["//visibility:public"],
