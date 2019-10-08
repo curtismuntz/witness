@@ -1,4 +1,4 @@
-absl-py==0.8.0
+absl-py==0.8.1
 grpcio==1.15.0
 protobuf==3.6.1
 psutil==5.4.0
