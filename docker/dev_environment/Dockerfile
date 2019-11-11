@@ -6,6 +6,7 @@ RUN apt update && apt install -y \
                   python3-pip \
                   python \
                   python-pip \
+                  vim \
                   wget
 
 RUN wget --directory-prefix=/tmp https://github.com/bazelbuild/bazelisk/releases/download/v1.0/bazelisk-linux-amd64 && \
@@ -17,6 +18,11 @@ RUN wget -P /tmp https://download.docker.com/linux/static/stable/x86_64/docker-1
     cp /tmp/docker/docker /usr/bin/docker && \
     rm -rf /tmp/docker*
 
+COPY bashrc /root/.bashrc
+
+RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
+
 RUN mkdir -p /root/src
 WORKDIR /root/src
-ENTRYPOINT ["/bin/bash"]
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
