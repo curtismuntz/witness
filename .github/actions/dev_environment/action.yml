@@ -1,0 +1,16 @@
+name: 'witness Development Environment Action'
+author: 'Curtis Muntz'
+description: 'Run Bazel commands'
+inputs:
+  args:
+    description: 'Arguments to pass into the witness development environment'
+    required: true
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.args }}
+branding:
+  icon: 'box'
+  color: 'green'

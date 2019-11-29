@@ -1,0 +1,18 @@
+on: push
+name: ci
+jobs:
+  build:
+    name: "x86 build and test"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: build
+      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      with:
+        args: bazel build //witness/...
+
+    - name: test
+      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      with:
+        args: bazel test //witness/...
