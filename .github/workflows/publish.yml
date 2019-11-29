@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: ["aarch64", "armv7hf", "amd64"]
+        architecture: ["aarch64", "armv7hf"]
     steps:
     - uses: actions/checkout@master
 
