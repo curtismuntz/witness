@@ -11,6 +11,8 @@ jobs:
       matrix:
         architecture: ["aarch64", "armv7hf", "amd64"]
     steps:
+    - uses: actions/checkout@master
+
     - name: login to registry
       env:
         docker_password: ${{ secrets.docker_password }}
