@@ -1,0 +1,24 @@
+on: push
+name: ci
+jobs:
+  build:
+    name: "x86 build and test"
+    runs-on: murtis/witness_dev:latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: build
+      run: bazel build //witness/...
+    - name: test
+      run: bazel test //witness/...
+
+  deploy:
+    name: deploy
+    needs: build
+    runs-on: murtis/witness_dev:latest
+    strategy:
+      matrix:
+        architecture: ["aarch64", "armv7hf", "amd64"]
+    steps:
+    - name: deploy
+      run: ci/deploy.sh ${{ matrix.architecture }}
