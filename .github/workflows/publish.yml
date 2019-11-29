@@ -24,8 +24,4 @@ jobs:
     - name: publish images
       uses: curtismuntz/witness/.github/actions/dev_environment@master
       with:
-        args: |
-          bazel run \
-            --host_force_python=PY2 \
-            --config=${{ matrix.architecture }} \
-            //deploy:push_witness_${{ matrix.architecture }}
+        args: bazel run --host_force_python=PY2 --config=${{ matrix.architecture }} //deploy:push_witness_${{ matrix.architecture }}
