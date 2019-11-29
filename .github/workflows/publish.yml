@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+      - master
+name: ci
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: ["aarch64", "armv7hf", "amd64"]
+    steps:
+    - name: login to registry
+      env:
+        docker_password: ${{ secrets.docker_password }}
+      run: |
+        docker login \
+            -u murtis \
+            -p ${docker_password}
+
+    - name: publish images
+      run: |
+        bazel run \
+          --host_force_python=PY2 \
+          --local_ram_resources=HOST_RAM*.25 \
+          --local_cpu_resources=HOST_CPUS-3 \
+          --config=${{ matrix.architecture }} \
+          //deploy:push_witness_${{ matrix.architecture }}

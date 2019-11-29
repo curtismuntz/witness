@@ -1,0 +1,19 @@
+on:
+  pull_request:
+    branches:
+    - master
+name: ci
+jobs:
+  build:
+    name: "x86 build and test"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: ["aarch64", "armv7hf", "amd64"]
+    steps:
+    - uses: actions/checkout@master
+
+    - name: build
+      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      with:
+        args: bazel build //witness/... --config=${{ matrix.architecture }}
