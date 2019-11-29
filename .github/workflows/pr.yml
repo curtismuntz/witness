@@ -1,8 +1,8 @@
 on: pull_request
-name: pull request
+name: pr
 jobs:
   build:
-    name: "build //witness/..."
+    name: "build"
     runs-on: ubuntu-latest
     strategy:
       matrix:

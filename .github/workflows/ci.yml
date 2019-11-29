@@ -11,3 +11,8 @@ jobs:
       uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
       with:
         args: bazel build //witness/...
+
+    - name: test
+      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      with:
+        args: bazel test //witness/...
