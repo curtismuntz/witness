@@ -11,6 +11,6 @@ jobs:
     - uses: actions/checkout@master
 
     - name: build
-      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      uses: curtismuntz/witness/.github/actions/dev_environment@master
       with:
         args: bazel build //witness/... --config=${{ matrix.architecture }}

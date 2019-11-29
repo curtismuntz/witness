@@ -20,7 +20,7 @@ jobs:
             -p ${docker_password}
 
     - name: publish images
-      uses: curtismuntz/witness/.github/actions/dev_environment@github-actions
+      uses: curtismuntz/witness/.github/actions/dev_environment@master
       with:
         args: |
           bazel run \
