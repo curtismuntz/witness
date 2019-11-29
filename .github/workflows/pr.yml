@@ -1,11 +1,8 @@
-on:
-  pull_request:
-    branches:
-    - master
-name: ci
+on: pull_request
+name: pull request
 jobs:
   build:
-    name: "x86 build and test"
+    name: "build //witness/..."
     runs-on: ubuntu-latest
     strategy:
       matrix:

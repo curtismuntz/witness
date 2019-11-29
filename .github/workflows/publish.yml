@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - master
-name: ci
+name: publish
 jobs:
   deploy:
     name: deploy
