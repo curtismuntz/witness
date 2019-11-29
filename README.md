@@ -1,5 +1,5 @@
 # Witness: An API callable webcam project.
-[![Build Status](https://travis-ci.org/curtismuntz/witness.svg?branch=master)](https://travis-ci.org/curtismuntz/witness)
+[![Actions Status](https://github.com/curtismuntz/witness/workflows/ci/badge.svg)](https://github.com/curtismuntz/witness/actions)
 
 An api callable webcam project. Read about it in my blog post on [https://murt.is/articles/2019-03/witness.html](https://murt.is/articles/2019-03/witness.html).
 
