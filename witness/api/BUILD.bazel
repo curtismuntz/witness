@@ -2,6 +2,8 @@ load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
 load("@rules_proto_grpc//cpp:defs.bzl", "cpp_proto_library")
 load("@rules_proto_grpc//python:defs.bzl", "python_grpc_library")
 
+load("@io_bazel_rules_rust//proto:proto.bzl", "rust_grpc_library")
+
 proto_library(
     name = "witness",
     srcs = [
@@ -29,6 +31,12 @@ cpp_grpc_library(
 python_grpc_library(
     name = "py_grpc",
     transitive = True,
+    visibility = ["//visibility:public"],
+    deps = [":witness"],
+)
+
+rust_grpc_library(
+    name = "rust_grpc",
     visibility = ["//visibility:public"],
     deps = [":witness"],
 )
