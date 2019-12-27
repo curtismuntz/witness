@@ -7,7 +7,9 @@ cc_library(
     name = "apriltag",
     hdrs = [
         "apriltag.h",
+        "apriltag_pose.h",
         "tagStandard41h12.h",
+        "tag36h11.h"
     ],
     include_prefix = "apriltag",
     visibility = ["//visibility:public"],
@@ -19,6 +21,7 @@ cc_library(
 
 cc_library(
     name = "common",
+    # visibility = ["//visibility:public"],
     srcs = glob(["common/*.c"]),
     hdrs = glob(["common/*.h"]),
 )
@@ -28,10 +31,11 @@ cc_library(
     srcs = glob([
         "apriltag*.c",
         "tagStandard41h12.c",
+        "tag36h11.c",
     ]),
     hdrs = glob([
         "apriltag*.h",
-        "tagStandard41h12.h",
+        "tag36h11.h",
     ]),
     deps = [":common"],
 )

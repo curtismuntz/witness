@@ -134,6 +134,67 @@ EOF""",
 )
 
 genrule(
+    name = "opencl_kernels_features2d",
+    outs = ["opencl_kernels_features2d.hpp"],
+    cmd = """
+cat > $@ <<"EOF"
+// This file is auto-generated. Do not edit!
+
+#include "opencv2/core/ocl.hpp"
+#include "opencv2/core/ocl_genbase.hpp"
+#include "opencv2/core/opencl/ocl_defs.hpp"
+
+#ifdef HAVE_OPENCL
+
+namespace cv
+{
+namespace ocl
+{
+namespace features2d
+{
+
+extern const struct ProgramEntry brute_force_match;
+extern ProgramSource brute_force_match_oclsrc;
+extern const struct ProgramEntry fast;
+extern ProgramSource fast_oclsrc;
+extern const struct ProgramEntry orb;
+extern ProgramSource orb_oclsrc;
+}
+}}
+#endif
+EOF""",
+)
+
+genrule(
+    name = "opencl_kernels_calib3d",
+    outs = ["opencl_kernels_calib3d.hpp"],
+    cmd = """
+cat > $@ <<"EOF"
+// This file is auto-generated. Do not edit!
+
+#include "opencv2/core/ocl.hpp"
+#include "opencv2/core/ocl_genbase.hpp"
+#include "opencv2/core/opencl/ocl_defs.hpp"
+
+#ifdef HAVE_OPENCL
+
+namespace cv
+{
+namespace ocl
+{
+namespace calib3d
+{
+
+extern const struct ProgramEntry stereobm;
+extern ProgramSource stereobm_oclsrc;
+}
+}}
+#endif
+EOF""",
+)
+
+
+genrule(
     name = "cvconfig",
     srcs = select({
         ":arm7": ["cvconfig_armv7hf.h"],
@@ -881,5 +942,87 @@ cc_library(
     deps = [
         ":opencv_core",
         ":opencv_imgproc",
+    ],
+)
+
+
+cc_library(
+    name = "opencv_flann",
+    srcs = glob(
+        [
+            "modules/flann/src/**/*.cpp",
+            "modules/flann/src/**/*.hpp",
+            "modules/flann/include/**/*.hpp",
+            "modules/flann/include/**/*.h",
+        ],
+    ),
+    hdrs = [
+        # "opencl_kernels_video.hpp",
+    ],
+    copts = _OPENCV_COPTS,
+    includes = [
+        "modules/flann/include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":opencv_core",
+    ],
+)
+
+cc_library(
+    name = "opencv_features2d",
+    srcs = glob(
+        [
+            "modules/features2d/src/**/*.cpp",
+            "modules/features2d/src/**/*.hpp",
+            "modules/features2d/src/**/*.h",
+            "modules/features2d/include/**/*.hpp",
+            "modules/features2d/include/**/*.h",
+        ],
+    ),
+    hdrs = [
+        "opencl_kernels_features2d.hpp",
+    ],
+    copts = _OPENCV_COPTS,
+    includes = [
+        "modules/features2d/include",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":opencv_core",
+        ":opencv_imgproc",
+        ":opencv_highgui",
+        ":opencv_flann",
+    ],
+)
+
+
+cc_library(
+    name = "opencv_calib3d",
+    srcs = glob(
+        [
+            "modules/calib3d/src/**/*.cpp",
+            "modules/calib3d/src/**/*.hpp",
+            "modules/calib3d/src/**/*.h",
+            "modules/calib3d/include/**/*.hpp",
+            "modules/calib3d/include/**/*.h",
+            "modules/calib3d/src/precomp.hpp",
+        ],
+    ),
+    hdrs = [
+        "opencl_kernels_calib3d.hpp",
+        # "modules/calib3d/src/precomp.hpp",
+    ],
+    copts = _OPENCV_COPTS,
+    includes = [
+        "modules/calib3d/include",
+        "modules/calib3d/src",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":opencv_core",
+        ":opencv_imgproc",
+        ":opencv_highgui",
+        ":opencv_features2d",
     ],
 )

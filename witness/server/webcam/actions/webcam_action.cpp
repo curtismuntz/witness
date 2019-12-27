@@ -9,9 +9,8 @@ namespace server {
 namespace webcam {
 namespace actions {
 
-
 bool WebcamAction::Start() {
-  if(working_) {
+  if (working_) {
     return false;
   }
   working_ = true;
@@ -19,9 +18,22 @@ bool WebcamAction::Start() {
   return true;
 }
 
+bool WebcamAction::StartBlocking() {
+  if (working_) {
+    return false;
+  }
+  working_ = true;
+  // worker_ = std::make_unique<std::thread>(&WebcamAction::Loop, this);
+  Loop();
+  return true;
+}
+
 bool WebcamAction::Stop() {
+  LOG(INFO) << "Stopping.";
   working_ = false;
-  worker_->join();
+  if (worker_) {
+    worker_->join();
+  }
   worker_.reset(nullptr);
   webcam_->CloseCamera();
   return true;

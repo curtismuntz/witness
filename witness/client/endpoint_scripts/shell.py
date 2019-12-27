@@ -7,6 +7,7 @@ import common
 import take_photo
 import get_server_state
 import start_recording
+import start_calibration
 import stop_recording
 import start_timelapse
 import open_webcam
@@ -18,6 +19,7 @@ import take_3
 import automated_timelapse
 import download_all
 import set_rotation
+import track
 
 
 class MyPrompt(Cmd):
@@ -49,6 +51,13 @@ class MyPrompt(Cmd):
         Sets the server to the specified webcam id (as listed in /dev/video{0,1,2,etc}).
         '''
         open_webcam.open_webcam(self._service, *parse_int(input))
+
+    def do_track(self, input):
+        '''do_track
+
+        TODO(curtismuntz): add help
+        '''
+        track.track(self._service)
 
     def do_automated_timelapse(self, input):
         '''fnname args
@@ -109,6 +118,15 @@ class MyPrompt(Cmd):
         '''
         # TODO(curtismuntz): support parameter passing here
         start_recording.start_recording(self._service)
+
+    def do_start_calibration(self, input):
+        '''start_recording
+
+        Starts the recording service with the given filename. If the filename is blank, one will be
+        generated.
+        '''
+        # TODO(curtismuntz): support parameter passing here
+        start_calibration.start_calibration(self._service)
 
     def do_start_timelapse(self, input):
         '''start_timelapse

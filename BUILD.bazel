@@ -12,6 +12,7 @@ buildifier(
 )
 
 load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
+
 # Python2 is a dependency of rules_docker due to its dependency on
 # containerregistry. To run builds on environments in which 'which python'
 # points to python3, you can use the py_runtime target below.
@@ -28,8 +29,8 @@ py_runtime(
 
 py_runtime(
     name = "py_runtime_3",
-    python_version = "PY3",
     interpreter_path = "/usr/bin/python3",
+    python_version = "PY3",
 )
 
 py_runtime_pair(

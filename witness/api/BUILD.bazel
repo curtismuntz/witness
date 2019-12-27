@@ -1,10 +1,23 @@
 load("@build_stack_rules_proto//python:python_grpc_library.bzl", "python_grpc_library")
 load("@build_stack_rules_proto//cpp:cpp_grpc_library.bzl", "cpp_grpc_library")
+load("@build_stack_rules_proto//cpp:cpp_proto_library.bzl", "cpp_proto_library")
 
 proto_library(
     name = "witness",
-    srcs = ["witness.proto"],
+    srcs = [
+        "calibration.proto",
+        "error.proto",
+        "tracking.proto",
+        "witness.proto",
+    ],
     visibility = ["//witness:__subpackages__"],
+    deps = ["@com_google_protobuf//:timestamp_proto"],
+)
+
+cpp_proto_library(
+    name = "cc_proto",
+    visibility = ["//witness:__subpackages__"],
+    deps = [":witness"],
 )
 
 cpp_grpc_library(

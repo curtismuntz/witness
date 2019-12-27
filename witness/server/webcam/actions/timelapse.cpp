@@ -1,20 +1,22 @@
 #include "witness/server/webcam/actions/timelapse.h"
+#include <algorithm>
 #include "third_party/alphanum/alphanum.hpp"
-#include "witness/server/common/file_operations.h"
+#include "witness/server/file_operations/file_operations.h"
+
 
 namespace witness {
 namespace server {
 namespace webcam {
 namespace actions {
 
-TimeLapse::TimeLapse(std::shared_ptr<witness::webcam::Webcam> webcam, const std::string &folder_path, const std::string &video_ext,
-          const std::string &photo_ext, int sleep_for)
-  : WebcamAction(webcam)
-  , folder_(folder_path)
-  , video_ext_(video_ext)
-  , photo_ext_(photo_ext)
-  , sleep_for_(sleep_for)
-{};
+TimeLapse::TimeLapse(std::shared_ptr<witness::webcam::Webcam> webcam,
+                     const std::string &folder_path, const std::string &video_ext,
+                     const std::string &photo_ext, int sleep_for)
+    : WebcamAction(webcam),
+      folder_(folder_path),
+      video_ext_(video_ext),
+      photo_ext_(photo_ext),
+      sleep_for_(sleep_for) {}
 
 bool TimeLapse::Loop() {
   webcam_->OpenCamera();

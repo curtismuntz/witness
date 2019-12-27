@@ -1,15 +1,14 @@
 #include "witness/server/webcam/actions/monitor.h"
 
+#include <vector>
+
 namespace witness {
 namespace server {
 namespace webcam {
 namespace actions {
 
 Monitor::Monitor(std::shared_ptr<witness::webcam::Webcam> webcam, const std::string &fname)
-  : WebcamAction(webcam)
-  , fname_(fname)
-{};
-
+    : WebcamAction(webcam), fname_(fname) {}
 
 bool Monitor::MotionDetected(cv::Mat *foreground_mask) {
   int largest_area = 0;
@@ -30,7 +29,6 @@ bool Monitor::MotionDetected(cv::Mat *foreground_mask) {
 
   return motion_detected;
 }
-
 
 bool Monitor::Loop() {
   webcam_->OpenCamera();

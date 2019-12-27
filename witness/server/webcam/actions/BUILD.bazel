@@ -1,50 +1,72 @@
+load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
+
 cc_library(
-  name = "webcam_action",
-  hdrs = ["webcam_action.h"],
-  srcs = ["webcam_action.cpp"],
-  deps = ["//witness/server/webcam:webcam"],
+    name = "webcam_action",
+    srcs = ["webcam_action.cpp"],
+    hdrs = ["webcam_action.h"],
+    deps = ["//witness/server/webcam"],
 )
 
 cc_library(
-  name = "video_recorder",
-  srcs = ["video_recorder.cpp"],
-  hdrs = ["video_recorder.h"],
-  deps = [
-      ":webcam_action",
-  ],
-  visibility = ["//visibility:public"],
+    name = "video_recorder",
+    srcs = ["video_recorder.cpp"],
+    hdrs = ["video_recorder.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":webcam_action",
+    ],
 )
 
 cc_library(
-  name = "monitor",
-  srcs = ["monitor.cpp"],
-  hdrs = ["monitor.h"],
-  deps = [
-      ":webcam_action",
-  ],
-  visibility = ["//visibility:public"],
+    name = "monitor",
+    srcs = ["monitor.cpp"],
+    hdrs = ["monitor.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":webcam_action",
+    ],
 )
 
 cc_library(
-  name = "timelapse",
-  srcs = ["timelapse.cpp"],
-  hdrs = ["timelapse.h"],
-  deps = [
-    ":webcam_action",
-    "//witness/server/common:file_operations",
-    "//third_party/alphanum",
-  ],
-  visibility = ["//visibility:public"],
+    name = "timelapse",
+    srcs = ["timelapse.cpp"],
+    hdrs = ["timelapse.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":webcam_action",
+        "//third_party/alphanum",
+        "//witness/server/file_operations",
+    ],
 )
 
 cc_library(
-  name = "tracking",
-  srcs = ["tracking.cpp"],
-  hdrs = ["tracking.h"],
-  deps = [
-    ":webcam_action",
-    "//witness/server/common:file_operations",
-    "@apriltag_archive//:apriltag",
-  ],
-  visibility = ["//visibility:public"],
+    name = "tracking",
+    srcs = ["tracking.cpp"],
+    hdrs = ["tracking.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":webcam_action",
+        "//witness/api:cc_grpc",
+        "//witness/server/converters",
+        "//witness/server/file_operations",
+        "//witness/server/vision:apriltag",
+        "//witness/server/vision:imshow_wrapper",
+        "@apriltag_archive//:apriltag",
+    ],
 )
+
+cc_library(
+    name = "calibrate",
+    srcs = ["calibrate.cpp"],
+    hdrs = ["calibrate.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":webcam_action",
+        "//witness/api:cc_grpc",
+        "//witness/server/file_operations",
+        "//witness/server/vision:calibration",
+        "@apriltag_archive//:apriltag",
+    ],
+)
+
+cpplint()

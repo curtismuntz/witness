@@ -3,12 +3,13 @@
 #include <memory>
 #include <string>
 
-#include "witness/server/common/file_operations.h"
+#include "witness/server/file_operations/file_operations.h"
 #include "witness/server/server.h"
 #include "witness/server/webcam/actions/monitor.h"
 #include "witness/server/webcam/actions/timelapse.h"
 #include "witness/server/webcam/actions/tracking.h"
 #include "witness/server/webcam/actions/video_recorder.h"
+#include "witness/server/webcam/actions/calibrate.h"
 
 static bool ValidateRotation(const char *flagname, int value) {
   if (std::abs(value) > 360) {
@@ -62,7 +63,7 @@ Status WitnessService::StopRecording(ServerContext *context, const StopRecording
                                      StopRecordingReply *reply) {
   LOG(INFO) << "StopRecording requested" << std::endl;
   if (webcam_action_) {
-    auto success = webcam_action_->Stop();
+    webcam_action_->Stop();
     webcam_action_.reset();
   }
   return Status::OK;
@@ -204,17 +205,55 @@ Status WitnessService::SetCameraRotation(ServerContext *context,
 
 Status WitnessService::StartAprilTracking(ServerContext *context,
                                           const StartAprilTrackingRequest *request,
-                                          StartAprilTrackingReply *reply) {
+                                          ServerWriter<StartAprilTrackingReply> *writer) {
   LOG(INFO) << "StartAprilTracking requested" << std::endl;
   auto fname = "tracking.avi";
   auto tag_id = request->apriltag_id();
-  LOG(INFO) << " Using april tag id: " << tag_id;
-  LOG(INFO) << " Saving to fname: " << fname;
+  // LOG(INFO) << " Using april tag id: " << tag_id;
+  // LOG(INFO) << " Saving to fname: " << fname;
+  auto params = webcam::actions::TrackingParameters();
+  params.fname_ = fname;
+  params.tag_id_ = tag_id;
   if (!webcam_action_) {
     webcam_action_ =
-        std::make_unique<witness::server::webcam::actions::Tracking>(webcam_, fname, tag_id);
-    auto success = webcam_action_->Start();
+        std::make_unique<witness::server::webcam::actions::Tracking>(webcam_, params, writer);
+    webcam_action_->StartBlocking();
   }
+  return Status::OK;
+}
+
+
+
+Status WitnessService::StartCalibration(ServerContext *context,
+                                          const StartCalibrationRequest *request,
+                                          ServerWriter<StartCalibrationReply> *writer) {
+  LOG(INFO) << "StartCalibration requested" << std::endl;
+
+  auto params = vision::CalibrateParameters();
+  params.board_size_width            = request->chessboard().board_size_width();
+  params.board_size_height           = request->chessboard().board_size_height();
+  params.square_size_mm              = request->chessboard().square_size();
+  params.window_size                 = request->chessboard().window_size();
+  params.minimum_calibration_samples = request->chessboard().minimum_calibration_samples();
+
+  if (!params.validate()) {
+    auto reply = StartCalibrationReply();
+    auto reply_error = reply.mutable_error();
+    reply_error->set_code(Error::UNKNOWN);
+    reply_error->set_message("Invalid parameters!");
+    writer->Write(reply);
+  } else if (!webcam_action_) {
+    webcam_action_ =
+        std::make_unique<witness::server::webcam::actions::Calibrate>(webcam_, params);
+    webcam_action_->StartBlocking();
+  } else {
+    auto reply = StartCalibrationReply();
+    auto reply_error = reply.mutable_error();
+    reply_error->set_code(Error::UNKNOWN);
+    reply_error->set_message("Another action is running!");
+    writer->Write(reply);
+  }
+  webcam_action_->Stop();
   return Status::OK;
 }
 

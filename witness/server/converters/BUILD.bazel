@@ -1,0 +1,27 @@
+load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
+
+cc_library(
+    name = "converters",
+    srcs = ["converters.cpp"],
+    hdrs = ["converters.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//witness/api:cc_proto",
+        "//witness/server/time:time",
+        "@apriltag_archive//:apriltag",
+        "@eigen_archive//:eigen",
+        "@opencv_archive//:opencv",
+    ],
+)
+
+cc_test(
+    name = "converters_test",
+    srcs = ["converters_test.cpp"],
+    deps = [
+        ":converters",
+        "//external:gtest",
+        "@com_github_google_glog//:glog",
+    ],
+)
+
+cpplint()

@@ -1,8 +1,12 @@
 #include "witness/server/webcam/actions/tracking.h"
-#include "witness/server/common/file_operations.h"
+#include "witness/server/converters/converters.h"
+#include "witness/server/file_operations/file_operations.h"
+#include "witness/server/vision/apriltag.h"
+#include "witness/server/vision/imshow_wrapper.h"
 
 extern "C" {
 #include "apriltag/apriltag.h"
+#include "apriltag/apriltag_pose.h"
 #include "apriltag/tagStandard41h12.h"
 }
 
@@ -11,87 +15,48 @@ namespace server {
 namespace webcam {
 namespace actions {
 
-Tracking::Tracking(std::shared_ptr<witness::webcam::Webcam> webcam, const std::string &fname, const std::string &tag_id)
-  : WebcamAction(webcam)
-  , fname_(fname)
-  , tag_id_(tag_id)
-{};
-
+Tracking::Tracking(std::shared_ptr<witness::webcam::Webcam> webcam,
+                   const TrackingParameters &params, ServerWriter<StartAprilTrackingReply> *writer)
+    : WebcamAction(webcam), params_(params), writer_(writer) {}
 
 bool Tracking::Loop() {
   webcam_->OpenCamera();
-  auto desired_filename = "tracking.avi";
+  auto desired_filename = params_.fname_;
   cv::Mat gray;
   cv::Mat frame;
   int frame_number = 0;
 
-
-  auto video = webcam_->CreateVideoObject(desired_filename);
-  apriltag_family_t *tf = NULL;
-  tf = tagStandard41h12_create();
-  apriltag_detector_t *td = apriltag_detector_create();
-  apriltag_detector_add_family(td, tf);
-
-  // TODO(curtismuntz): configurables!
-  td->quad_decimate = 2.0;
-  td->quad_sigma = 0.0;
-  td->nthreads = 1;
-  td->debug = false;
-  td->refine_edges = true;
-
+  auto intrinsics = webcam_->GetCalibration();
+  auto fx = intrinsics.at<double>(0, 0);
+  auto fy = intrinsics.at<double>(1, 1);
+  auto cx = intrinsics.at<double>(0, 2);
+  auto cy = intrinsics.at<double>(1, 2);
+  auto tagsize = 0.01;
+  auto detector = witness::server::vision::Detector(
+      tagsize, fx, fy, cx, cy, witness::server::vision::Detector::TagFamily::TAG36h11);
+  auto imshow = witness::server::vision::ImageManager();
   while (working_ && webcam_->camera_->isOpened()) {
     webcam_->ReadGrey(&frame, &gray);
-    // Make an image_u8_t header for the Mat data
-    image_u8_t im = { .width = gray.cols,
-        .height = gray.rows,
-        .stride = gray.cols,
-        .buf = gray.data
-    };
+    auto detections = detector.detect(gray);
+    auto num_detects = zarray_size(detections);
+    if (num_detects > 0) {
+      auto reply_msg = witness::api::StartAprilTrackingReply();
+      detector.draw(&frame, detections);
+      LOG(INFO) << num_detects << " detections.";
+      auto tags = detector.extract_detected_poses(detections);
 
-    zarray_t *detections = apriltag_detector_detect(td, &im);
-
-
-    LOG(INFO) << zarray_size(detections) << "tags detected";
-
-    // Draw detection outlines
-    for (int i = 0; i < zarray_size(detections); i++) {
-        apriltag_detection_t *det;
-        zarray_get(detections, i, &det);
-        cv::line(frame, cv::Point(det->p[0][0], det->p[0][1]),
-                 cv::Point(det->p[1][0], det->p[1][1]),
-                 cv::Scalar(0, 0xff, 0), 2);
-        cv::line(frame, cv::Point(det->p[0][0], det->p[0][1]),
-                 cv::Point(det->p[3][0], det->p[3][1]),
-                 cv::Scalar(0, 0, 0xff), 2);
-        cv::line(frame, cv::Point(det->p[1][0], det->p[1][1]),
-                 cv::Point(det->p[2][0], det->p[2][1]),
-                 cv::Scalar(0xff, 0, 0), 2);
-        cv::line(frame, cv::Point(det->p[2][0], det->p[2][1]),
-                 cv::Point(det->p[3][0], det->p[3][1]),
-                 cv::Scalar(0xff, 0, 0), 2);
-
-        std::stringstream ss;
-        ss << det->id;
-        cv::String text = ss.str();
-        int fontface = CV_FONT_HERSHEY_SCRIPT_SIMPLEX;
-        double fontscale = 1.0;
-        int baseline;
-        cv::Size textsize = cv::getTextSize(text, fontface, fontscale, 2,
-                                        &baseline);
-        cv::putText(frame, text, cv::Point(det->c[0]-textsize.width/2,
-                                   det->c[1]+textsize.height/2),
-                fontface, fontscale, cv::Scalar(0xff, 0x99, 0), 2);
+      for (auto i : tags) {
+        witness::server::converters::add_tag(i, &reply_msg);
+      }
+      writer_->Write(reply_msg);
     }
-    apriltag_detections_destroy(detections);
-    video.write(frame);
+    imshow.show("detections", frame);
+    LOG(INFO) << "frame: " << frame_number;
     ++frame_number;
   }
-  apriltag_detector_destroy(td);
-  tagStandard41h12_destroy(tf);
-  video.release();
-
-
+  // video.release();
   webcam_->CloseCamera();
+  return true;
 }
 
 }  // namespace actions

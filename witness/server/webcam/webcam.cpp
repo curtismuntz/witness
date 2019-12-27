@@ -1,10 +1,9 @@
-#include <glog/logging.h>
 #include "witness/server/webcam/webcam.h"
-#include "witness/server/common/file_operations.h"
+#include "glog/logging.h"
+#include "witness/server/file_operations/file_operations.h"
 
 namespace witness {
 namespace webcam {
-
 
 bool Webcam::SaveImage(const std::string &desired_filename) {
   OpenCamera();
@@ -85,7 +84,6 @@ cv::VideoWriter Webcam::CreateVideoObject(const std::string &fname) {
   return video;
 }
 
-
 void Webcam::Watermark(cv::Mat *img) {
   cv::putText(*img, "https://murt.is", cv::Point(30, 30), cv::FONT_HERSHEY_COMPLEX, 0.8,
               cv::Scalar(0, 165, 255), 1, CV_AA);
@@ -112,5 +110,5 @@ bool Webcam::OpenCamera(int camera_id /* = 0 */) {
   return true;
 }
 
-} // webcam
-} // witness
+}  // namespace webcam
+}  // namespace witness

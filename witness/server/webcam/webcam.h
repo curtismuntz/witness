@@ -1,25 +1,31 @@
 #pragma once
-#include <glog/logging.h>
+#include <memory>
+#include <string>
+#include "glog/logging.h"
 #include "opencv2/core.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/videoio.hpp"
-#include <memory>
 
 namespace witness {
 namespace webcam {
 
 // Manager and actions for common camera acquisition and adjustments
 class Webcam {
-public:
-  Webcam(int camera_rotation_degrees)
-  : rotation_degrees_(camera_rotation_degrees)
-  {};
+ public:
+  explicit Webcam(int camera_rotation_degrees)
+      : calibrated_(false), rotation_degrees_(camera_rotation_degrees) {
+    // Disable autofocus.
+    SetParameter(cv::CAP_PROP_AUTOFOCUS, 0);
+  }
 
-  ~Webcam() {CloseCamera();};
+  ~Webcam() { CloseCamera(); }
 
-  bool OpenCamera(int camera_id = 1);
+  bool OpenCamera(int camera_id = 0);
+  bool IsCalibrated() { return calibrated_; }
+  void SetCalibration(const cv::Mat &m) { camera_intrisics_ = m; }
+  cv::Mat GetCalibration() { return camera_intrisics_; }
   void CloseCamera();
   bool SetParameter(const int cv_parameter, const int value);
   bool SaveImage(const std::string &desired_filename);
@@ -32,10 +38,12 @@ public:
   void SetCameraRotation(const int degrees) { rotation_degrees_ = degrees; }
   std::unique_ptr<cv::VideoCapture> camera_;
 
-private:
+ private:
   bool active_;
+  bool calibrated_;
   int rotation_degrees_;
+  cv::Mat camera_intrisics_;
 };
 
-} // webcam
-} // witness
+}  // namespace webcam
+}  // namespace witness

@@ -193,3 +193,11 @@ http_archive(
     urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.2.5.tar.gz"],
     sha256 = "a0f6d464fa3ae00df4e51f86b9c8801bd2f8faf61fe73049e9ea2a48896aea70",
 )
+
+http_archive(
+    name = "eigen_archive",
+    build_file = "//third_party:eigen.BUILD",
+    strip_prefix = "eigen-3.3.7/",
+    urls = ["https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz"],
+    sha256 = "d56fbad95abf993f8af608484729e3d87ef611dd85b3380a8bad1d5cbc373a57",
+)
