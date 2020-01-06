@@ -13,6 +13,8 @@
 #include <thread>
 
 #include "witness/api/witness.grpc.pb.h"
+#include "witness/api/calibration.grpc.pb.h"
+#include "witness/api/tracking.grpc.pb.h"
 #include "witness/server/version.h"
 #include "witness/server/webcam/actions/webcam_action.h"
 #include "witness/server/webcam/webcam.h"
@@ -27,33 +29,35 @@ using grpc::ServerCompletionQueue;
 using grpc::ServerContext;
 using grpc::ServerWriter;
 using grpc::Status;
-using witness::api::witness::CameraRotationReply;
-using witness::api::witness::CameraRotationRequest;
-using witness::api::witness::ClearDataReply;
-using witness::api::witness::ClearDataRequest;
-using witness::api::witness::Error;
-using witness::api::witness::FileListReply;
-using witness::api::witness::GetFileListRequest;
-using witness::api::witness::OpenWebcamReply;
-using witness::api::witness::OpenWebcamRequest;
-using witness::api::witness::ServerState;
-using witness::api::witness::ServerStateReply;
-using witness::api::witness::ServerStateRequest;
-using witness::api::witness::StartAprilTrackingReply;
-using witness::api::witness::StartAprilTrackingRequest;
-using witness::api::witness::StartMonitorReply;
-using witness::api::witness::StartMonitorRequest;
-using witness::api::witness::StartRecordingReply;
-using witness::api::witness::StartRecordingRequest;
-using witness::api::witness::StartTimelapseReply;
-using witness::api::witness::StartTimelapseRequest;
-using witness::api::witness::StopRecordingReply;
-using witness::api::witness::StopRecordingRequest;
-using witness::api::witness::TakePhotoReply;
-using witness::api::witness::TakePhotoRequest;
-using witness::api::witness::VersionReply;
-using witness::api::witness::VersionRequest;
-using witness::api::witness::WitnessCameraService;
+using witness::api::CameraRotationReply;
+using witness::api::CameraRotationRequest;
+using witness::api::ClearDataReply;
+using witness::api::ClearDataRequest;
+using witness::api::Error;
+using witness::api::FileListReply;
+using witness::api::GetFileListRequest;
+using witness::api::OpenWebcamReply;
+using witness::api::OpenWebcamRequest;
+using witness::api::ServerState;
+using witness::api::ServerStateReply;
+using witness::api::ServerStateRequest;
+using witness::api::StartAprilTrackingReply;
+using witness::api::StartAprilTrackingRequest;
+using witness::api::StartCalibrationRequest;
+using witness::api::StartCalibrationReply;
+using witness::api::StartMonitorReply;
+using witness::api::StartMonitorRequest;
+using witness::api::StartRecordingReply;
+using witness::api::StartRecordingRequest;
+using witness::api::StartTimelapseReply;
+using witness::api::StartTimelapseRequest;
+using witness::api::StopRecordingReply;
+using witness::api::StopRecordingRequest;
+using witness::api::TakePhotoReply;
+using witness::api::TakePhotoRequest;
+using witness::api::VersionReply;
+using witness::api::VersionRequest;
+using witness::api::WitnessCameraService;
 
 class WitnessService final : public WitnessCameraService::Service {
  public:
@@ -83,11 +87,12 @@ class WitnessService final : public WitnessCameraService::Service {
   Status SetCameraRotation(ServerContext *context, const CameraRotationRequest *request,
                            CameraRotationReply *writer) override;
   Status StartAprilTracking(ServerContext *context, const StartAprilTrackingRequest *request,
-                            StartAprilTrackingReply *writer) override;
-
-  std::string media_dir_;
+                            ServerWriter<StartAprilTrackingReply> *writer) override;
+  Status StartCalibration(ServerContext *context, const StartCalibrationRequest *request,
+                            ServerWriter<StartCalibrationReply> *writer) override;
   std::shared_ptr<witness::webcam::Webcam> webcam_;
   std::unique_ptr<witness::server::webcam::actions::WebcamAction> webcam_action_;
+  std::string media_dir_;
 };
 
 void RunServer(const std::string &media_dir);

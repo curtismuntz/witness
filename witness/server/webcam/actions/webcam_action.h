@@ -13,22 +13,20 @@ namespace webcam {
 namespace actions {
 
 class WebcamAction {
-public:
-  WebcamAction(std::shared_ptr<witness::webcam::Webcam> webcam)
-    : webcam_(webcam)
-    , working_(false)
-    , worker_(nullptr)
-  {};
+ public:
+  explicit WebcamAction(std::shared_ptr<witness::webcam::Webcam> webcam)
+      : webcam_(webcam), working_(false), worker_(nullptr) {}
 
+  bool StartBlocking();
   bool Start();
   bool Stop();
   virtual bool Loop() = 0;
 
-protected:
+ protected:
   std::shared_ptr<witness::webcam::Webcam> webcam_;
   bool working_;
 
-private:
+ private:
   std::unique_ptr<std::thread> worker_;
 };
 

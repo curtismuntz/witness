@@ -1,6 +1,6 @@
 load("@murtis_bazel_tools//tools:linters.bzl", "pylint")
 
-ENDPOINT_SCRIPTS=[
+ENDPOINT_SCRIPTS = [
     "//witness/api:py_grpc",
     "//witness/client/endpoint_scripts:automated_timelapse",
     "//witness/client/endpoint_scripts:clear_data",
@@ -17,6 +17,8 @@ ENDPOINT_SCRIPTS=[
     "//witness/client/endpoint_scripts:stop_recording",
     "//witness/client/endpoint_scripts:take_3",
     "//witness/client/endpoint_scripts:take_photo",
+    "//witness/client/endpoint_scripts:track",
+    "//witness/client/endpoint_scripts:start_calibration",
 ]
 
 py_binary(
@@ -173,6 +175,16 @@ py_binary(
 py_binary(
     name = "start_recording",
     srcs = ["start_recording.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":common",
+        "//witness/api:py_grpc",
+    ],
+)
+
+py_binary(
+    name = "start_calibration",
+    srcs = ["start_calibration.py"],
     visibility = ["//visibility:public"],
     deps = [
         ":common",

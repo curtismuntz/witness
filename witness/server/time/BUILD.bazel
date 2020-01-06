@@ -1,14 +1,19 @@
 load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
 
 cc_library(
-    name = "webcam",
-    srcs = ["webcam.cpp"],
-    hdrs = ["webcam.h"],
+    name = "time",
+    srcs = ["time.cpp"],
+    hdrs = ["time.h"],
     visibility = ["//visibility:public"],
+)
+
+cc_test(
+    name = "time_test",
+    srcs = ["time_test.cpp"],
     deps = [
-        "//witness/server/file_operations",
+        ":time",
+        "//external:gtest",
         "@com_github_google_glog//:glog",
-        "@opencv_archive//:opencv",
     ],
 )
 

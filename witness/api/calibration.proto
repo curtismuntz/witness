@@ -1,0 +1,51 @@
+syntax = "proto3";
+import "witness/api/error.proto";
+
+package witness.api;
+
+
+message StartCalibrationRequest {
+  Chessboard chessboard = 1;
+
+  message Chessboard {
+    int32 square_size = 1;
+    int32 board_size_height = 2;
+    int32 board_size_width = 3;
+    int32 window_size = 4;
+    int32 minimum_calibration_samples = 5;
+  }
+}
+
+message StartCalibrationReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {
+    State state = 1;
+    int32 samples = 2;
+    enum State {
+      VISIBLE = 0;
+      NOT_SEEN = 1;
+    }
+  }
+}
+
+
+
+
+
+message GetCalibrationRequest {}
+message GetCalibrationReply {
+  oneof result {
+    Error error = 1;
+    Data data = 2;
+  }
+  message Data {
+    // calibraion timestamp
+    // focal length
+    // distortion model type
+    // optical center
+    // etc
+  }
+}

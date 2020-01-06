@@ -1,0 +1,31 @@
+syntax = "proto3";
+import "witness/api/error.proto";
+import "google/protobuf/timestamp.proto";
+
+package witness.api;
+
+message StartAprilTrackingRequest {
+  string apriltag_id = 1;
+}
+
+message StartAprilTrackingReply {
+  repeated AprilTag tag = 1;
+
+  message AprilTag {
+    google.protobuf.Timestamp timestamp = 1;
+    Vector3 vec = 2;
+    Quaternion quat = 3;
+    double error = 4;
+  }
+
+  message Quaternion {
+    double w = 1;
+    Vector3 vec = 2;
+  }
+
+  message Vector3 {
+    double x = 1;
+    double y = 2;
+    double z = 3;
+  }
+}

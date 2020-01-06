@@ -1,6 +1,10 @@
 syntax = "proto3";
 
-package witness.api.witness;
+import "witness/api/error.proto";
+import "witness/api/calibration.proto";
+import "witness/api/tracking.proto";
+
+package witness.api;
 
 service WitnessCameraService {
   // Opens a webcam by id.
@@ -36,28 +40,13 @@ service WitnessCameraService {
   rpc SetCameraRotation(CameraRotationRequest) returns (CameraRotationReply);
 
   // Starts a april tag tracking service
-  rpc StartAprilTracking(StartAprilTrackingRequest) returns (StartAprilTrackingReply);
-}
+  rpc StartAprilTracking(StartAprilTrackingRequest) returns (stream StartAprilTrackingReply);
 
-message StartAprilTrackingRequest {
-  string apriltag_id = 1;
-}
+  // Starts a calibration routine on the camera.
+  rpc StartCalibration(StartCalibrationRequest) returns (stream StartCalibrationReply);
 
-message StartAprilTrackingReply {
-  /* repeated Vector3 = 1; */
-}
-
-message Error {
-  Code code = 1;
-  string message = 2;
-  enum Code {
-    // Unknown/undefined error.
-    UNKNOWN = 0;
-    // The requested endpoint has not yet been implemented.
-    NOT_IMPLEMENTED = 1;
-    // The request cannot be complete because the camera is active.
-    CAMERA_ACTIVE = 2;
-  }
+  // Gets the loaded calibration
+  rpc GetCalibration(GetCalibrationRequest) returns (GetCalibrationReply);
 }
 
 message ServerState {
@@ -69,6 +58,10 @@ message ServerState {
     RECORDING = 1;
     // The server is in a security monitor loop.
     MONITORING = 2;
+    // The server is running a calibration routine on the active camera.
+    CALIBRATING = 3;
+    // The server is runing a tracking routine on the active camera.
+    TRACKING = 4;
   }
 }
 

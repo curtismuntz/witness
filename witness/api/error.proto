@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package witness.api;
+
+message Error {
+  Code code = 1;
+  string message = 2;
+  enum Code {
+    // Unknown/undefined error.
+    UNKNOWN = 0;
+    // The requested endpoint has not yet been implemented.
+    NOT_IMPLEMENTED = 1;
+    // The request cannot be complete because the camera is active.
+    CAMERA_ACTIVE = 2;
+    // There is no calibration information present
+    NOT_CALIBRATED = 3;
+  }
+}

@@ -1,4 +1,4 @@
-#include "witness/server/common/file_operations.h"
+#include "witness/server/file_operations/file_operations.h"
 #include "gtest/gtest.h"
 
 namespace witness {

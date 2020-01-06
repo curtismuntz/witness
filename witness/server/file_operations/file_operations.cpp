@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "witness/server/common/file_operations.h"
+#include "witness/server/file_operations/file_operations.h"
 
 namespace witness {
 namespace server {

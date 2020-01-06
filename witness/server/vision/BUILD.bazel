@@ -1,0 +1,82 @@
+load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
+
+cc_library(
+    name = "imshow_wrapper",
+    srcs = [
+        "imshow_wrapper.cpp",
+    ],
+    hdrs = ["imshow_wrapper.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@com_github_gflags_gflags//:gflags",
+        "@com_github_google_glog//:glog",
+        "@opencv_archive//:opencv",
+    ],
+)
+
+cc_test(
+    name = "imshow_wrapper_test",
+    srcs = ["imshow_wrapper_test.cpp"],
+    deps = [
+        ":imshow_wrapper",
+        "//external:gtest",
+    ],
+)
+
+cc_library(
+    name = "apriltag",
+    srcs = [
+        "apriltag.cpp",
+    ],
+    hdrs = ["apriltag.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//witness/server/converters",
+        "//witness/server/file_operations",
+        "@apriltag_archive//:apriltag",
+        "@com_github_gflags_gflags//:gflags",
+        "@com_github_google_glog//:glog",
+        "@opencv_archive//:opencv",
+    ],
+)
+
+cc_test(
+    name = "apriltag_test",
+    srcs = ["apriltag_test.cpp"],
+    data = glob(["test_data/**/*.jpg"]),
+    deps = [
+        ":apriltag",
+        ":imshow_wrapper",
+        "//external:gtest",
+        "//witness/server/file_operations",
+    ],
+)
+
+# TODO(curtismuntz) enable cpplint for calibration
+cpplint()
+
+cc_library(
+    name = "calibration",
+    srcs = ["calibration.cpp"],
+    hdrs = ["calibration.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":imshow_wrapper",
+        "//witness/server/file_operations",
+        "@com_github_gflags_gflags//:gflags",
+        "@com_github_google_glog//:glog",
+        "@opencv_archive//:opencv",
+        "@opencv_archive//:opencv_calib3d",
+    ],
+)
+
+cc_test(
+    name = "calibration_test",
+    srcs = ["calibration_test.cpp"],
+    data = glob(["test_data/**/*.jpg"]),
+    deps = [
+        ":calibration",
+        "//external:gtest",
+        "//witness/server/file_operations",
+    ],
+)

@@ -5,10 +5,9 @@ namespace server {
 namespace webcam {
 namespace actions {
 
-VideoRecorder::VideoRecorder(std::shared_ptr<witness::webcam::Webcam> webcam, const std::string &fname)
-  : WebcamAction(webcam)
-  , fname_(fname)
-{};
+VideoRecorder::VideoRecorder(std::shared_ptr<witness::webcam::Webcam> webcam,
+                             const std::string &fname)
+    : WebcamAction(webcam), fname_(fname) {}
 
 bool VideoRecorder::Loop() {
   webcam_->OpenCamera();
