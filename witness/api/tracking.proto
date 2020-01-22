@@ -19,8 +19,10 @@ message StartAprilTrackingReply {
   }
 
   message Quaternion {
+    double x = 3;
+    double y = 4;
+    douvle z = 5;
     double w = 1;
-    Vector3 vec = 2;
   }
 
   message Vector3 {
