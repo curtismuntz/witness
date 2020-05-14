@@ -8,8 +8,8 @@ test --host_force_python=PY2
 run --host_force_python=PY2
 
 # https://github.com/stackb/rules_proto/issues/114
-build --incompatible_depset_is_not_iterable=false
-run --incompatible_use_python_toolchains=false
+#build --incompatible_depset_is_not_iterable=false
+#run --incompatible_use_python_toolchains=false
 
 # NEEDED FOR OPENCV
 build -c opt

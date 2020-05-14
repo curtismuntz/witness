@@ -72,9 +72,7 @@ cc_library(
         "version_string.inc",
     ],
     hdrs = ["modules/core/include/opencv2/core/opencl/ocl_defs.hpp"],
-    copts = [
-        "-Iexternal/zlib",
-    ] + _OPENCV_COPTS,
+    copts = _OPENCV_COPTS,
     includes = [
         ".",
         "modules/core/include",
