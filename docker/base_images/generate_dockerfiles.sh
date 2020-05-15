@@ -8,7 +8,8 @@ build_steps(){
 COMMON_STEPS="
 LABEL maintainer=\"me@murt.is\"
 RUN apt-get -q update && apt-get upgrade -yq && apt-get install -y \\
-                      libstdc++6
+                      libstdc++6 \\
+                      libatomic1
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN mkdir /data
 RUN ls /opt
