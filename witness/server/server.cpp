@@ -264,6 +264,10 @@ void RunServer(const std::string &media_dir) {
   builder.AddListeningPort(kServerAddress, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
+  auto val = std::getenv("DEMO");
+  if(val) {
+      LOG(INFO) << "Hello " << val << "!";
+  }
   LOG(INFO) << "Server listening on " << kServerAddress << std::endl;
   server->Wait();
 }
