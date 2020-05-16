@@ -2,7 +2,8 @@ version: '2'
 
 services:
   witness:
-    image: murtis/witness_armv7hf:service
+    # image: murtis/witness_armv7hf:service
+    image: murtis/witness_aarch64:service
     expose:
       - 50051
       - 8000
