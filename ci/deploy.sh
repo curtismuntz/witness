@@ -18,7 +18,6 @@ if [[ -z "$ARCHITECTURE_CONFIG" ]]; then
 fi
 
 bazel run \
-  --host_force_python=PY2 \
   --local_ram_resources=HOST_RAM*.25 \
   --local_cpu_resources=HOST_CPUS-3 \
   --config="$1" \
