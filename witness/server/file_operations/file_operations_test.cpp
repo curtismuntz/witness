@@ -1,9 +1,7 @@
 #include "witness/server/file_operations/file_operations.h"
 #include "gtest/gtest.h"
 
-namespace witness {
-namespace server {
-namespace file_operations {
+namespace witness::server::file_operations {
 namespace {
 
 // TODO(curtismuntz) add more meaningful tests
@@ -19,9 +17,7 @@ TEST(CreatePathString, All) {
 }
 
 }  // namespace
-}  // namespace file_operations
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::file_operations
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

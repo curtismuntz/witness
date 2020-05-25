@@ -3,9 +3,7 @@
 #include "gtest/gtest.h"
 #include "witness/server/file_operations/file_operations.h"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 namespace {
 
 bool matrix_equal(const cv::Mat &a, const cv::Mat &b) {
@@ -77,9 +75,7 @@ TEST(CalibratorReturnsUncalibrated, All) {
 // }
 
 }  // namespace
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

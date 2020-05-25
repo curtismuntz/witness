@@ -7,9 +7,7 @@
 #include "gflags/gflags.h"
 #include "opencv2/core/core.hpp"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 DECLARE_string(output_photo_dir);
 DECLARE_string(imshow_photo_extension);
@@ -26,6 +24,4 @@ class ImageManager {
   std::unordered_map<std::string, unsigned int> _map;
 };
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

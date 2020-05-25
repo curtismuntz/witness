@@ -7,10 +7,7 @@
 
 #include "witness/server/webcam/webcam.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 class WebcamAction {
  public:
@@ -30,7 +27,4 @@ class WebcamAction {
   std::unique_ptr<std::thread> worker_;
 };
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

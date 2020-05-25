@@ -4,10 +4,7 @@
 #include "witness/server/file_operations/file_operations.h"
 
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 TimeLapse::TimeLapse(std::shared_ptr<witness::webcam::Webcam> webcam,
                      const std::string &folder_path, const std::string &video_ext,
@@ -53,7 +50,4 @@ bool TimeLapse::Loop() {
   video.release();
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

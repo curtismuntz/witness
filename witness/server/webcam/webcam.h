@@ -8,8 +8,7 @@
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/videoio.hpp"
 
-namespace witness {
-namespace webcam {
+namespace witness::webcam {
 
 // Manager and actions for common camera acquisition and adjustments
 class Webcam {
@@ -47,5 +46,4 @@ class Webcam {
   std::string watermark_string_ = "https://murt.is";
 };
 
-}  // namespace webcam
-}  // namespace witness
+}  // namespace witness::webcam

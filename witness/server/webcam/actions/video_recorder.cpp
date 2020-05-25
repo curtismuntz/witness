@@ -1,9 +1,6 @@
 #include "witness/server/webcam/actions/video_recorder.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 VideoRecorder::VideoRecorder(std::shared_ptr<witness::webcam::Webcam> webcam,
                              const std::string &fname)
@@ -27,7 +24,4 @@ bool VideoRecorder::Loop() {
   webcam_->CloseCamera();
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

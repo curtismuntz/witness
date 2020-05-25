@@ -2,10 +2,7 @@
 #include <vector>
 #include "witness/server/file_operations/file_operations.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 Calibrate::Calibrate(std::shared_ptr<witness::webcam::Webcam> webcam,
                      const witness::server::vision::CalibrateParameters &params)
@@ -54,7 +51,4 @@ bool Calibrate::Loop() {
   return true;
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

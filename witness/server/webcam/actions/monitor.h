@@ -8,10 +8,7 @@
 #include "witness/server/webcam/actions/webcam_action.h"
 #include "witness/server/webcam/webcam.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 class Monitor : public witness::server::webcam::actions::WebcamAction {
  public:
@@ -23,7 +20,4 @@ class Monitor : public witness::server::webcam::actions::WebcamAction {
   const std::string fname_;
 };
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

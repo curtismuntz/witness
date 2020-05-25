@@ -2,9 +2,7 @@
 #include "glog/logging.h"
 #include "opencv2/imgproc.hpp"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 Detector::Detector(double tag_size, double fx, double fy, double cx, double cy, TagFamily type)
     : tag_family_(NULL),
@@ -97,6 +95,4 @@ std::vector<witness::server::converters::TagData> Detector::extract_detected_pos
   return poses;
 }
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

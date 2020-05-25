@@ -2,8 +2,7 @@
 #include "glog/logging.h"
 #include "witness/server/file_operations/file_operations.h"
 
-namespace witness {
-namespace webcam {
+namespace witness::webcam {
 
 bool Webcam::SaveImage(const std::string &desired_filename) {
   OpenCamera();
@@ -110,5 +109,4 @@ bool Webcam::OpenCamera(int camera_id /* = 0 */) {
   return true;
 }
 
-}  // namespace webcam
-}  // namespace witness
+}  // namespace witness::webcam

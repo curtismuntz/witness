@@ -13,9 +13,7 @@ extern "C" {
 
 #include "witness/server/converters/converters.h"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 class Detector {
  public:
@@ -41,6 +39,4 @@ class Detector {
   double cy_;  // optical center y-coordinate [px]
 };
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

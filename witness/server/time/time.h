@@ -3,12 +3,8 @@
 #include <chrono>
 #include <utility>
 
-namespace witness {
-namespace server {
-namespace time {
+namespace witness::server::time {
 
 std::pair<std::chrono::seconds, std::chrono::nanoseconds> current_time();
 
-}  // namespace time
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::time

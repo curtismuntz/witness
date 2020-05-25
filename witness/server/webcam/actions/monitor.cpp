@@ -2,10 +2,7 @@
 
 #include <vector>
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 Monitor::Monitor(std::shared_ptr<witness::webcam::Webcam> webcam, const std::string &fname)
     : WebcamAction(webcam), fname_(fname) {}
@@ -64,7 +61,4 @@ bool Monitor::Loop() {
   webcam_->CloseCamera();
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

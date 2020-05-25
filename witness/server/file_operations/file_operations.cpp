@@ -2,9 +2,7 @@
 
 #include "witness/server/file_operations/file_operations.h"
 
-namespace witness {
-namespace server {
-namespace file_operations {
+namespace witness::server::file_operations {
 
 void ClearDir(const std::string &fullpath) {
   for (auto &p : std::experimental::filesystem::directory_iterator(fullpath)) {
@@ -72,6 +70,4 @@ bool exists(const std::string fname) {
   return std::experimental::filesystem::exists(fname);
 }
 
-}  // namespace file_operations
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::file_operations

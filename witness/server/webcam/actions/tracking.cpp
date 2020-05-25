@@ -10,10 +10,7 @@ extern "C" {
 #include "apriltag/tagStandard41h12.h"
 }
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 Tracking::Tracking(std::shared_ptr<witness::webcam::Webcam> webcam,
                    const TrackingParameters &params, ServerWriter<StartAprilTrackingReply> *writer)
@@ -63,7 +60,4 @@ bool Tracking::Loop() {
   return true;
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

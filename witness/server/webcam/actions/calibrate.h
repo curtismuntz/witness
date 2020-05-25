@@ -10,10 +10,7 @@
 #include "witness/server/webcam/actions/webcam_action.h"
 #include "witness/server/webcam/webcam.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 using grpc::ServerWriter;
 using witness::api::StartCalibrationReply;
@@ -30,7 +27,4 @@ class Calibrate : public witness::server::webcam::actions::WebcamAction {
   unsigned int minimum_calibration_samples_;
 };
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

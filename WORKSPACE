@@ -122,25 +122,27 @@ load(
     "container_pull",
 )
 
+WITNESS_CONTAINER_TAG = "base"
+
 container_pull(
     name = "witness_armv7_docker_base",
     registry = "index.docker.io",
     repository = "murtis/witness_armv7hf",
-    tag = "base",
+    tag = WITNESS_CONTAINER_TAG,
 )
 
 container_pull(
     name = "witness_aarch64_docker_base",
     registry = "index.docker.io",
     repository = "murtis/witness_aarch64",
-    tag = "base",
+    tag = WITNESS_CONTAINER_TAG,
 )
 
 container_pull(
     name = "witness_amd64_docker_base",
     registry = "index.docker.io",
     repository = "murtis/witness_amd64",
-    tag = "base",
+    tag = WITNESS_CONTAINER_TAG,
 )
 
 load(

@@ -2,9 +2,7 @@
 #include <opencv2/core/core.hpp>
 #include "gtest/gtest.h"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 namespace {
 
 TEST(ImagesStartAtZero, All) {
@@ -30,9 +28,7 @@ TEST(LookupsOnDifferentNamesDontAffectEachOther, All) {
 }
 
 }  // namespace
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

@@ -13,9 +13,7 @@ extern "C" {
 
 #include "witness/api/tracking.pb.h"
 
-namespace witness {
-namespace server {
-namespace converters {
+namespace witness::server::converters {
 
 struct TagData {
   double error;
@@ -35,6 +33,4 @@ std::ostream &operator<<(std::ostream &os, const Eigen::Quaterniond &quat);
 
 void add_tag(const TagData &tag, witness::api::StartAprilTrackingReply *reply);
 
-}  // namespace converters
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::converters

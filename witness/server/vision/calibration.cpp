@@ -1,9 +1,7 @@
 #include "witness/server/vision/calibration.h"
 #include "witness/server/file_operations/file_operations.h"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 Calibrator::Calibrator(const CalibrateParameters &params)
     : params_(params), camera_matrix_(cv::Mat::eye(3, 3, 1)) {}
@@ -190,6 +188,4 @@ double Calibrator::computeReprojectionErrors(const std::vector<std::vector<Point
   return std::sqrt(totalErr / totalPoints);
 }
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

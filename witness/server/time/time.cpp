@@ -1,8 +1,6 @@
 #include "witness/server/time/time.h"
 
-namespace witness {
-namespace server {
-namespace time {
+namespace witness::server::time {
 
 std::pair<std::chrono::seconds, std::chrono::nanoseconds> current_time() {
   // https://stackoverflow.com/a/27678121/9711444
@@ -15,6 +13,4 @@ std::pair<std::chrono::seconds, std::chrono::nanoseconds> current_time() {
   return std::make_pair(seconds, nanos);
 }
 
-}  // namespace time
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::time

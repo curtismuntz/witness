@@ -19,8 +19,7 @@
 #include "witness/server/webcam/actions/webcam_action.h"
 #include "witness/server/webcam/webcam.h"
 
-namespace witness {
-namespace server {
+namespace witness::server {
 
 using grpc::Server;
 using grpc::ServerAsyncWriter;
@@ -97,5 +96,4 @@ class WitnessService final : public WitnessCameraService::Service {
 
 void RunServer(const std::string &media_dir);
 
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server

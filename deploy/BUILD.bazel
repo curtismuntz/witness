@@ -12,16 +12,27 @@ config_setting(
     values = {"cpu": "aarch64-linux-gnu"},
 )
 
-pkg_tar(
-    name = "witness_tar",
-    srcs = ["//witness/server"],
-    extension = "tar",
-    include_runfiles = True,
-    mode = "0755",
-    package_dir = "/opt/witness",
-    strip_prefix = ".",
-    visibility = ["//visibility:public"],
-)
+#pkg_tar(
+#    name = "witness_tar",
+#    srcs = ["//witness/server"],
+#    extension = "tar",
+#    include_runfiles = True,
+#    mode = "0755",
+#    package_dir = "/opt/witness",
+#    strip_prefix = ".",
+#    visibility = ["//visibility:public"],
+#)
+
+#pkg_deb(
+#    name = "witness_deb",
+#    built_using_file = ":bazel_version.txt",
+#    data = ":witness_tar",
+#    description = "woo",
+#    homepage = "https://murt.is",
+#    maintainer = "Curtis Muntz <me@murt.is>",
+#    package = "witness_deb",
+#    version_file = "//witness:version.txt",
+#)
 
 # Modified from:
 # https://github.com/bazelbuild/bazel/blob/master/scripts/packages/BUILD#L128
@@ -42,17 +53,6 @@ genrule(
     outs = ["bazel_version.txt"],
     cmd =
         "echo Bazel `cat $(location //:.bazelversion)` > $@\n",
-)
-
-pkg_deb(
-    name = "witness_deb",
-    built_using_file = ":bazel_version.txt",
-    data = ":witness_tar",
-    description = "woo",
-    homepage = "https://murt.is",
-    maintainer = "Curtis Muntz <me@murt.is>",
-    package = "witness_deb",
-    version_file = "//witness:version.txt",
 )
 
 cc_image(

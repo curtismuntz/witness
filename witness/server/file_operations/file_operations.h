@@ -8,9 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace witness {
-namespace server {
-namespace file_operations {
+namespace witness::server::file_operations {
 
 static bool ValidateExtension(const char *flagname, const std::string &value) {
   std::experimental::filesystem::path path(value);
@@ -32,6 +30,4 @@ std::string DecideFilename(const std::string &media_dir, const std::string &requ
                            const std::string &ext);
 bool exists(const std::string fname);
 
-}  // namespace file_operations
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::file_operations

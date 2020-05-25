@@ -1,9 +1,7 @@
 #include "witness/server/converters/converters.h"
 #include "witness/server/time/time.h"
 
-namespace witness {
-namespace server {
-namespace converters {
+namespace witness::server::converters {
 
 const Eigen::Quaterniond get_quaternion(const apriltag_pose_t &pose) {
   auto rot = get_rotation_matrix(pose);
@@ -51,6 +49,4 @@ void add_tag(const TagData &tag, witness::api::StartAprilTrackingReply *reply) {
   reply_tag->set_error(tag.error);
 }
 
-}  // namespace converters
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::converters

@@ -3,9 +3,7 @@
 #include "glog/logging.h"
 #include "opencv2/highgui/highgui.hpp"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 DEFINE_string(output_photo_dir, "/tmp", "Output photo directory");
 DEFINE_string(imshow_photo_extension, ".jpg", "Photo extension");
@@ -28,6 +26,4 @@ void ImageManager::imshow(const std::string &name, const cv::Mat &img) {
   cv::imwrite(fname, img);
 }
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

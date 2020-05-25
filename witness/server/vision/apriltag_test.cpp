@@ -12,9 +12,7 @@ extern "C" {
 
 #include "opencv2/highgui/highgui.hpp"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 namespace {
 
 TEST(Tag, All) {
@@ -37,9 +35,7 @@ TEST(Tag, All) {
 }
 
 }  // namespace
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

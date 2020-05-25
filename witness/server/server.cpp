@@ -27,8 +27,7 @@ DEFINE_validator(photo_extension, &witness::server::file_operations::ValidateExt
 DEFINE_validator(video_extension, &witness::server::file_operations::ValidateExtension);
 DEFINE_validator(camera_rotation, &ValidateRotation);
 
-namespace witness {
-namespace server {
+namespace witness::server {
 
 WitnessService::WitnessService(std::string media_dir, const std::string &watermark_text)
     : webcam_(nullptr), webcam_action_(nullptr), media_dir_(std::move(media_dir)) {
@@ -273,5 +272,4 @@ void RunServer(const std::string &media_dir) {
   server->Wait();
 }
 
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server

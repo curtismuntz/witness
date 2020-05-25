@@ -4,10 +4,7 @@
 
 #include "witness/server/webcam/actions/webcam_action.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 bool WebcamAction::Start() {
   if (working_) {
@@ -39,7 +36,4 @@ bool WebcamAction::Stop() {
   return true;
 }
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions

@@ -2,9 +2,7 @@
 #include "glog/logging.h"
 #include "gtest/gtest.h"
 
-namespace witness {
-namespace server {
-namespace converters {
+namespace witness::server::converters {
 namespace {
 
 TEST(Conversions, All) {
@@ -64,9 +62,7 @@ TEST(Conversions, All) {
 }
 
 }  // namespace
-}  // namespace converters
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::converters
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

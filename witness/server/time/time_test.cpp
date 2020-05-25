@@ -1,9 +1,7 @@
 #include "witness/server/time/time.h"
 #include "gtest/gtest.h"
 
-namespace witness {
-namespace server {
-namespace time {
+namespace witness::server::time {
 namespace {
 
 TEST(Time, All) {
@@ -15,9 +13,7 @@ TEST(Time, All) {
 }
 
 }  // namespace
-}  // namespace time
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::time
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

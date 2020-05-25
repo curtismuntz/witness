@@ -12,9 +12,7 @@
 #include "opencv2/imgproc.hpp"
 #include "opencv2/videoio.hpp"
 
-namespace witness {
-namespace server {
-namespace vision {
+namespace witness::server::vision {
 
 static const unsigned int kMinimumBoardSizeWidth = 1;
 static const unsigned int kMinimumBoardSizeHeight = 1;
@@ -125,6 +123,4 @@ class Calibrator {
   cv::Mat camera_matrix_;
 };
 
-}  // namespace vision
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::vision

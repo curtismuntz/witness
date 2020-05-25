@@ -10,10 +10,7 @@
 #include "witness/server/webcam/actions/webcam_action.h"
 #include "witness/server/webcam/webcam.h"
 
-namespace witness {
-namespace server {
-namespace webcam {
-namespace actions {
+namespace witness::server::webcam::actions {
 
 using grpc::ServerWriter;
 using witness::api::StartAprilTrackingReply;
@@ -36,7 +33,4 @@ class Tracking : public witness::server::webcam::actions::WebcamAction {
   ServerWriter<StartAprilTrackingReply> *writer_;
 };
 
-}  // namespace actions
-}  // namespace webcam
-}  // namespace server
-}  // namespace witness
+}  // namespace witness::server::webcam::actions
