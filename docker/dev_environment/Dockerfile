@@ -18,6 +18,8 @@ RUN wget -P /tmp https://download.docker.com/linux/static/stable/x86_64/docker-1
 
 COPY bashrc /root/.bashrc
 
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 RUN mkdir -p /root/src
 WORKDIR /root/src
 COPY entrypoint.sh /entrypoint.sh
