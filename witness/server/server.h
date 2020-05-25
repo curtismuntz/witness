@@ -61,7 +61,7 @@ using witness::api::WitnessCameraService;
 
 class WitnessService final : public WitnessCameraService::Service {
  public:
-  explicit WitnessService(const std::string &media_dir);
+  WitnessService(std::string media_dir, const std::string &watermark_text);
 
  private:
   Status StartTimelapse(ServerContext *context, const StartTimelapseRequest *request,

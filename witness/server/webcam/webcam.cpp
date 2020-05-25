@@ -85,7 +85,7 @@ cv::VideoWriter Webcam::CreateVideoObject(const std::string &fname) {
 }
 
 void Webcam::Watermark(cv::Mat *img) {
-  cv::putText(*img, "https://murt.is", cv::Point(30, 30), cv::FONT_HERSHEY_COMPLEX, 0.8,
+  cv::putText(*img, watermark_string_, cv::Point(30, 30), cv::FONT_HERSHEY_COMPLEX, 0.8,
               cv::Scalar(0, 165, 255), 1, CV_AA);
 }
 

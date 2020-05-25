@@ -2,6 +2,7 @@
 #include <fstream>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "witness/server/file_operations/file_operations.h"
 #include "witness/server/server.h"
@@ -29,9 +30,10 @@ DEFINE_validator(camera_rotation, &ValidateRotation);
 namespace witness {
 namespace server {
 
-WitnessService::WitnessService(const std::string &media_dir)
-    : webcam_(nullptr), webcam_action_(nullptr), media_dir_(media_dir) {
+WitnessService::WitnessService(std::string media_dir, const std::string &watermark_text)
+    : webcam_(nullptr), webcam_action_(nullptr), media_dir_(std::move(media_dir)) {
   webcam_ = std::make_shared<witness::webcam::Webcam>(FLAGS_camera_rotation);
+  webcam_->SetWatermarkString(watermark_text);
   LOG(INFO) << "Witness server version " << WITNESS_VERSION;
 }
 
@@ -259,15 +261,14 @@ Status WitnessService::StartCalibration(ServerContext *context,
 
 void RunServer(const std::string &media_dir) {
   const std::string kServerAddress{"0.0.0.0:50051"};
-  WitnessService service(media_dir);
+  auto val = std::getenv("DEMO") ? std::getenv("DEMO") : "witness";
+  LOG(INFO) << "Hello " << val << "!";
+  WitnessService service(media_dir, val);
   ServerBuilder builder;
   builder.AddListeningPort(kServerAddress, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
-  auto val = std::getenv("DEMO");
-  if(val) {
-      LOG(INFO) << "Hello " << val << "!";
-  }
+
   LOG(INFO) << "Server listening on " << kServerAddress << std::endl;
   server->Wait();
 }

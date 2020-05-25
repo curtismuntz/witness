@@ -34,7 +34,9 @@ bool Tracking::Loop() {
   auto tagsize = 0.01;
   auto detector = witness::server::vision::Detector(
       tagsize, fx, fy, cx, cy, witness::server::vision::Detector::TagFamily::TAG36h11);
+#ifdef IMSHOW_APRILTAGS
   auto imshow = witness::server::vision::ImageManager();
+#endif
   while (working_ && webcam_->camera_->isOpened()) {
     webcam_->ReadGrey(&frame, &gray);
     auto detections = detector.detect(gray);
@@ -50,7 +52,9 @@ bool Tracking::Loop() {
       }
       writer_->Write(reply_msg);
     }
+#ifdef IMSHOW_APRILTAGS
     imshow.show("detections", frame);
+#endif
     LOG(INFO) << "frame: " << frame_number;
     ++frame_number;
   }

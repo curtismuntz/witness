@@ -18,3 +18,6 @@ build:aarch64 --cpu=aarch64-linux-gnu --compiler=gcc
 build:aarch64 --spawn_strategy=standalone
 
 build:amd64 --cpu=k8
+# #Launch build buddy via following instructions here https://github.com/buildbuddy-io/buildbuddy
+# build --bes_results_url=http://localhost:8080/invocation/
+# build --bes_backend=grpc://localhost:1985

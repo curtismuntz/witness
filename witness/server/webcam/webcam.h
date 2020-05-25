@@ -37,12 +37,14 @@ class Webcam {
   void WatermarkTime(cv::Mat *img);
   void SetCameraRotation(const int degrees) { rotation_degrees_ = degrees; }
   std::unique_ptr<cv::VideoCapture> camera_;
+  void SetWatermarkString(const std::string &newstring) { watermark_string_ = newstring; }
 
  private:
   bool active_;
   bool calibrated_;
   int rotation_degrees_;
   cv::Mat camera_intrisics_;
+  std::string watermark_string_ = "https://murt.is";
 };
 
 }  // namespace webcam
