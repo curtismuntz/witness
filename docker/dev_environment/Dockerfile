@@ -1,11 +1,9 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 RUN apt update && apt install -y \
                   build-essential \
                   git \
                   python3 \
                   python3-pip \
-                  python \
-                  python-pip \
                   vim \
                   wget
 
@@ -20,7 +18,7 @@ RUN wget -P /tmp https://download.docker.com/linux/static/stable/x86_64/docker-1
 
 COPY bashrc /root/.bashrc
 
-RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN mkdir -p /root/src
 WORKDIR /root/src
