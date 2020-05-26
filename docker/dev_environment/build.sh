@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 set -e
-docker build -t murtis/witness_dev:latest .
-docker push murtis/witness_dev:latest
+
+full_tag=murtis/witness_dev:latest
+docker build -t "$full_tag" .
+docker push "$full_tag"
