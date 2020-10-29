@@ -158,9 +158,9 @@ _cc_image_repos()
 http_archive(
     name = "opencv_archive",
     build_file = "//third_party:opencv.BUILD",
-    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
-    strip_prefix = "opencv-3.1.0",
-    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
+    sha256 = "c8919dfb5ead6be67534bf794cb0925534311f1cd5c6680f8164ad1813c88d13",
+    strip_prefix = "opencv-3.4.12",
+    url = "https://github.com/opencv/opencv/archive/3.4.12.tar.gz",
 )
 
 http_archive(
