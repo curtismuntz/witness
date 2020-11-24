@@ -1,0 +1,15 @@
+# REQUIRES OPENCV BUILT WITH FFMPEG SUPPORT. I PROVED THIS WORKS BUT NEED TO BAZELIFY FFMPEG =(
+#cc_binary(
+#    name = "amcrest",
+#    srcs = ["amcrest.cpp"],
+#    linkopts = [
+#        "-lpthread",
+#        "-ldl",
+#    ],
+#    deps = [
+#        "@opencv//:core",
+#        "@opencv//:imgproc",
+#        "@opencv//:videoio",
+#        "@com_github_gflags_gflags//:gflags",
+#    ],
+#)

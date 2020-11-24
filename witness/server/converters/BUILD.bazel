@@ -4,13 +4,14 @@ cc_library(
     name = "converters",
     srcs = ["converters.cpp"],
     hdrs = ["converters.h"],
+    linkopts = ["-ldl"],
     visibility = ["//visibility:public"],
     deps = [
         "//witness/api:cc_proto",
-        "//witness/server/time:time",
+        "//witness/server/time",
         "@apriltag_archive//:apriltag",
         "@eigen_archive//:eigen",
-        "@opencv_archive//:opencv",
+        "@opencv//:core",
     ],
 )
 

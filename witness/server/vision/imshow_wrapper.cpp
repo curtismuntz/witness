@@ -1,7 +1,7 @@
 #include "witness/server/vision/imshow_wrapper.h"
 
 #include "glog/logging.h"
-#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgcodecs/imgcodecs.hpp"
 
 namespace witness::server::vision {
 

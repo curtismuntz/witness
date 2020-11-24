@@ -34,13 +34,13 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":_base_headers",
-        ":opencv_core",
-        ":opencv_highgui",
-        ":opencv_imgcodecs",
-        ":opencv_imgproc",
-        ":opencv_ml",
-        ":opencv_video",
-        ":opencv_videoio",
+        ":core",
+        ":highgui",
+        ":imgcodecs",
+        ":imgproc",
+        ":ml",
+        ":video",
+        ":videoio",
     ],
 )
 
@@ -58,7 +58,7 @@ cc_library(
 )
 
 cc_library(
-    name = "opencv_core",
+    name = "core",
     srcs = glob([
         "modules/core/src/**/*.cpp",
         "modules/core/src/**/*.hpp",
@@ -294,6 +294,7 @@ cat > $@ <<"EOF"
 
 /* FFMpeg video library */
 /* #undef HAVE_FFMPEG */
+// #define HAVE_FFMPEG
 
 /* Geospatial Data Abstraction Library */
 /* #undef HAVE_GDAL */
@@ -791,7 +792,7 @@ EOF""",
 )
 
 cc_library(
-    name = "opencv_imgproc",
+    name = "imgproc",
     srcs = glob([
         "modules/imgproc/src/**/*.cpp",
         "modules/imgproc/src/**/*.hpp",
@@ -806,7 +807,7 @@ cc_library(
         "modules/imgproc/include",
     ],
     visibility = ["//visibility:public"],
-    deps = [":opencv_core"],
+    deps = [":core"],
 )
 
 genrule(
@@ -821,7 +822,7 @@ EOF""",
 )
 
 cc_library(
-    name = "opencv_ml",
+    name = "ml",
     srcs = glob([
         "modules/ml/src/**/*.cpp",
         "modules/ml/src/**/*.hpp",
@@ -830,11 +831,11 @@ cc_library(
     copts = _OPENCV_COPTS,
     includes = ["modules/ml/include"],
     visibility = ["//visibility:public"],
-    deps = [":opencv_core"],
+    deps = [":core"],
 )
 
 cc_library(
-    name = "opencv_highgui",
+    name = "highgui",
     srcs = glob(
         [
             "modules/highgui/src/**/*.cpp",
@@ -856,14 +857,14 @@ cc_library(
     includes = ["modules/highgui/include"],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgcodecs",
-        ":opencv_videoio",
+        ":core",
+        ":imgcodecs",
+        ":videoio",
     ],
 )
 
 cc_library(
-    name = "opencv_imgcodecs",
+    name = "imgcodecs",
     srcs = glob([
         "modules/imgcodecs/src/**/*.cpp",
         "modules/imgcodecs/src/**/*.hpp",
@@ -879,8 +880,8 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgproc",
+        ":core",
+        ":imgproc",
         "//external:png",
         "//external:zlib",
         "@libjpeg_archive//:libjpeg",
@@ -888,7 +889,7 @@ cc_library(
 )
 
 cc_library(
-    name = "opencv_videoio",
+    name = "videoio",
     srcs = glob(
         [
             "modules/videoio/src/**/*.cpp",
@@ -914,13 +915,14 @@ cc_library(
     includes = ["modules/videoio/include"],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgcodecs",
+        ":core",
+        ":imgcodecs",
+        # "@ffmpeg//:ffmpeg",
     ],
 )
 
 cc_library(
-    name = "opencv_video",
+    name = "video",
     srcs = glob(
         [
             "modules/video/src/**/*.cpp",
@@ -938,14 +940,14 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgproc",
+        ":core",
+        ":imgproc",
     ],
 )
 
 
 cc_library(
-    name = "opencv_flann",
+    name = "flann",
     srcs = glob(
         [
             "modules/flann/src/**/*.cpp",
@@ -963,12 +965,12 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
+        ":core",
     ],
 )
 
 cc_library(
-    name = "opencv_features2d",
+    name = "features2d",
     srcs = glob(
         [
             "modules/features2d/src/**/*.cpp",
@@ -987,16 +989,16 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgproc",
-        ":opencv_highgui",
-        ":opencv_flann",
+        ":core",
+        ":imgproc",
+        ":highgui",
+        ":flann",
     ],
 )
 
 
 cc_library(
-    name = "opencv_calib3d",
+    name = "calib3d",
     srcs = glob(
         [
             "modules/calib3d/src/**/*.cpp",
@@ -1018,9 +1020,9 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":opencv_core",
-        ":opencv_imgproc",
-        ":opencv_highgui",
-        ":opencv_features2d",
+        ":core",
+        ":imgproc",
+        ":highgui",
+        ":features2d",
     ],
 )

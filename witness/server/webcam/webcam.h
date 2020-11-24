@@ -3,7 +3,7 @@
 #include <string>
 #include "glog/logging.h"
 #include "opencv2/core.hpp"
-#include "opencv2/highgui.hpp"
+// #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/video/background_segm.hpp"
 #include "opencv2/videoio.hpp"

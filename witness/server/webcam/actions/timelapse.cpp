@@ -1,8 +1,11 @@
 #include "witness/server/webcam/actions/timelapse.h"
+
 #include <algorithm>
+
+#include "opencv2/imgcodecs/imgcodecs.hpp"
+#include "opencv2/videoio/videoio.hpp"
 #include "third_party/alphanum/alphanum.hpp"
 #include "witness/server/file_operations/file_operations.h"
-
 
 namespace witness::server::webcam::actions {
 
@@ -38,7 +41,8 @@ bool TimeLapse::Loop() {
 
   auto video_name = std::string{folder_ + video_ext_};
   LOG(INFO) << "Writing timelapse video: " << video_name;
-  cv::VideoWriter video(video_name, CV_FOURCC('M', 'J', 'P', 'G'), 30, cv::Size(width, height));
+  cv::VideoWriter video(video_name, cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 30,
+                        cv::Size(width, height));
 
   // Iterate over folder path and add frames to a video object.
   auto file_vector = file_operations::ListDir(folder_, photo_ext_, video_ext_);

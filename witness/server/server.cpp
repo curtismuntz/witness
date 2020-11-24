@@ -1,3 +1,5 @@
+#include "witness/server/server.h"
+
 #include <cstdint>
 #include <fstream>
 #include <memory>
@@ -5,12 +7,12 @@
 #include <utility>
 
 #include "witness/server/file_operations/file_operations.h"
-#include "witness/server/server.h"
+#include "witness/server/webcam/actions/calibrate.h"
 #include "witness/server/webcam/actions/monitor.h"
 #include "witness/server/webcam/actions/timelapse.h"
 #include "witness/server/webcam/actions/tracking.h"
 #include "witness/server/webcam/actions/video_recorder.h"
-#include "witness/server/webcam/actions/calibrate.h"
+
 
 static bool ValidateRotation(const char *flagname, int value) {
   if (std::abs(value) > 360) {
@@ -223,18 +225,16 @@ Status WitnessService::StartAprilTracking(ServerContext *context,
   return Status::OK;
 }
 
-
-
 Status WitnessService::StartCalibration(ServerContext *context,
-                                          const StartCalibrationRequest *request,
-                                          ServerWriter<StartCalibrationReply> *writer) {
+                                        const StartCalibrationRequest *request,
+                                        ServerWriter<StartCalibrationReply> *writer) {
   LOG(INFO) << "StartCalibration requested" << std::endl;
 
   auto params = vision::CalibrateParameters();
-  params.board_size_width            = request->chessboard().board_size_width();
-  params.board_size_height           = request->chessboard().board_size_height();
-  params.square_size_mm              = request->chessboard().square_size();
-  params.window_size                 = request->chessboard().window_size();
+  params.board_size_width = request->chessboard().board_size_width();
+  params.board_size_height = request->chessboard().board_size_height();
+  params.square_size_mm = request->chessboard().square_size();
+  params.window_size = request->chessboard().window_size();
   params.minimum_calibration_samples = request->chessboard().minimum_calibration_samples();
 
   if (!params.validate()) {
@@ -244,8 +244,7 @@ Status WitnessService::StartCalibration(ServerContext *context,
     reply_error->set_message("Invalid parameters!");
     writer->Write(reply);
   } else if (!webcam_action_) {
-    webcam_action_ =
-        std::make_unique<witness::server::webcam::actions::Calibrate>(webcam_, params);
+    webcam_action_ = std::make_unique<witness::server::webcam::actions::Calibrate>(webcam_, params);
     webcam_action_->StartBlocking();
   } else {
     auto reply = StartCalibrationReply();

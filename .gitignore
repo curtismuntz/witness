@@ -3,3 +3,4 @@ bazel-*
 __pycache__/
 pyenv/
 .clwb
+flagfile

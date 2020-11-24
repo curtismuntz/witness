@@ -1,6 +1,8 @@
 #include "witness/server/webcam/webcam.h"
+
 #include "glog/logging.h"
 #include "witness/server/file_operations/file_operations.h"
+#include "opencv2/imgcodecs/imgcodecs.hpp"
 
 namespace witness::webcam {
 
@@ -71,10 +73,11 @@ cv::VideoWriter Webcam::CreateVideoObject(const std::string &fname) {
   auto height = camera_->get(cv::CAP_PROP_FRAME_HEIGHT);
 
 #ifdef RPI_CAM
-  auto codec = CV_FOURCC('M', 'J', 'P', 'G');
+  auto codec = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
   cv::VideoWriter video(fname, codec, fps, cv::Size(width, height));
 #else
-  auto codec = camera_->get(cv::CAP_PROP_FOURCC);
+    auto codec = camera_->get(cv::CAP_PROP_FOURCC);
+//  auto codec = cv::VideoWriter::fourcc('X', '2', '6', '4');
   cv::VideoWriter video(fname, codec, fps, cv::Size(width, height));
 #endif
 

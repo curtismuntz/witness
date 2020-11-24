@@ -6,11 +6,13 @@ cc_library(
         "imshow_wrapper.cpp",
     ],
     hdrs = ["imshow_wrapper.h"],
+    linkopts = ["-ldl"],
     visibility = ["//visibility:public"],
     deps = [
         "@com_github_gflags_gflags//:gflags",
         "@com_github_google_glog//:glog",
-        "@opencv_archive//:opencv",
+        "@opencv//:core",
+        "@opencv//:imgcodecs",
     ],
 )
 
@@ -36,7 +38,8 @@ cc_library(
         "@apriltag_archive//:apriltag",
         "@com_github_gflags_gflags//:gflags",
         "@com_github_google_glog//:glog",
-        "@opencv_archive//:opencv",
+        "@opencv//:core",
+        "@opencv//:imgproc",
     ],
 )
 
@@ -65,8 +68,9 @@ cc_library(
         "//witness/server/file_operations",
         "@com_github_gflags_gflags//:gflags",
         "@com_github_google_glog//:glog",
-        "@opencv_archive//:opencv",
-        "@opencv_archive//:opencv_calib3d",
+        "@opencv//:calib3d",
+        "@opencv//:core",
+        "@opencv//:videoio",
     ],
 )
 
