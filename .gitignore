@@ -4,3 +4,4 @@ __pycache__/
 pyenv/
 .clwb
 flagfile
+target/
