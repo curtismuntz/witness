@@ -156,20 +156,20 @@ _cc_image_repos()
 # c++
 ###############################
 http_archive(
-   name = "opencv",
-   build_file = "//third_party:opencv.BUILD",
-   sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
-   strip_prefix = "opencv-3.1.0",
-   url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
+    name = "opencv",
+    build_file = "//third_party:opencv.BUILD",
+    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
+    strip_prefix = "opencv-3.1.0",
+    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
 )
 
 http_archive(
     name = "libjpeg_archive",
     build_file = "//third_party:jpeg.BUILD",
-    sha256 = "75c3ec241e9996504fe02a9ed4d12f16b74ade713972f3db9e65ce95cd27e35d",
-    strip_prefix = "jpeg-6b",
+    sha256 = "301d99bdb1abbb849975a56689680649ca7d8dbe06dc4bda08edeb1e5e4f77c0",
+    strip_prefix = "libjpeg-libjpeg-6b",
     urls = [
-        "https://svwh.dl.sourceforge.net/project/libjpeg/libjpeg/6b/jpegsrc.v6b.tar.gz",
+        "https://github.com/freedesktop/libjpeg/archive/libjpeg-6b.tar.gz",
     ],
 )
 
@@ -243,11 +243,12 @@ http_archive(
     ],
 )
 
-
 load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
+
 rust_repositories()
 
 load("@io_bazel_rules_rust//proto:repositories.bzl", "rust_proto_repositories")
+
 rust_proto_repositories()
 
 load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
