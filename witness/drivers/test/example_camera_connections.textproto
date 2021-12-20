@@ -1,0 +1,21 @@
+# Textproto of style //witness/drivers/
+connections: [
+  {
+    camera_name: "example1"
+    ip: "192.168.1.1"
+    username: "example_user"
+    password: "example_password"
+    port: 80
+    subtype: 0
+    channel: 1
+  },
+  {
+    camera_name: "example2"
+    ip: "192.168.1.2"
+    username: "example_user"
+    password: "example_password"
+    port: 80
+    subtype: 0
+    channel: 1
+  }
+]

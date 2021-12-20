@@ -155,13 +155,13 @@ _cc_image_repos()
 ###############################
 # c++
 ###############################
-http_archive(
-    name = "opencv",
-    build_file = "//third_party:opencv.BUILD",
-    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
-    strip_prefix = "opencv-3.1.0",
-    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
-)
+#http_archive(
+#    name = "opencv",
+#    build_file = "//third_party:opencv.BUILD",
+#    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
+#    strip_prefix = "opencv-3.1.0",
+#    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
+#)
 
 http_archive(
     name = "libjpeg_archive",
@@ -254,3 +254,15 @@ rust_proto_repositories()
 load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
 
 bazel_version(name = "bazel_version")
+
+load("//tools/workspace:default.bzl", "add_default_repositories")
+
+add_default_repositories()
+
+load(
+    "@com_github_mjbots_bazel_deps//tools/workspace:default.bzl",
+    bazel_deps_add = "add_default_repositories",
+)
+
+bazel_deps_add()
+

@@ -1,15 +1,61 @@
 # REQUIRES OPENCV BUILT WITH FFMPEG SUPPORT. I PROVED THIS WORKS BUT NEED TO BAZELIFY FFMPEG =(
-#cc_binary(
-#    name = "amcrest",
-#    srcs = ["amcrest.cpp"],
-#    linkopts = [
-#        "-lpthread",
-#        "-ldl",
-#    ],
-#    deps = [
-#        "@opencv//:core",
-#        "@opencv//:imgproc",
-#        "@opencv//:videoio",
-#        "@com_github_gflags_gflags//:gflags",
-#    ],
-#)
+proto_library(
+    name = "amcrest_proto",
+    srcs = ["amcrest.proto"],
+    deps = [],
+)
+
+cc_proto_library(
+    name = "amcrest_cc_proto",
+    deps = [":amcrest_proto"],
+)
+
+# REQUIRES OPENCV BUILT WITH FFMPEG SUPPORT. I PROVED THIS WORKS BUT NEED TO BAZELIFY FFMPEG =(
+cc_library(
+    name = "amcrest",
+    srcs = ["amcrest.cpp"],
+    hdrs = ["amcrest.h"],
+    linkopts = [
+        "-lpthread",
+        "-ldl",
+    ],
+    deps = [
+        ":amcrest_cc_proto",
+        "@com_github_google_glog//:glog",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+    ],
+)
+
+cc_binary(
+    name = "amcrest_capture",
+    srcs = ["amcrest_capture.cpp"],
+    linkopts = [
+        "-lpthread",
+        "-lstdc++fs",
+    ],
+    deps = [
+        ":amcrest",
+        "@com_github_google_glog//:glog",
+        "@com_google_absl//absl/flags:flag",
+        "@com_google_absl//absl/flags:parse",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@com_google_protobuf//:protobuf",
+        "@opencv//:core",
+        "@opencv//:imgproc",
+        "@opencv//:videoio",
+    ],
+)
+
+cc_test(
+    name = "test_amcrest",
+    srcs = ["test/test_amcrest.cpp"],
+    deps = [
+        ":amcrest",
+        "@gtest//gtest",
+    ],
+)

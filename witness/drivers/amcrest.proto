@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message AmcrestConnection {
+  string camera_name = 1;
+  string ip = 2;
+  string username = 3;
+  string password = 4;
+  int32 port = 5;
+  int32 subtype = 6;
+  int32 channel = 7;
+}
+
+message AmcrestCameras {
+  repeated AmcrestConnection connections = 1;
+}
