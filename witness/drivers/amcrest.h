@@ -12,6 +12,8 @@
 #include <sstream>
 #include <fcntl.h>
 #include "witness/drivers/amcrest.pb.h"
+#include <stdio.h>
+#include <curl/curl.h>
 
 namespace amcrest {
 
@@ -46,9 +48,12 @@ public:
     }
     std::string auth();
     std::string host_string();
+    std::string get_photo_url();
     std::string get_authd_host_string();
     std::string get_real_time_stream_url();
+  bool download_jpeg(const char* url, std::string& fname);
 private:
+    static size_t callbackfunction(void *ptr, size_t size, size_t nmemb, void* userdata);
     std::string username_, password_, hostname_, port_, channel_, subtype_;
 };
 

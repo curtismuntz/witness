@@ -12,6 +12,14 @@ http_archive(
     urls = ["https://github.com/curtismuntz/bazel_tools/archive/fb5b9ad88abe259e6a2306503870f57154bf44ec.tar.gz"],
 )
 
+http_archive(
+    name = "com_github_curl",
+    build_file = "//third_party:curl.BUILD",
+    sha256 = "ffa8f79f68dd77b08987ce16acd1f292875df8ab3bf7e3654f98d62b445ebd9a",
+    strip_prefix = "curl-curl-7_78_0",
+    urls = ["https://github.com/curl/curl/archive/refs/tags/curl-7_78_0.tar.gz"],
+)
+
 load("@murtis_bazel_tools//tools:deps.bzl", "google_cpp_dependencies", "linter_dependencies")
 
 linter_dependencies()
@@ -155,13 +163,13 @@ _cc_image_repos()
 ###############################
 # c++
 ###############################
-#http_archive(
-#    name = "opencv",
-#    build_file = "//third_party:opencv.BUILD",
-#    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
-#    strip_prefix = "opencv-3.1.0",
-#    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
-#)
+http_archive(
+    name = "opencv",
+    build_file = "//third_party:opencv.BUILD",
+    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
+    strip_prefix = "opencv-3.1.0",
+    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
+)
 
 http_archive(
     name = "libjpeg_archive",
@@ -234,6 +242,14 @@ http_archive(
 )
 
 http_archive(
+    name = "com_github_p-ranav_indicators",
+    build_file = "//third_party:indicators.BUILD",
+    sha256 = "b768f1b7ca64a413503f72d5460cc617c1458c17fb7a8c0ee503d753e1f20d03",
+    strip_prefix = "indicators-2.2",
+    urls = ["https://github.com/p-ranav/indicators/archive/refs/tags/v2.2.tar.gz"],
+)
+
+http_archive(
     name = "bazel_skylib",
     sha256 = "eb5c57e4c12e68c0c20bc774bfbc60a568e800d025557bc4ea022c6479acc867",
     strip_prefix = "bazel-skylib-0.6.0",
@@ -255,14 +271,13 @@ load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
 
 bazel_version(name = "bazel_version")
 
-load("//tools/workspace:default.bzl", "add_default_repositories")
-
-add_default_repositories()
-
-load(
-    "@com_github_mjbots_bazel_deps//tools/workspace:default.bzl",
-    bazel_deps_add = "add_default_repositories",
-)
-
-bazel_deps_add()
-
+#load("//tools/workspace:default.bzl", "add_default_repositories")
+#
+#add_default_repositories()
+#
+#load(
+#    "@com_github_mjbots_bazel_deps//tools/workspace:default.bzl",
+#    bazel_deps_add = "add_default_repositories",
+#)
+#
+#bazel_deps_add()

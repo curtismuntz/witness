@@ -16,6 +16,25 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "create_timelapse",
+    srcs = ["create_timelapse.cpp"],
+    hdrs = ["create_timelapse.h"],
+    linkopts = [
+        "-lstdc++fs",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//third_party/alphanum",
+        "//witness/server/file_operations",
+        "@com_github_google_glog//:glog",
+        "@com_google_absl//absl/flags:flag",
+        "@opencv//:core",
+        "@opencv//:imgproc",
+        "@opencv//:videoio",
+    ],
+)
+
 cc_test(
     name = "imshow_wrapper_test",
     srcs = ["imshow_wrapper_test.cpp"],

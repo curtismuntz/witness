@@ -177,8 +177,8 @@ Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamReques
 Status WitnessService::GetFileList(ServerContext *context, const GetFileListRequest *request,
                                    ServerWriter<FileListReply> *writer) {
   LOG(INFO) << "GetFileList requested" << std::endl;
-  auto file_list = witness::server::file_operations::ListDir(media_dir_, FLAGS_photo_extension,
-                                                             FLAGS_video_extension);
+  auto file_list = witness::server::file_operations::ListDir(media_dir_, std::unordered_set<std::string>{FLAGS_photo_extension,
+                                                             FLAGS_video_extension});
   LOG(INFO) << "file_list length:" << file_list.size();
   for (const auto str : file_list) {
     FileListReply flr;

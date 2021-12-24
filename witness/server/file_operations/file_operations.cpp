@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#include "absl/time/clock.h"
+#include "absl/time/time.h"
 #include "witness/server/file_operations/file_operations.h"
 
 namespace witness::server::file_operations {
@@ -12,12 +14,9 @@ void ClearDir(const std::string &fullpath) {
 }
 
 std::string CurrentTimeString() {
-  auto t = std::time(nullptr);
-  auto tm = *std::localtime(&t);
-
-  std::ostringstream oss;
-  oss << std::put_time(&tm, "%d-%m-%Y_%H-%M-%S");
-  return oss.str();
+  auto now = absl::Now();
+  auto tz = absl::LocalTimeZone();
+  return absl::FormatTime("%Y-%m-%d_%H-%M-%S", now, tz);
 }
 
 // If no extension is provided, it won't append the extension!
@@ -39,7 +38,7 @@ std::string DecideFilename(const std::string &media_dir, const std::string &requ
   auto hostname = hostvar ? hostvar : "local";
   std::string fname = hostname + std::string{"_"};
 
-  if (requested_fname != "") {
+  if (!requested_fname.empty()) {
     fname = fname + requested_fname;
   } else {
     fname = fname + CurrentTimeString();
@@ -48,25 +47,31 @@ std::string DecideFilename(const std::string &media_dir, const std::string &requ
   return CreatePathString(media_dir, fname, ext);
 }
 
-std::vector<std::string> ListDir(const std::string &media_path, const std::string &photo_ext,
-                                 const std::string &video_ext) {
+std::vector<std::string> ListDir(const std::string &media_path, std::unordered_set<std::string> extensions){
   std::vector<std::string> file_list;
   for (const auto &p : std::experimental::filesystem::directory_iterator(media_path)) {
-    auto fext = p.path().extension();
-    if (fext == photo_ext || fext == video_ext) {
+    auto fext = p.path().extension().string();
+    if (extensions.find(fext) != extensions.end()) {
       auto path_string = p.path().string();
-      LOG(INFO) << "Found file at " << path_string;
+      DLOG(INFO) << "Found file at " << path_string;
       file_list.push_back(path_string);
     }
   }
   return file_list;
 }
 
+std::string MakeTimeDir(const std::string& base_directory) {
+  std::experimental::filesystem::path new_folder(std::experimental::filesystem::path{base_directory} / std::experimental::filesystem::path{CurrentTimeString()});
+  MakeDir(new_folder);
+  return new_folder;
+}
+
 void MakeDir(const std::string &fullpath) {
+  LOG(INFO)<< "Creating folder " << fullpath << std::endl;
   std::experimental::filesystem::create_directory(fullpath);
 }
 
-bool exists(const std::string fname) {
+bool exists(const std::string& fname) {
   return std::experimental::filesystem::exists(fname);
 }
 

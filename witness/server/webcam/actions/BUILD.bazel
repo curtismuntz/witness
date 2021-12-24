@@ -34,8 +34,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         ":webcam_action",
-        "//third_party/alphanum",
-        "//witness/server/file_operations",
+        "//witness/server/vision:create_timelapse",
     ],
 )
 
