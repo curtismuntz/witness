@@ -1,10 +1,21 @@
+# python shit
 *.pyc
+__pycache__/
+pyenv/
+
+# bazel shit
+bazel-*
+
+# clion shit
+.clwb
+
+# runtime shit (gflags)
+flagfile
+
+# rust shit
+target/
+
+# media shit
 *.avi
 *.mpg
 *.mp4
-bazel-*
-__pycache__/
-pyenv/
-.clwb
-flagfile
-target/

@@ -58,7 +58,6 @@ http_archive(
     sha256 = "",
     strip_prefix = "grpc-1.44.0",
     urls = [
-        #        "https://github.com/grpc/grpc/archive/5399e7e209f2d4348c9004b88d528236a43c4f82.tar.gz",
         "https://github.com/grpc/grpc/archive/refs/tags/v1.44.0.tar.gz",
     ],
 )
@@ -75,13 +74,6 @@ grpc_extra_deps()
 ###############################
 # Docker
 ###############################
-#http_archive(
-#    name = "io_bazel_rules_docker",
-#    sha256 = "3efbd23e195727a67f87b2a04fb4388cc7a11a0c0c2cf33eec225fb8ffbb27ea",
-#    strip_prefix = "rules_docker-0.14.2",
-#    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.2/rules_docker-v0.14.2.tar.gz"],
-#)
-
 http_archive(
     name = "io_bazel_rules_docker",
     sha256 = "85ffff62a4c22a74dbd98d05da6cf40f497344b3dbf1e1ab0a37ab2a1a6ca014",
