@@ -66,15 +66,12 @@ void timelapse(const AmcrestCameras &file_pb, const std::experimental::filesyste
         option::MaxProgress{timelapse_frames},
         option::FontStyles{std::vector<FontStyle>{FontStyle::bold}}
     };
-    auto progress = 0.0f;
     for( int i = 0; i < timelapse_frames; ++i) {
         // Show iteration as postfix text
         bar.set_option(option::PostfixText{
           std::to_string(i) + "/" + std::to_string(timelapse_frames)
         });
         bar.tick();
-        progress=(float(i+1)/float(timelapse_frames));
-        // bar.set_progress(progress);
         DLOG(INFO) << "Capturing frame " << i << std::endl;
         capture_cameras(file_pb, folder, i);
         DLOG(INFO) << "Sleeping " << sleep_time << " seconds.";

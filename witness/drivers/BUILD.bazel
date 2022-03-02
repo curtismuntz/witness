@@ -52,11 +52,11 @@ cc_binary(
     ],
 )
 
-cc_test(
-    name = "test_amcrest",
-    srcs = ["test/test_amcrest.cpp"],
-    deps = [
-        ":amcrest",
-        "@gtest//gtest",
-    ],
-)
+#cc_test(
+#    name = "test_amcrest",
+#    srcs = ["test/test_amcrest.cpp"],
+#    deps = [
+#        ":amcrest",
+#        "//external:gtest",
+#    ],
+#)

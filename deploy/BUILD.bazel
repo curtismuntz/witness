@@ -1,16 +1,17 @@
 load("@io_bazel_rules_docker//cc:image.bzl", "cc_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
 
-config_setting(
-    name = "armeabi-v7a",
-    values = {"cpu": "armeabi-v7a"},
-)
-
-config_setting(
-    name = "aarch64-linux-gnu",
-    values = {"cpu": "aarch64-linux-gnu"},
-)
+#load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+#
+#config_setting(
+#    name = "armeabi-v7a",
+#    values = {"cpu": "armeabi-v7a"},
+#)
+#
+#config_setting(
+#    name = "aarch64-linux-gnu",
+#    values = {"cpu": "aarch64-linux-gnu"},
+#)
 
 #pkg_tar(
 #    name = "witness_tar",
@@ -70,31 +71,32 @@ cc_image(
     name = "container_aarch64",
     base = "@witness_aarch64_docker_base//image",
     binary = "//witness/server:server",
+    target_compatible_with = [":aarch64-linux-gnu"],
 )
 
-container_push(
-    name = "push_witness_aarch64",
-    format = "Docker",
-    image = ":container_aarch64",
-    registry = "index.docker.io",
-    repository = "murtis/witness_aarch64",
-    tag = "service",
-)
-
-container_push(
-    name = "push_witness_armv7hf",
-    format = "Docker",
-    image = ":container_armv7hf",
-    registry = "index.docker.io",
-    repository = "murtis/witness_armv7hf",
-    tag = "service",
-)
-
-container_push(
-    name = "push_witness_amd64",
-    format = "Docker",
-    image = ":container_amd64",
-    registry = "index.docker.io",
-    repository = "murtis/witness_amd64",
-    tag = "service",
-)
+#container_push(
+#    name = "push_witness_aarch64",
+#    format = "Docker",
+#    image = ":container_aarch64",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_aarch64",
+#    tag = "service",
+#)
+#
+#container_push(
+#    name = "push_witness_armv7hf",
+#    format = "Docker",
+#    image = ":container_armv7hf",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_armv7hf",
+#    tag = "service",
+#)
+#
+#container_push(
+#    name = "push_witness_amd64",
+#    format = "Docker",
+#    image = ":container_amd64",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_amd64",
+#    tag = "service",
+#)

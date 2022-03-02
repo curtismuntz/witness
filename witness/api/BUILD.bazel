@@ -1,8 +1,7 @@
-load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
-load("@rules_proto_grpc//cpp:defs.bzl", "cpp_proto_library")
-load("@rules_proto_grpc//python:defs.bzl", "python_grpc_library")
-
-load("@io_bazel_rules_rust//proto:proto.bzl", "rust_grpc_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
+load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
+load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library")
 
 proto_library(
     name = "witness",
@@ -16,27 +15,38 @@ proto_library(
     deps = ["@com_google_protobuf//:timestamp_proto"],
 )
 
-cpp_proto_library(
+cc_proto_library(
     name = "cc_proto",
     visibility = ["//witness:__subpackages__"],
     deps = [":witness"],
 )
 
-cpp_grpc_library(
+cc_grpc_library(
     name = "cc_grpc",
+    srcs = [":witness"],
+    grpc_only = True,
     visibility = ["//visibility:public"],
-    deps = [":witness"],
+    deps = [
+        ":cc_proto",
+        "@com_github_grpc_grpc//:grpc++",
+    ],
 )
 
-python_grpc_library(
-    name = "py_grpc",
-    transitive = True,
-    visibility = ["//visibility:public"],
-    deps = [":witness"],
-)
+#cpp_grpc_library(
+#    name = "cc_grpc",
+#    visibility = ["//visibility:public"],
+#    protos = [":cc_proto"],
+#)
+#
+#python_grpc_library(
+#    name = "py_grpc",
+#    transitive = True,
+#    visibility = ["//visibility:public"],
+#    protos = [":witness"],
+#)
 
-rust_grpc_library(
-    name = "rust_grpc",
-    visibility = ["//visibility:public"],
-    deps = [":witness"],
-)
+#rust_grpc_library(
+#    name = "rust_grpc",
+#    visibility = ["//visibility:public"],
+#    deps = [":witness"],
+#)

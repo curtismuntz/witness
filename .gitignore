@@ -1,4 +1,7 @@
 *.pyc
+*.avi
+*.mpg
+*.mp4
 bazel-*
 __pycache__/
 pyenv/

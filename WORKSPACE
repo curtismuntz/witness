@@ -1,15 +1,13 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-register_toolchains("//:system_installed_python_toolchain")
-
 ###############################
 # murtis maintained external bazel projects
 ###############################
 http_archive(
     name = "murtis_bazel_tools",
-    sha256 = "1123eb08463f5a1a76e873d8c249a746caae89b6c31e8e43b045ff6cdf313821",
-    strip_prefix = "bazel_tools-fb5b9ad88abe259e6a2306503870f57154bf44ec",
-    urls = ["https://github.com/curtismuntz/bazel_tools/archive/fb5b9ad88abe259e6a2306503870f57154bf44ec.tar.gz"],
+    sha256 = "f5839e08855386011cf78c4204d993c40527ea5d33f7bb78c53eb6ce94d72ded",
+    strip_prefix = "bazel_tools-713720bb61c13868c4f57ed66777a75aa17f6019",
+    urls = ["https://github.com/curtismuntz/bazel_tools/archive/713720bb61c13868c4f57ed66777a75aa17f6019.tar.gz"],
 )
 
 http_archive(
@@ -40,78 +38,55 @@ cross_compiler_dependencies()
 ###############################
 # protobuf
 ###############################
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "rules_proto",
+    sha256 = "c22cfcb3f22a0ae2e684801ea8dfed070ba5bed25e73f73580564f250475e72d",
+    strip_prefix = "rules_proto-4.0.0-3.19.2",
+    urls = [
+        "https://github.com/bazelbuild/rules_proto/archive/refs/tags/4.0.0-3.19.2.tar.gz",
+    ],
+)
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
+rules_proto_dependencies()
+
+rules_proto_toolchains()
 
 http_archive(
-    name = "rules_proto_grpc",
-    sha256 = "5f0f2fc0199810c65a2de148a52ba0aff14d631d4e8202f41aff6a9d590a471b",
-    strip_prefix = "rules_proto_grpc-1.0.2",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/1.0.2.tar.gz"],
+    name = "com_github_grpc_grpc",
+    sha256 = "",
+    strip_prefix = "grpc-1.44.0",
+    urls = [
+        #        "https://github.com/grpc/grpc/archive/5399e7e209f2d4348c9004b88d528236a43c4f82.tar.gz",
+        "https://github.com/grpc/grpc/archive/refs/tags/v1.44.0.tar.gz",
+    ],
 )
-
-load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_repos", "rules_proto_grpc_toolchains")
-
-rules_proto_grpc_toolchains()
-
-rules_proto_grpc_repos()
-
-load("@rules_proto_grpc//cpp:repositories.bzl", rules_proto_grpc_cpp_repos = "cpp_repos")
-
-rules_proto_grpc_cpp_repos()
 
 load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
 
 grpc_deps()
 
-###############################
-# protobuf (python)
-###############################
-load("@rules_proto_grpc//python:repositories.bzl", rules_proto_grpc_python_repos = "python_repos")
+# Not mentioned in official docs... mentioned here https://github.com/grpc/grpc/issues/20511
+load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
 
-rules_proto_grpc_python_repos()
-
-load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
-
-grpc_deps()
-
-load("@rules_python//python:repositories.bzl", "py_repositories")
-
-py_repositories()
-
-load("@rules_python//python:pip.bzl", "pip_repositories")
-
-pip_repositories()
-
-load("@rules_python//python:pip.bzl", "pip_import")
-
-pip_import(
-    name = "rules_proto_grpc_py2_deps",
-    python_interpreter = "python",  # Replace this with the platform specific Python 2 name, or remove if not using Python 2
-    requirements = "@rules_proto_grpc//python:requirements.txt",
-)
-
-load("@rules_proto_grpc_py2_deps//:requirements.bzl", pip2_install = "pip_install")
-
-pip2_install()
-
-pip_import(
-    name = "rules_proto_grpc_py3_deps",
-    python_interpreter = "python3",
-    requirements = "@rules_proto_grpc//python:requirements.txt",
-)
-
-load("@rules_proto_grpc_py3_deps//:requirements.bzl", pip3_install = "pip_install")
-
-pip3_install()
+grpc_extra_deps()
 
 ###############################
 # Docker
 ###############################
+#http_archive(
+#    name = "io_bazel_rules_docker",
+#    sha256 = "3efbd23e195727a67f87b2a04fb4388cc7a11a0c0c2cf33eec225fb8ffbb27ea",
+#    strip_prefix = "rules_docker-0.14.2",
+#    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.2/rules_docker-v0.14.2.tar.gz"],
+#)
+
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "3efbd23e195727a67f87b2a04fb4388cc7a11a0c0c2cf33eec225fb8ffbb27ea",
-    strip_prefix = "rules_docker-0.14.2",
-    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.2/rules_docker-v0.14.2.tar.gz"],
+    sha256 = "85ffff62a4c22a74dbd98d05da6cf40f497344b3dbf1e1ab0a37ab2a1a6ca014",
+    strip_prefix = "rules_docker-0.23.0",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.23.0/rules_docker-v0.23.0.tar.gz"],
 )
 
 load(
@@ -134,6 +109,7 @@ WITNESS_CONTAINER_TAG = "base"
 
 container_pull(
     name = "witness_armv7_docker_base",
+    digest = "sha256:4aa2e2289e8b7c586b0e41bf9b889dafc2aad81ff683312776cf99a328f90d0e",
     registry = "index.docker.io",
     repository = "murtis/witness_armv7hf",
     tag = WITNESS_CONTAINER_TAG,
@@ -141,17 +117,18 @@ container_pull(
 
 container_pull(
     name = "witness_aarch64_docker_base",
+    digest = "sha256:02bc8b9cb0fb5e7923f28128b65eb0dcd8f8a268563c413f29d8157494e920ed",
     registry = "index.docker.io",
     repository = "murtis/witness_aarch64",
     tag = WITNESS_CONTAINER_TAG,
 )
 
-container_pull(
-    name = "witness_amd64_docker_base",
-    registry = "index.docker.io",
-    repository = "murtis/witness_amd64",
-    tag = WITNESS_CONTAINER_TAG,
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
 )
+
+container_repositories()
 
 load(
     "@io_bazel_rules_docker//cc:image.bzl",
@@ -218,9 +195,9 @@ http_archive(
 http_archive(
     name = "cpp_httplib_archive",
     build_file = "//third_party:cpp-httplib.BUILD",
-    sha256 = "35bcc6a3f9612feb92b2153c5e56389ccc1ab46c7ba8781b873a5c2e249eb610",
-    strip_prefix = "cpp-httplib-0.6.6",
-    urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.6.6.tar.gz"],
+    sha256 = "c8ef7d19842c63747eaa844d25732eb999250716bdf658b876a9c34b274af22c",
+    strip_prefix = "cpp-httplib-0.9.7",
+    urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.9.7.tar.gz"],
 )
 
 http_archive(
@@ -251,11 +228,11 @@ http_archive(
 
 http_archive(
     name = "bazel_skylib",
-    sha256 = "eb5c57e4c12e68c0c20bc774bfbc60a568e800d025557bc4ea022c6479acc867",
-    strip_prefix = "bazel-skylib-0.6.0",
+    sha256 = "9245b0549e88e356cd6a25bf79f97aa19332083890b7ac6481a2affb6ada9752",
+    strip_prefix = "bazel-skylib-1.1.1",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/0.6.0.tar.gz",
-        "https://github.com/bazelbuild/bazel-skylib/archive/0.6.0.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/archive/1.1.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/archive/1.1.1.tar.gz",
     ],
 )
 

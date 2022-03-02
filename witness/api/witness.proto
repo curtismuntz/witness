@@ -67,9 +67,12 @@ message ServerState {
 
 message OpenWebcamRequest {
   // Integer of webcam to open. video0 is 0, video1 is 1, etc.
-  // Note that this is almost always going to be the default value of zero, as this softare will
+  // Note that this is almost always going to be the default value of zero, as this software will
   // almost always be running in a container, which can be translated by the docker volume command.
-  int32 webcam_id = 1;
+  oneof webcam_type {
+    int32 webcam_id = 1;
+    string rtsp_address = 2;
+  }
 }
 
 message OpenWebcamReply {
