@@ -22,6 +22,7 @@ class Webcam {
   ~Webcam() { CloseCamera(); }
 
   bool OpenCamera(int camera_id = 0);
+  bool OpenCamera(std::string rtsp_address);
   bool IsCalibrated() { return calibrated_; }
   void SetCalibration(const cv::Mat &m) { camera_intrisics_ = m; }
   cv::Mat GetCalibration() { return camera_intrisics_; }

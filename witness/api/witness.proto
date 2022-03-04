@@ -3,6 +3,7 @@ syntax = "proto3";
 import "witness/api/error.proto";
 import "witness/api/calibration.proto";
 import "witness/api/tracking.proto";
+import "witness/drivers/amcrest.proto";
 
 package witness.api;
 
@@ -71,7 +72,7 @@ message OpenWebcamRequest {
   // almost always be running in a container, which can be translated by the docker volume command.
   oneof webcam_type {
     int32 webcam_id = 1;
-    string rtsp_address = 2;
+    AmcrestConnection amcrest_connection = 2;
   }
 }
 

@@ -228,18 +228,6 @@ http_archive(
     ],
 )
 
-load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repositories")
-
-rust_repositories()
-
-load("@io_bazel_rules_rust//proto:repositories.bzl", "rust_proto_repositories")
-
-rust_proto_repositories()
-
-load("@io_bazel_rules_rust//:workspace.bzl", "bazel_version")
-
-bazel_version(name = "bazel_version")
-
 #load("//tools/workspace:default.bzl", "add_default_repositories")
 #
 #add_default_repositories()

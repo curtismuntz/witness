@@ -3,16 +3,18 @@ load("@com_google_protobuf//:protobuf.bzl", "py_proto_library")
 load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library")
 
+WITNESS_PROTOS = [
+                         "calibration.proto",
+                         "error.proto",
+                         "tracking.proto",
+                         "witness.proto",
+ ]
+
 proto_library(
     name = "witness",
-    srcs = [
-        "calibration.proto",
-        "error.proto",
-        "tracking.proto",
-        "witness.proto",
-    ],
+    srcs = WITNESS_PROTOS,
     visibility = ["//witness:__subpackages__"],
-    deps = ["@com_google_protobuf//:timestamp_proto"],
+    deps = ["@com_google_protobuf//:timestamp_proto", "//witness/drivers:amcrest_proto"],
 )
 
 cc_proto_library(
@@ -32,21 +34,14 @@ cc_grpc_library(
     ],
 )
 
-#cpp_grpc_library(
-#    name = "cc_grpc",
-#    visibility = ["//visibility:public"],
-#    protos = [":cc_proto"],
+#py_proto_library(
+#    name = "py_proto",
+#    srcs = [":witness"],
 #)
 #
-#python_grpc_library(
+#py_grpc_library(
 #    name = "py_grpc",
-#    transitive = True,
+#    deps = [":py_proto"],
 #    visibility = ["//visibility:public"],
-#    protos = [":witness"],
-#)
-
-#rust_grpc_library(
-#    name = "rust_grpc",
-#    visibility = ["//visibility:public"],
-#    deps = [":witness"],
+#    srcs = [":witness"],
 #)

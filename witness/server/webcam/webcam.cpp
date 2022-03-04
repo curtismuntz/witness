@@ -97,6 +97,21 @@ void Webcam::WatermarkTime(cv::Mat *img) {
               cv::FONT_HERSHEY_COMPLEX, 0.8, cv::Scalar(0, 165, 255), 1, CV_AA);
 }
 
+bool Webcam::OpenCamera(std::string rtsp_address) {
+  if (camera_) {
+    LOG(INFO) << "camera already opened" << std::endl;
+    return false;
+  }
+  LOG(INFO) << "opening camera " << rtsp_address << std::endl;
+  camera_ = std::make_unique<cv::VideoCapture>(rtsp_address);
+
+  if (!camera_->isOpened()) {
+    LOG(ERROR) << "unable to open camera" << std::endl;
+    return false;
+  }
+  return true;
+}
+
 bool Webcam::OpenCamera(int camera_id /* = 0 */) {
   if (camera_) {
     LOG(INFO) << "camera already opened" << std::endl;

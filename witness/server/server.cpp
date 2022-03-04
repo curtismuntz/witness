@@ -12,7 +12,7 @@
 #include "witness/server/webcam/actions/timelapse.h"
 #include "witness/server/webcam/actions/tracking.h"
 #include "witness/server/webcam/actions/video_recorder.h"
-
+#include "witness/drivers/amcrest.h"
 
 static bool ValidateRotation(const char *flagname, int value) {
   if (std::abs(value) > 360) {
@@ -165,7 +165,13 @@ Status WitnessService::TakePhoto(ServerContext *context, const TakePhotoRequest 
 
 Status WitnessService::OpenWebcam(ServerContext *context, const OpenWebcamRequest *request,
                                   OpenWebcamReply *reply) {
-  auto opened = webcam_->OpenCamera(request->webcam_id());
+  bool opened = false;
+  if(request->has_webcam_id()){
+    opened = webcam_->OpenCamera(request->webcam_id());
+  } else if(request->has_amcrest_connection()) {
+    auto amcrest = amcrest::Amcrest(request->amcrest_connection());
+    opened = webcam_->OpenCamera(amcrest.get_real_time_stream_url());
+  }
   if (!opened) {
     auto reply_error = reply->mutable_error();
     reply_error->set_code(Error::UNKNOWN);
