@@ -189,9 +189,9 @@ bind(
 http_archive(
     name = "zlib_git",
     build_file = "//third_party:zlib.BUILD",
-    sha256 = "e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a",
-    strip_prefix = "zlib-1.2.8",
-    url = "https://github.com/madler/zlib/archive/v1.2.8.tar.gz",
+    sha256 = "17e88863f3600672ab49182f217281b6fc4d3c762bde361935e436a95214d05c",
+    strip_prefix = "zlib-1.3.1",
+    url = "https://github.com/madler/zlib/archive/v1.3.1.tar.gz",
 )
 
 bind(
