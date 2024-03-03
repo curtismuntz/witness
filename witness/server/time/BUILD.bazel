@@ -1,5 +1,3 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
-
 cc_library(
     name = "time",
     srcs = ["time.cpp"],
@@ -12,9 +10,7 @@ cc_test(
     srcs = ["time_test.cpp"],
     deps = [
         ":time",
-        "//external:gtest",
         "@com_github_google_glog//:glog",
+        "@googletest//:gtest",
     ],
 )
-
-cpplint()

@@ -884,7 +884,7 @@ cc_library(
         ":imgproc",
         "//external:png",
         "//external:zlib",
-        "@libjpeg_archive//:libjpeg",
+        "@libjpeg_turbo//:jpeg",
     ],
 )
 

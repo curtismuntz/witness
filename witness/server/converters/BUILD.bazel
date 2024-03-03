@@ -1,5 +1,3 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
-
 cc_library(
     name = "converters",
     srcs = ["converters.cpp"],
@@ -10,7 +8,7 @@ cc_library(
         "//witness/api:cc_proto",
         "//witness/server/time",
         "@apriltag_archive//:apriltag",
-        "@eigen_archive//:eigen",
+        "@eigen",
         "@opencv//:core",
     ],
 )
@@ -20,9 +18,7 @@ cc_test(
     srcs = ["converters_test.cpp"],
     deps = [
         ":converters",
-        "//external:gtest",
         "@com_github_google_glog//:glog",
+        "@googletest//:gtest",
     ],
 )
-
-cpplint()

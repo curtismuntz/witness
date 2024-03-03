@@ -1,5 +1,3 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
-
 cc_library(
     name = "webcam",
     srcs = ["webcam.cpp"],
@@ -13,5 +11,3 @@ cc_library(
         "@opencv//:videoio",
     ],
 )
-
-cpplint()

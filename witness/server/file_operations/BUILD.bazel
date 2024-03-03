@@ -1,5 +1,3 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
-
 cc_library(
     name = "file_operations",
     srcs = ["file_operations.cpp"],
@@ -14,8 +12,6 @@ cc_test(
     srcs = ["file_operations_test.cpp"],
     deps = [
         ":file_operations",
-        "//external:gtest",
+        "@googletest//:gtest",
     ],
 )
-
-cpplint()

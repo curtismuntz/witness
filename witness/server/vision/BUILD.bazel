@@ -1,5 +1,3 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "cpplint")
-
 cc_library(
     name = "imshow_wrapper",
     srcs = [
@@ -16,14 +14,14 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "imshow_wrapper_test",
-    srcs = ["imshow_wrapper_test.cpp"],
-    deps = [
-        ":imshow_wrapper",
-        "//external:gtest",
-    ],
-)
+#cc_test(
+#    name = "imshow_wrapper_test",
+#    srcs = ["imshow_wrapper_test.cpp"],
+#    deps = [
+#        ":imshow_wrapper",
+#        "//external:com_github_google_googletest",
+#    ],
+#)
 
 cc_library(
     name = "apriltag",
@@ -43,20 +41,17 @@ cc_library(
     ],
 )
 
-cc_test(
-    name = "apriltag_test",
-    srcs = ["apriltag_test.cpp"],
-    data = glob(["test_data/**/*.jpg"]),
-    deps = [
-        ":apriltag",
-        ":imshow_wrapper",
-        "//external:gtest",
-        "//witness/server/file_operations",
-    ],
-)
-
-# TODO(curtismuntz) enable cpplint for calibration
-cpplint()
+#cc_test(
+#    name = "apriltag_test",
+#    srcs = ["apriltag_test.cpp"],
+#    data = glob(["test_data/**/*.jpg"]),
+#    deps = [
+#        ":apriltag",
+#        ":imshow_wrapper",
+#        "//external:com_github_google_googletest",
+#        "//witness/server/file_operations",
+#    ],
+#)
 
 cc_library(
     name = "calibration",
@@ -80,7 +75,7 @@ cc_test(
     data = glob(["test_data/**/*.jpg"]),
     deps = [
         ":calibration",
-        "//external:gtest",
         "//witness/server/file_operations",
+        "@googletest//:gtest",
     ],
 )

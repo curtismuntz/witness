@@ -1,0 +1,54 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+################################
+## c++
+################################
+http_archive(
+    name = "opencv",
+    build_file = "//third_party:opencv.BUILD",
+    sha256 = "f3b160b9213dd17aa15ddd45f6fb06017fe205359dbd1f7219aad59c98899f15",
+    strip_prefix = "opencv-3.1.0",
+    url = "https://github.com/opencv/opencv/archive/3.1.0.tar.gz",
+)
+
+http_archive(
+    name = "libpng_archive",
+    build_file = "//third_party:png.BUILD",
+    sha256 = "e30bf36cd5882e017c23a5c6a79a9aa1a744dd5841bb45ff7035ec6e3b3096b8",
+    strip_prefix = "libpng-1.6.29",
+    url = "http://download.sourceforge.net/libpng/libpng-1.6.29.tar.gz",
+)
+
+bind(
+    name = "png",
+    actual = "@libpng_archive//:libpng",
+)
+
+http_archive(
+    name = "zlib_git",
+    build_file = "//third_party:zlib.BUILD",
+    sha256 = "e380bd1bdb6447508beaa50efc653fe45f4edc1dafe11a251ae093e0ee97db9a",
+    strip_prefix = "zlib-1.2.8",
+    url = "https://github.com/madler/zlib/archive/v1.2.8.tar.gz",
+)
+
+bind(
+    name = "zlib",
+    actual = "@zlib_git//:zlib",
+)
+
+http_archive(
+    name = "apriltag_archive",
+    build_file = "//third_party:apriltag.BUILD",
+    sha256 = "7349e1fcc8b2979230b46c0d62ccf2ba2bbd611d87ef80cfd37ffe74425f5efb",
+    strip_prefix = "apriltag-3.1.1",
+    url = "https://github.com/AprilRobotics/apriltag/archive/3.1.1.tar.gz",
+)
+
+http_archive(
+    name = "cpp_httplib_archive",
+    build_file = "//third_party:cpp-httplib.BUILD",
+    sha256 = "35bcc6a3f9612feb92b2153c5e56389ccc1ab46c7ba8781b873a5c2e249eb610",
+    strip_prefix = "cpp-httplib-0.6.6",
+    urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.6.6.tar.gz"],
+)

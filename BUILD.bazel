@@ -1,46 +1,27 @@
-exports_files([
-    "requirements.txt",
-    ".bazelversion",
-    "pycodestyle.cfg",
-    "CPPLINT.cfg",
-])
+#load("@buildifier_prebuilt//:rules.bzl", "buildifier")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
-load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+package(default_visibility = ["//visibility:public"])
 
-buildifier(
-    name = "buildifier",
-)
+#exports_files([
+#    "requirements.in",
+#    ".bazelversion",
+#    "pycodestyle.cfg",
+#    "CPPLINT.cfg",
+#])
+#
+#buildifier(
+#    name = "buildifier.check",
+#    exclude_patterns = [
+#        "./.git/*",
+#    ],
+#    lint_mode = "warn",
+#    mode = "diff",
+#)
 
-load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
-
-# Python2 is a dependency of rules_docker due to its dependency on
-# containerregistry. To run builds on environments in which 'which python'
-# points to python3, you can use the py_runtime target below.
-# To use this target, simply add the following flag to your build commands:
-# --python_top=//python:py_runtime_2
-# Note you need to have a symlink to a valid python2 version in
-# '/usr/bin/python2' for this to work.
-py_runtime(
-    name = "py_runtime_2",
-    interpreter_path = "/usr/bin/python2",
-    python_version = "PY2",
-    visibility = ["//visibility:public"],
-)
-
-py_runtime(
-    name = "py_runtime_3",
-    interpreter_path = "/usr/bin/python3",
-    python_version = "PY3",
-)
-
-py_runtime_pair(
-    name = "my_py_runtime_pair",
-    py2_runtime = ":py_runtime_2",
-    py3_runtime = ":py_runtime_3",
-)
-
-toolchain(
-    name = "system_installed_python_toolchain",
-    toolchain = ":my_py_runtime_pair",
-    toolchain_type = "@bazel_tools//tools/python:toolchain_type",
+compile_pip_requirements(
+    name = "requirements",
+    src = "requirements.in",
+    requirements_txt = "requirements_lock.txt",
+    requirements_windows = "requirements_windows.txt",
 )

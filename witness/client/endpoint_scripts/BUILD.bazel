@@ -1,4 +1,4 @@
-load("@murtis_bazel_tools//tools:linters.bzl", "pylint")
+load("@pip//:requirements.bzl", "all_requirements", "requirement")
 
 ENDPOINT_SCRIPTS = [
     "//witness/api:py_grpc",
@@ -29,13 +29,20 @@ py_binary(
     deps = ENDPOINT_SCRIPTS,
 )
 
+print(all_requirements)
+
 py_library(
     name = "common",
     srcs = [
         "common.py",
     ],
     visibility = ["//visibility:public"],
-    deps = ["//witness/api:py_grpc"],
+    deps = [
+        "//witness/api:py_grpc",
+        "//witness/api:py_proto",
+        "@rules_python//python/cc:current_py_cc_headers",
+        #        requirement("grpcio"),
+    ] + all_requirements,
 )
 
 py_binary(
@@ -94,6 +101,7 @@ py_binary(
 py_binary(
     name = "start_timelapse",
     srcs = ["start_timelapse.py"],
+    python_version = "PY3",
     visibility = ["//visibility:public"],
     deps = [
         ":common",
@@ -108,6 +116,7 @@ py_binary(
     deps = [
         ":common",
         "//witness/api:py_grpc",
+        "//witness/api:py_proto",
     ],
 )
 
@@ -175,11 +184,13 @@ py_binary(
 py_binary(
     name = "start_recording",
     srcs = ["start_recording.py"],
+    python_version = "PY3",
     visibility = ["//visibility:public"],
     deps = [
         ":common",
+        "//witness/api:py_proto",
         "//witness/api:py_grpc",
-    ],
+    ] + all_requirements,
 )
 
 py_binary(
@@ -201,5 +212,3 @@ py_binary(
         "//witness/api:py_grpc",
     ],
 )
-
-pylint()

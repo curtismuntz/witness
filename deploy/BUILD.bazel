@@ -1,100 +1,100 @@
-load("@io_bazel_rules_docker//cc:image.bzl", "cc_image")
-load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
-load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
-
-config_setting(
-    name = "armeabi-v7a",
-    values = {"cpu": "armeabi-v7a"},
-)
-
-config_setting(
-    name = "aarch64-linux-gnu",
-    values = {"cpu": "aarch64-linux-gnu"},
-)
-
-#pkg_tar(
-#    name = "witness_tar",
-#    srcs = ["//witness/server"],
-#    extension = "tar",
-#    include_runfiles = True,
-#    mode = "0755",
-#    package_dir = "/opt/witness",
-#    strip_prefix = ".",
-#    visibility = ["//visibility:public"],
+#load("@io_bazel_rules_docker//cc:image.bzl", "cc_image")
+#load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+#load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_deb", "pkg_tar")
+#
+#config_setting(
+#    name = "armeabi-v7a",
+#    values = {"cpu": "armeabi-v7a"},
 #)
-
-#pkg_deb(
-#    name = "witness_deb",
-#    built_using_file = ":bazel_version.txt",
-#    data = ":witness_tar",
-#    description = "woo",
-#    homepage = "https://murt.is",
-#    maintainer = "Curtis Muntz <me@murt.is>",
-#    package = "witness_deb",
-#    version_file = "//witness:version.txt",
+#
+#config_setting(
+#    name = "aarch64-linux-gnu",
+#    values = {"cpu": "aarch64-linux-gnu"},
 #)
-
-# Modified from:
-# https://github.com/bazelbuild/bazel/blob/master/scripts/packages/BUILD#L128
-genrule(
-    name = "build_version",
-    outs = ["version.txt"],
-    cmd =
-        "echo -n \"`date` \" >> $@ " +
-        "&& cat bazel-out/stable-status.txt" +
-        " | grep EMBED_LABEL | cut -d ' ' -f 2-" +
-        " >> $@",
-    stamp = 1,
-)
-
-genrule(
-    name = "bazel_version",
-    srcs = ["//:.bazelversion"],
-    outs = ["bazel_version.txt"],
-    cmd =
-        "echo Bazel `cat $(location //:.bazelversion)` > $@\n",
-)
-
-cc_image(
-    name = "container_amd64",
-    binary = "//witness/server:server",
-)
-
-cc_image(
-    name = "container_armv7hf",
-    base = "@witness_armv7_docker_base//image",
-    binary = "//witness/server:server",
-)
-
-cc_image(
-    name = "container_aarch64",
-    base = "@witness_aarch64_docker_base//image",
-    binary = "//witness/server:server",
-)
-
-container_push(
-    name = "push_witness_aarch64",
-    format = "Docker",
-    image = ":container_aarch64",
-    registry = "index.docker.io",
-    repository = "murtis/witness_aarch64",
-    tag = "service",
-)
-
-container_push(
-    name = "push_witness_armv7hf",
-    format = "Docker",
-    image = ":container_armv7hf",
-    registry = "index.docker.io",
-    repository = "murtis/witness_armv7hf",
-    tag = "service",
-)
-
-container_push(
-    name = "push_witness_amd64",
-    format = "Docker",
-    image = ":container_amd64",
-    registry = "index.docker.io",
-    repository = "murtis/witness_amd64",
-    tag = "service",
-)
+#
+##pkg_tar(
+##    name = "witness_tar",
+##    srcs = ["//witness/server"],
+##    extension = "tar",
+##    include_runfiles = True,
+##    mode = "0755",
+##    package_dir = "/opt/witness",
+##    strip_prefix = ".",
+##    visibility = ["//visibility:public"],
+##)
+#
+##pkg_deb(
+##    name = "witness_deb",
+##    built_using_file = ":bazel_version.txt",
+##    data = ":witness_tar",
+##    description = "woo",
+##    homepage = "https://murt.is",
+##    maintainer = "Curtis Muntz <me@murt.is>",
+##    package = "witness_deb",
+##    version_file = "//witness:version.txt",
+##)
+#
+## Modified from:
+## https://github.com/bazelbuild/bazel/blob/master/scripts/packages/BUILD#L128
+#genrule(
+#    name = "build_version",
+#    outs = ["version.txt"],
+#    cmd =
+#        "echo -n \"`date` \" >> $@ " +
+#        "&& cat bazel-out/stable-status.txt" +
+#        " | grep EMBED_LABEL | cut -d ' ' -f 2-" +
+#        " >> $@",
+#    stamp = 1,
+#)
+#
+#genrule(
+#    name = "bazel_version",
+#    srcs = ["//:.bazelversion"],
+#    outs = ["bazel_version.txt"],
+#    cmd =
+#        "echo Bazel `cat $(location //:.bazelversion)` > $@\n",
+#)
+#
+#cc_image(
+#    name = "container_amd64",
+#    binary = "//witness/server:server",
+#)
+#
+#cc_image(
+#    name = "container_armv7hf",
+#    base = "@witness_armv7_docker_base//image",
+#    binary = "//witness/server:server",
+#)
+#
+#cc_image(
+#    name = "container_aarch64",
+#    base = "@witness_aarch64_docker_base//image",
+#    binary = "//witness/server:server",
+#)
+#
+#container_push(
+#    name = "push_witness_aarch64",
+#    format = "Docker",
+#    image = ":container_aarch64",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_aarch64",
+#    tag = "service",
+#)
+#
+#container_push(
+#    name = "push_witness_armv7hf",
+#    format = "Docker",
+#    image = ":container_armv7hf",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_armv7hf",
+#    tag = "service",
+#)
+#
+#container_push(
+#    name = "push_witness_amd64",
+#    format = "Docker",
+#    image = ":container_amd64",
+#    registry = "index.docker.io",
+#    repository = "murtis/witness_amd64",
+#    tag = "service",
+#)
