@@ -2,4 +2,4 @@ psutil==5.7.0
 numpy==1.17.2
 protobuf==4.21.12
 absl-py==1.4.0
-grpcio==1.54.2
+grpcio==1.56.3
