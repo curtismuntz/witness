@@ -202,9 +202,9 @@ bind(
 http_archive(
     name = "apriltag_archive",
     build_file = "//third_party:apriltag.BUILD",
-    sha256 = "7349e1fcc8b2979230b46c0d62ccf2ba2bbd611d87ef80cfd37ffe74425f5efb",
-    strip_prefix = "apriltag-3.1.1",
-    url = "https://github.com/AprilRobotics/apriltag/archive/3.1.1.tar.gz",
+    sha256 = "7e021bab89f136aa3cf736f772a635aaa353f93f6f8859495f4bd8c519be4805",
+    strip_prefix = "apriltag-3.4.2",
+    url = "https://github.com/AprilRobotics/apriltag/archive/v3.4.2.tar.gz",
 )
 
 http_archive(
