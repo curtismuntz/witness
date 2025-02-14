@@ -210,9 +210,9 @@ http_archive(
 http_archive(
     name = "cpp_httplib_archive",
     build_file = "//third_party:cpp-httplib.BUILD",
-    sha256 = "35bcc6a3f9612feb92b2153c5e56389ccc1ab46c7ba8781b873a5c2e249eb610",
-    strip_prefix = "cpp-httplib-0.6.6",
-    urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.6.6.tar.gz"],
+    sha256 = "c9b9e0524666e1cd088f0874c57c1ce7c0eaa8552f9f4e15c755d5201fc8c608",
+    strip_prefix = "cpp-httplib-0.19.0",
+    urls = ["https://github.com/yhirose/cpp-httplib/archive/v0.19.0.tar.gz"],
 )
 
 http_archive(
